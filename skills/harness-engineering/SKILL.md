@@ -1,7 +1,7 @@
 ---
 name: harness-engineering
-description: Design V6 runtime infrastructure around AI agents — permissions, tools, MCP/Skills/Hooks, feedback loops, observability, scheduled routines, von Neumann-style runtime architecture, and governance. Use when deploying agents to production, designing multi-agent systems, building agent harnesses, or turning Obsidian wiki rules into bounded runtime controls.
-version: "6.1"
+description: Design V6 runtime infrastructure around AI agents — permissions, tools, MCP/Skills/Hooks, feedback loops, observability, scheduled routines, Agentic OS four-C packaging, closed-loop organization trace governance, custom evals, von Neumann-style runtime architecture, and governance. Use when deploying agents to production, designing multi-agent systems, building agent harnesses, or turning Obsidian wiki rules into bounded runtime controls.
+version: "6.3"
 updated: "2026-07-02"
 assumes: "The agent workflow will use tools, permissions, logs, or production-like reliability boundaries."
 conflicts_with: "Do not relax approval, sandbox, or observability constraints introduced by agentic-engineering or agent-teams-command."
@@ -63,6 +63,37 @@ Google I/O '26 added a practical pressure test for harness design: the same runt
 
 If a harness cannot produce an audit trail for what the agent saw, decided, called, changed, and verified, the agent is not ready for delegated action.
 
+## Agentic OS Four-C Runtime Gate
+
+Use this before wrapping a workflow in a dashboard, button, voice command, routine, or headless execution:
+
+| C | Harness check |
+|---|---|
+| Context | Source-of-truth files, wiki pages, state, logs, and retrieval path are explicit. |
+| Connections | Accounts, APIs, MCP servers, repos, vaults, and credentials are scoped by risk. |
+| Capabilities | Skills, SOPs, scripts, templates, and evals define the action, not a vague prompt. |
+| Cadence | Schedule, event, queue threshold, receipt, anomaly alert, and stop rule are defined. |
+
+Most value should exist before the UI: codified capabilities plus durable state. A headless command or button is not safe automation unless it has the same mandate, context, verifier, receipt, and rollback path as a CLI run.
+
+## Closed-Loop Organization Gate
+
+Use this when a harness reads broad company traces such as code, chats, meetings, tickets, docs, sales calls, or support logs. Closed-loop does not mean full access by default. Define:
+
+```text
+Trace sources:
+Owner / DRI:
+Allowed reads:
+Denied reads:
+Retention and redaction:
+Decision or action the trace may influence:
+Custom eval or grader:
+Human review boundary:
+Feedback-to-skill path:
+```
+
+Do not turn workplace surveillance into a harness. Prefer least-privilege trace slices, explicit owners, audit logs, and reviewable recommendations before autonomous action.
+
 ## Managed Agent Runtime Model
 
 For production-like agents, separate the runtime into three resources:
@@ -118,6 +149,8 @@ Use harness-engineering for this agent workflow. Design permissions, tools, feed
 - Verification evidence is defined before deployment or automation.
 - Harness design separates context-hot-path rules from cold-path reports, dashboards, backlogs, and wiki maps.
 - Runtime design maps stored program, control path, memory, disk, bus, I/O tools, verifier, and garbage collection before delegated execution.
+- Agentic OS packaging passes the four-C gate before headless, scheduled, or button-driven execution.
+- Broad organizational trace access has owner, retention, redaction, audit, custom eval, and human review boundaries.
 
 ## When to Use
 
@@ -351,6 +384,8 @@ Data Lake → Risk Engine → Optimizer → Stress Test → OMS → Compliance �
 - [ ] Tool contracts include bounds, failure path, evidence, and audit trail
 - [ ] V6 extension primitive selected with MCP/Skills/Hooks/workflow/team tradeoff and zero-overhead context checked
 - [ ] Scheduled or proactive harness has Trigger, Context, Steering, Receipt, budget, stop condition, and recovery path
+- [ ] Agentic OS four-C gate defines Context, Connections, Capabilities, and Cadence before UI or headless packaging
+- [ ] Closed-loop organization trace access is least-privilege, owned, auditable, redacted, and tied to a specific eval or decision
 - [ ] Von Neumann runtime frame names stored program, control path, RAM, disk, bus, I/O tools, verifier, and garbage collector
 - [ ] High-risk decisions stay on an auditable serial control path; only owned/verifiable workstreams run in parallel
 - [ ] Self-improving skills, hooks, schemas, and automations pass the V6 promotion gate before installation

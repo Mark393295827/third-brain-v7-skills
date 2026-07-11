@@ -1,9 +1,9 @@
 ---
 name: loop-engineering
-description: Turn a repeatable task into a bounded, evidence-driven agent loop. Use when Codex needs to decide whether a task merits a Goal, Loop, Automation, or AutoResearch pattern; define a loop contract; check trigger/state/tools/codebase readiness; choose single-agent versus maker-checker versus manager-workers topology; prevent runaway iteration; or repair a loop that stalls, self-grades, exceeds review budget, or writes without verified evidence.
+description: Turn a repeatable task into a bounded, evidence-driven agent loop. Use when Codex needs to decide whether a task merits a Goal, Loop, Automation, AutoResearch, or LLMLOOP-style code repair pattern; define a loop contract; check trigger/state/tools/codebase readiness; choose single-agent versus maker-checker versus manager-workers topology; calibrate verifier tiers; prevent runaway iteration, orchestration tax, quiet-success drift, or repair a loop that stalls, self-grades, exceeds review budget, or writes without verified evidence.
 metadata:
-  version: "6.2"
-  updated: "2026-06-28"
+  version: "6.4"
+  updated: "2026-07-02"
   assumes: "The proposed task has a reachable local state, an inspectable output, and a feasible evidence source."
   conflicts_with: "Do not bypass explicit approval, sandbox, permission, or production controls imposed by harness-engineering, agentic-engineering, or agent-teams-command."
 ---
@@ -48,6 +48,8 @@ Permission boundary: [allowed writes and approval gates]
 - The final receipt distinguishes verified success, budget stop, stall, and blocked state.
 - Scheduled knowledge loops distinguish unattended objective scans from supervised semantic writes.
 - The loop mode, trigger, artifact path, work clock, and review budget are explicit before any repeated execution starts.
+- Code loops choose the cheapest sufficient verification ladder and sandbox generated or untrusted tests before execution.
+- Loop contracts cap review load and include an understanding checkpoint when quiet success could outpace human ownership.
 
 ## 1. Choose The Execution Mode
 
@@ -75,6 +77,18 @@ Use a loop only when the work is repeatable, the output can be checked, and each
 | Taste-only, ambiguous, irreversible, or production-changing task | Keep a human approval gate; do not run unattended. |
 
 Reject a loop when its only stopping rule is “until satisfied,” “keep improving,” or “run forever.” Convert those requests into a metric, an acceptance fixture, a review queue, or a one-shot draft.
+
+Reject or narrow the seed prompt if it is vague. A loop does not guess wrong once; it can compound the same bad assumption every iteration. Before admission, write the spec, verifier, and stop condition in inspectable language.
+
+## 2A. Use The Workflow Adoption Ladder
+
+Promote recurring work in this order:
+
+```text
+manual run -> skill -> automation -> loop
+```
+
+Do the task manually first to prove the agent can produce the desired output. Turn the repeatable procedure into a skill. Automate the skill only when the trigger and receipt are clear. Add a loop only when success criteria and state logging exist. Skipping directly to a loop usually hides fuzzy goals, missing state, or unsafe cadence.
 
 ## 3. Check The Loop Harness
 
@@ -121,6 +135,7 @@ Create `.agent-state/loop-contract.md` or an equivalent durable state file befor
 - Time limit: 45 minutes.
 - Budget: 20 tool calls; stop before context or cost cap.
 - Review budget: Stop if the diff exceeds 1000 changed lines, 10 files, or the human review cap.
+- Understanding checkpoint: Stop if the human/lead cannot explain the architecture delta, invariants, and rollback plan.
 - Context policy: Compact state after every iteration; prune stale context when the tool, model, code, or bug changes.
 - Stop condition: Success metric passes, or any cap/stall condition fires.
 - Write-back: Update `.agent-state/payments-loop.md` and the task log.
@@ -161,6 +176,24 @@ Treat the Model-in-the-Loop / Software-in-the-Loop / Hardware-in-the-Loop vocabu
 
 If no telemetry can reveal whether the loop helped, reject the loop or convert it into a one-shot draft with human review.
 
+Use the five-tier verifier ladder for fuzzy loops:
+
+| Tier | Use when | Boundary |
+|---|---|---|
+| 1 Deterministic | Compile, tests, lints, parsers, schema checks. | Preferred for unattended loops. |
+| 2 Rule/constraint | Runtime, length, file count, budget, coverage, complexity. | Define threshold before launch. |
+| 3 External metric | Clicks, likes, revenue, latency, issue count. | Watch for proxy-metric gaming. |
+| 4 Independent AI judge | Subjective review needs scale. | The builder cannot judge itself. |
+| 5 Human-in-loop | Taste, strategy, ambiguity, high stakes. | Supervised loop only. |
+
+For code-repair loops, use an LLMLOOP-style cascade when the toolchain exists:
+
+```text
+compile/package -> given tests -> static analysis -> generated tests -> mutation or fault-injection test
+```
+
+Run the earliest failing verifier first; do not pay for later loops until earlier physical preconditions pass. Execute generated tests, fuzzers, mutation tests, and untrusted code inside Docker, a sandbox, or an isolated worktree with hard timeouts. If the same failure repeats twice, change the hypothesis, topology, prompt, or search diversity; do not keep replaying the same deterministic retry.
+
 ## 6. Run The Thin Loop
 
 For each iteration:
@@ -200,6 +233,8 @@ Stop successfully only when the declared verifier accepts the declared evidence.
 | Regression, permission denial, or shared-state conflict | Revert or isolate the last action; escalate with the receipt. |
 | Change volume outpaces human comprehension | Stop for review, shrink scope, or add an architecture summary before continuing. |
 | Diff exceeds review budget or approaches 1000 changed lines | Split the loop into smaller goals or stop for human review. |
+| Review queue grows faster than human review | Lower parallelism, batch by risk, or stop new loop launches. |
+| Loop succeeds but humans stop understanding it | Stop for architecture review; require summary, invariants, demo, and rollback evidence. |
 | Need to push, merge, deploy, publish, pay, message, or mutate shared production state | Stop for explicit approval. |
 | Scheduled loop wants to rewrite meaning from signal heat alone | Write a candidate to review queue; do not promote. |
 
@@ -231,8 +266,12 @@ For compounding loops, write signals to shared artifacts only when each artifact
 - [ ] Codebase readiness is checked for legible, executable, and verifiable conditions when code is touched.
 - [ ] Success metric and stop condition are separately stated.
 - [ ] Verifier is independent from the builder or backed by external evidence.
+- [ ] Verifier tier is calibrated; unattended loops use deterministic, rule, or telemetry evidence.
+- [ ] Code loops run the cheapest useful verifier cascade and sandbox generated or untrusted tests.
 - [ ] Iteration, time, and tool/token/request budgets are finite.
 - [ ] Review budget is finite and diff growth is capped before human comprehension fails.
+- [ ] Seed prompt/spec is precise enough that repeated execution will not compound one bad assumption.
+- [ ] Quiet-success risk has an understanding checkpoint for long-running or high-volume loops.
 - [ ] State, evidence, and write-back paths are durable and explicit.
 - [ ] Production or external mutations have approval, rollback, and audit boundaries.
 - [ ] Multi-agent use has independent ownership and an integration gate.
@@ -249,5 +288,8 @@ For compounding loops, write signals to shared artifacts only when each artifact
 - Carrying state only in chat memory.
 - Running a scheduled or production loop without caps, rollback, and anomaly escalation.
 - Repeating the same failed hypothesis without changing evidence or diagnosis.
+- Running expensive generated-test, fuzz, or mutation loops before compile and base tests pass.
+- Treating engagement, AI judgment, or taste as objective proof without proxy-risk review.
 - Using one wide-open while-loop for layered work that needs orchestrator, planner, researcher, coder, validator, and memory roles.
 - Letting quiet success accumulate large unreviewed changes that humans no longer understand.
+- Treating the loop itself as the compound asset; skills, evals, and state artifacts compound, while the loop is plumbing.

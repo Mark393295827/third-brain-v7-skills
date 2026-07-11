@@ -1,8 +1,8 @@
 ---
 name: anthropic-os
-description: Improve a personal or team operating system with self-evolving loops, CASH allocation, 3B creativity, predictive coding, and diagnostics. Use when the user wants to redesign a work method, learning loop, or cognitive operating system.
-version: "1.2"
-updated: "2026-06-01"
+description: Improve a personal or team operating system with self-evolving loops, CASH allocation, 3B creativity, predictive coding, closed-loop organization controls, and diagnostics. Use when the user wants to redesign a work method, learning loop, AI-native organization loop, or cognitive operating system.
+version: "1.3"
+updated: "2026-07-02"
 assumes: "The user wants to improve a work system rather than solve a single isolated task."
 conflicts_with: "Do not use as a replacement for startup-evaluation, daily-okr, or project-flow-ops when the user asks for those narrower workflows."
 ---
@@ -76,6 +76,20 @@ Use this audit when the operating system is meant to become the default work sur
 | Cadence | What should happen without manual prompting? | Routines, scheduled checks, event triggers | Slop automation and hidden failures |
 
 Do not add cadence before context, connections, and capabilities are strong enough to support it. A scheduled prompt without the right context and proof path is automation theater.
+
+## Closed-Loop Organization Audit
+
+Use this when a team wants agents to observe work traces and steer decisions:
+
+| Control | Required answer |
+|---|---|
+| Trace substrate | Which code, docs, chats, tickets, meetings, and outputs are readable? |
+| DRI | Who owns the outcome and review queue? |
+| Taste/eval | What custom rubric, trace label, or grader converts taste into a check? |
+| Review bandwidth | What PR/artifact/change volume can humans actually inspect? |
+| Quiet success stop | When do we pause because the system works but humans no longer understand it? |
+
+Do not copy revenue/headcount or 1000x productivity claims as targets. Use them as prompts to inspect leverage, then require local metrics, review receipts, and ownership checkpoints.
 
 ## Bike Method Permission Ladder
 
@@ -442,6 +456,7 @@ The system evolves itself using the same 3B algorithms it prescribes:
 
 - [ ] Practice stored in unified YAML schema
 - [ ] AIOS audit covers Context, Connections, Capabilities, and Cadence
+- [ ] Closed-loop org audit covers trace substrate, DRI, custom eval, review bandwidth, and quiet-success stop
 - [ ] Permission ladder identifies current autonomy stage and next gate
 - [ ] Diagnostic covers all 6 maturity dimensions
 - [ ] Prescription follows adaptive routing rules

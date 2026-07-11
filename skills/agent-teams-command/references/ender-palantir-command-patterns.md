@@ -19,6 +19,9 @@ This pattern is promoted from durable Obsidian pages, not from a single clipping
 - `wiki/concepts/智能体前线部署工程师.md`
 - `wiki/concepts/智能体协调器 Agentic Orchestrator.md`
 - `wiki/concepts/评估驱动开发.md`
+- `wiki/concepts/Loop编程.md`
+- `wiki/concepts/编排税.md`
+- `wiki/concepts/默然成功风险.md`
 
 Do not promote source-specific military, investment, or vendor claims into a project rule unless independently verified.
 
@@ -235,3 +238,29 @@ Abort condition:
 ```
 
 Retry the failed step, not the whole mission. Preserve prompt, tool output, artifact path, and decision basis so the team can resume without replaying chat.
+
+## Orchestration Tax And Quiet Success Controls
+
+Use these controls before scaling workers, loops, or generated PR volume:
+
+```text
+Review bandwidth:
+  max open PRs:
+  max changed lines per review batch:
+  max files per workstream:
+  reviewer:
+
+Understanding checkpoint:
+  architecture delta summary:
+  invariants:
+  demo or trace path:
+  rollback plan:
+  owner can explain? yes/no
+
+Quiet-success stop:
+  if commits or artifacts exceed review cap:
+  if lead cannot explain the diff:
+  if tests pass but architecture ownership is unclear:
+```
+
+Automation can reduce low-level review, but it cannot remove ownership. Use custom evals, PR summaries, traces, demos, and independent reviewers to shrink the review surface; stop launching new teammates when the review queue grows faster than integration.

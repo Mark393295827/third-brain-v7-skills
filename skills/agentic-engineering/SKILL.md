@@ -1,8 +1,8 @@
 ---
 name: agentic-engineering
-description: Design or refactor agent skills, workflows, operating loops, and V6 knowledge-OS upgrades for model-native Agentic Engineering. Use when making skills more autonomous, concise, verifiable, long-horizon capable, token-efficient, lower-friction for human-LLM collaboration, or ready to promote Obsidian wiki learning into reusable agent behavior.
-version: "6.0"
-updated: "2026-06-27"
+description: Design or refactor agent skills, workflows, operating loops, Agentic OS upgrades, and V6 knowledge-OS upgrades for model-native Agentic Engineering. Use when making skills more autonomous, concise, verifiable, long-horizon capable, token-efficient, lower-friction for human-LLM collaboration, ready to move from manual workflow to skill/automation/loop, preserve human taste through custom evals, manage 1000x-engineer leverage claims, or promote Obsidian wiki learning into reusable agent behavior.
+version: "6.2"
+updated: "2026-07-02"
 assumes: "The workflow can be expressed as a bounded agent loop with observable verification evidence."
 conflicts_with: "Do not override harness-engineering safety boundaries or verify-before-claim evidence requirements."
 ---
@@ -57,6 +57,25 @@ Before adding orchestration, classify the work at the lowest sufficient level:
 
 Default to the lower level when value, independence, or verification is unclear. Higher orchestration increases token cost, permission surface, and audit burden.
 
+## Agentic OS Adoption Gate
+
+Use this gate when turning an ad hoc workflow into a durable operating surface:
+
+| Stage | Promotion check | Output |
+|---|---|---|
+| Manual run | Has the agent completed the workflow once with hands-on steering? | Example transcript, artifact, and failure notes. |
+| Skill | Is the procedure repeatable with a specific input, output, and verifier? | Compact `SKILL.md` or SOP. |
+| Automation | Is the trigger, context, receipt, and rollback path clear? | Routine, cron, webhook, or button with audit log. |
+| Loop | Is there success criteria, state logging, budget, and stop condition? | Loop contract plus verifier evidence. |
+
+Check the Agentic OS four C's before packaging a workflow for repeated or team use: Context, Connections, Capabilities, and Cadence. Do not build a dashboard, button, or routine before Levels 1-2 are real: codified capabilities plus durable state. UI distribution raises the floor only when it wraps a verified workflow rather than hiding an untested prompt.
+
+## Taste And Custom Eval Gate
+
+When quality depends on product taste, user trust, domain nuance, or "AI slop" avoidance, do not rely on public benchmarks or the builder's self-rating. Capture representative traces, label a few good/bad examples, define the rubric, and route outputs through deterministic checks plus an independent grader or human reviewer. Cross-model graders are useful only when disagreements become eval cases, not when they replace human taste.
+
+Treat 1000x-engineer language as an ambition and leverage pattern, not a benchmark. The reusable procedure is: turn successful traces into skills, route work through resolvers/tools, run evals, cap review load, and keep humans responsible for architecture, taste, and risk.
+
 ## V6 Knowledge-OS Upgrade Gate
 
 When updating skills from Obsidian wiki knowledge, classify the rule before editing:
@@ -99,6 +118,8 @@ Use agentic-engineering to revise this skill/workflow. Make it model-native, con
 - The skill or workflow can be executed without extra clarification for its primary use case.
 - Residual human judgment points are explicit rather than hidden in vague prose.
 - Obsidian-derived rules pass the V6 promotion gate before entering skills, SOPs, schema, or automation.
+- Repeated workflows are promoted through manual run -> skill -> automation -> loop, with Context, Connections, Capabilities, and Cadence checked before OS-level packaging.
+- Human taste is translated into project-specific traces, rubrics, fixtures, or custom evals before broad autonomous execution.
 
 ## Model Meta-Properties
 
@@ -294,6 +315,10 @@ After significant output, decide where the result belongs:
 - [ ] Delegated external actions define mandate, authority, cost, reversibility, and audit record.
 - [ ] Long-horizon tasks have checkpoints or state artifacts.
 - [ ] Workflow complexity is justified at the lowest sufficient level.
+- [ ] Repeated workflows passed the manual -> skill -> automation -> loop adoption gate before OS-level packaging.
+- [ ] Agentic OS packaging states Context, Connections, Capabilities, and Cadence.
+- [ ] Taste-sensitive work has project-specific traces, rubric, custom evals, or human review.
+- [ ] 1000x-style leverage claims are treated as unverified unless backed by local metrics and review receipts.
 - [ ] Quality gates include executable or inspectable evidence.
 - [ ] High-risk work has evaluator, critic, or adversarial review.
 - [ ] AutoResearch loops have objective metrics, cheap evals, and explicit limits.
@@ -313,3 +338,4 @@ After significant output, decide where the result belongs:
 - Delegating a large macro action without non-goals, ownership, proof, or a stop condition.
 - Letting an agent buy, publish, message, schedule, or mutate external state without an explicit mandate and audit trail.
 - Running autonomous iteration where success depends on taste or risk judgment rather than a cheap metric.
+- Letting "boil the ocean" ambition bypass scope, evals, review bandwidth, or ownership checkpoints.
