@@ -1,6 +1,6 @@
 # 3-Minute Quickstart: Ingest One Source
 
-Use this when you want the fastest visible win from Third Brain V5 Skills.
+Use this when you want the fastest visible win from Third Brain V7 Skills.
 
 ## Before
 
@@ -45,7 +45,7 @@ After writing files, run a quick verification:
 
 The loose source becomes a linked knowledge unit with traceable claims, reusable concepts, and a clear next retrieval path.
 
-## Verification Case
+## Verification Receipt
 
 The run is successful when the agent can point to the created files and every new concept page has:
 

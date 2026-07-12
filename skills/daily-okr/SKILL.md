@@ -1,144 +1,96 @@
 ---
 name: daily-okr
-description: Execute a V6 daily knowledge compound closed loop — 7 Key Results from input to feedback with scoring, evidence, wiki write-back, and optional scheduled Obsidian daily-loop note. Use when the user wants to do a daily review, plan their day, run a knowledge workflow, or complete the generated daily knowledge-management loop.
-version: "6.0"
-updated: "2026-06-27"
-assumes: "The user wants a daily loop that connects knowledge capture, action, output, and review."
-conflicts_with: "Do not let daily scoring replace verify-before-claim for completion claims or wiki-lint for vault health."
+description: Use when planning or closing a daily knowledge-compounding cycle across input, cognition, wiki, behavior, creativity, output, and feedback.
+metadata:
+  version: "7.0.0"
+  updated: "2026-07-11"
+  profile: "stateful"
+  assumes: "A daily note or equivalent state record is writable and the user can choose one priority."
+  conflicts_with: "Invented completion, seven unrelated priorities, or activity counts without evidence."
 ---
 
-# Daily OKR — Knowledge Compound Closed Loop
+# Daily OKR
 
-Run a complete 7-KR cycle: Input → Cognition → Wiki → Behavior → Creativity → Output → Feedback.
+<skill_contract>
+
+Run one daily objective through seven linked Key Results. The cycle compounds only when evidence from today changes tomorrow's behavior or knowledge state.
 
 ## Usage Template
 
-**Prompt**
-```text
-Run daily-okr in compact mode. Produce one insight, one wiki update, one action under 15 minutes, one reusable output, and a final score.
-```
+Provide: date, one objective, available time, active project, knowledge inputs, and yesterday's evidence. Optional: a scheduled knowledge-loop note; treat it as input, not proof of execution.
 
-**Use Case**
-- Starting or closing a knowledge-work day with a repeatable compounding loop.
+## Workflow
 
-**Expected Result**
-- The agent addresses all 7 KRs and leaves a concise daily artifact.
+<intake>
 
-**Output Example**
-- A 7-KR scorecard with one captured input, one insight, one wiki update, one action, one idea, one output, and one review.
+1. Load the current daily state and any scheduled-loop proposal.
+2. Choose one objective tied to an active project or explicit learning goal.
+3. Set a total time budget and a minimum viable day.
+4. Carry forward only unresolved items with an owner or decision value.
 
-**Verification Case**
-- KR3 has a wiki update, KR4 has a concrete action, KR7 includes evidence for completed claims, and the score is calculated.
+</intake>
 
-**Verified Effect**
-- A scattered workday becomes one captured insight, one action, one reusable output, and one feedback score.
+<unknowns_gate>
+
+If priority, available time, or completion evidence is missing, return `NEEDS_INPUT` with one narrow probe. If the day is constrained, select the minimum cycle rather than fabricating seven completed results.
+
+</unknowns_gate>
+
+<execute>
+
+Create seven causally linked KRs:
+
+1. **Input:** capture one high-value source or observation.
+2. **Cognition:** extract one mechanism, contradiction, or decision implication.
+3. **Wiki:** write or improve one durable note with provenance.
+4. **Behavior:** execute one minimum behavior linked to the objective.
+5. **Creativity:** produce one alternative or falsifiable experiment.
+6. **Output:** ship one reviewable artifact or project increment.
+7. **Feedback:** record evidence, error, and tomorrow's adjustment.
+
+Each KR needs an artifact or receipt. Keep unfinished work visible; do not convert a scheduled trigger into a success claim.
+
+</execute>
+
+<evaluate>
+
+At close, mark each KR `done`, `partial`, `blocked`, or `skipped` from evidence. Check that at least one input became a durable wiki change and one observation changed a future action. Remove vanity metrics and report the bottleneck.
+
+</evaluate>
+
+<state_contract>
+
+Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus date, objective, seven KR statuses, artifact links, bottleneck, and tomorrow adjustment. Append receipts; never rewrite historical completion evidence.
+
+</state_contract>
+
+## Failure Protocol
+
+- `NEEDS_INPUT`: no daily objective or time budget can be inferred safely.
+- `BLOCKED_DEPENDENCY`: a required source, project, or tool is unavailable; complete independent KRs and record the blocker.
+- `VERIFY_FAILED`: a KR has no artifact or receipt; mark it partial or skipped.
+- `BUDGET_STOP`: time is exhausted; close the state and select one next action.
+
+## Output Contract
+
+Return `status`, `result` (objective plus seven KR states), `evidence` (artifact links or receipts), `unknowns`, and `next_action` for the next cycle.
+
+## Edge Cases
+
+- Only 15 minutes remain: perform Input -> Cognition -> Wiki as one atomic note, then record feedback; mark other KRs skipped.
+- A scheduled loop note exists but no command ran: record the trigger as proposed work, not execution evidence.
 
 ## Success Metrics
 
-- All 7 KRs have an explicit result, score, or skipped-with-reason status.
-- KR3 names the wiki update, KR4 names a concrete action, and KR7 states evidence for any completion claim.
-- Daily artifact includes a final score and one improvement for tomorrow.
-- When a scheduled daily-loop note exists, the final score references its queue, health snapshot, or evidence section.
-
-## When to Use
-
-- User says "start my daily OKR", "daily review", "today's workflow"
-- Beginning of a work session focused on knowledge work
-- User wants to capture, think, act, and reflect
-
-## The 7 KR Cycle
-
-```
-KR1 输入    → 记录 1-3 条高质量信息          [5 min]
-KR2 认知    → 提炼 1 句话摘要 + 1 个洞察      [5 min]
-KR3 Wiki   → 新增/更新 1 个 Wiki 页面         [5 min]
-KR4 行为    → 设计并执行 1 个 15 分钟行动       [5 min]
-KR5 创意    → 写下 1 个新想法                 [1 min]
-KR6 输出    → 留下 1 个可复用成果              [2 min]
-KR7 反馈    → 3 行复盘 + 验证证据              [3 min]
-```
-
-> Minimum bar: **1 input + 1 insight + 1 action + 1 review.**
-
-## V6 Scheduled Daily Loop
-
-If `system/daily/YYYY-MM-DD-daily-knowledge-loop.md` exists, use it as the starting artifact:
-
-1. Read the automated snapshot for clipping queue, P0/P1 debt, changed files, and rule candidates.
-2. Pick one focused KR3 wiki update or one P0/P1 repair.
-3. Keep automated blocks intact; write only in manual KR sections or append a log entry.
-4. Do not promote system rules from daily signals alone. Queue candidates for supervised review.
-5. End with evidence: changed files, diff, command output, dashboard metric, or skipped-with-reason.
-
-### The Stop Doing List (Warren Buffett & Charlie Munger)
-
-> "The difference between successful people and very successful people is that very successful people say 'no' to almost everything." — Warren Buffett
-
-> "It is remarkable how much long-term advantage people have gotten by trying to be consistently not stupid, instead of trying to be very intelligent." — Charlie Munger
-
-During KR7, in addition to reviewing what was done, ask:
-
-| Question | Purpose | Master Who Used It |
-|----------|---------|-------------------|
-| What should I NOT have done today? | Identify time-wasting activities | Buffett: "Avoiding stupidity is easier than seeking brilliance" |
-| What habit should I stop? | Break bad patterns | Munger: "Invert, always invert" |
-| What commitment should I decline? | Protect time and energy | Peter Drucker: "The most important decision is what not to do" |
-| What investment should I cut losses on? | Avoid sunk cost fallacy | Graham: "The intelligent investor sells when a stock reaches its intrinsic value" |
-
-**The Wisdom of Not Doing:**
-- Saying no is harder than saying yes, but far more effective
-- Knowing what to ignore lets you focus on what matters
-- "The stock market is a device for transferring money from the impatient to the patient." — Buffett
-
-### KR1 — Input
-- Record 1-3 high-quality information items
-- At least 1 from external world (article/report/video/data)
-- At least 1 from personal experience (observation/conversation/project)
-- Note the source and why it matters
-
-### KR2 — Cognition
-- Select 1 item for deep understanding
-- Extract: 1-sentence summary + 1 insight/judgment
-
-### KR3 — Wiki
-- Create or update 1 wiki page
-- Add tags and ≥2 wikilinks
-- Set status (seed/growing/evergreen)
-
-### KR4 — Behavior
-- Derive 1 actionable item from today's knowledge
-- Break it down to ≤15 minutes
-- Execute or schedule it
-
-### KR5 — Creativity
-- Generate 1-3 ideas based on today's knowledge
-- At least 1 from cross-domain analogy
-- Select 1 worth pursuing
-
-### KR6 — Output
-- Produce 1 small reusable artifact
-- State which long-term goal it serves
-- Judge reusability
-
-### KR7 — Feedback + Verification
-- Write 3 lines of retrospective
-- ⭐ **Verification**: For every "completed" claim, show evidence (command output, diff, screenshot)
-- Anti-pattern: "should be fine" without proof
-- Update the daily log
-
-## Daily Scoring Card
-
-```
-输入 +1 | 认知 +1 | Wiki +2 | 行为 +2 | 创意 +1 | 输出 +2 | 反馈 +1 = /10
-3=still going  5=minimal loop  7=quality loop  10=compounding flywheel
-```
+- One objective governs all seven KRs.
+- At least one source becomes a verified durable note.
+- The closing feedback changes a named next action.
 
 ## Quality Gates
 
-- [ ] All 7 KRs addressed (even briefly)
-- [ ] KR3: page has ≥2 `[[wikilinks]]`
-- [ ] KR4: action is ≤15 minutes
-- [ ] KR6: output is reusable
-- [ ] KR7: every done-claim has evidence
-- [ ] Score calculated
-- [ ] Scheduled daily-loop note respected when present; automated snapshot not overwritten
+- [ ] Every completed KR has evidence.
+- [ ] Scheduled and executed states are distinct.
+- [ ] Carry-forward work has decision value and an owner.
+- [ ] The minimum day respects the declared budget.
+
+</skill_contract>

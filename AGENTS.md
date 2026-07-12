@@ -1,15 +1,15 @@
-# Third Brain V6 Skills — Codex CLI
+# Third Brain V7 Skills — Codex CLI
 
 This repository contains Agent Skills for the Codex CLI environment. Place skills in `~/.agents/skills/`.
 
-V6 treats Obsidian as the agent's durable disk and governance layer. Do not turn wiki signals into skill or schema rules until they pass the promotion gate: repeated source support or local verification, bounded macro action, no provenance relaxation, and a cheap objective check.
+V7 treats Obsidian as durable disk and governance, while every skill uses a profile-aware execution contract. Do not turn wiki signals into rules until they pass the promotion gate: repeated source support or local verification, bounded macro action, preserved provenance/permissions, and a cheap objective check.
 
 ## Skills
 
 ### 📥 Knowledge Pipeline
-- **wiki-ingest** — V6 STOW pipeline with source-risk classification, Trigger-Context-Steering scope, block refs, clipping archive, understanding gate, governance notes, and post-ingest lint.
+- **wiki-ingest** — STOW pipeline with source-risk classification, block refs, clipping lifecycle, understanding gate, promotion controls, and post-ingest lint.
 - **knowledge-ops** — Multi-layer knowledge management with Markdown-first retrieval, optional vector storage, evidence hierarchy, deduplication, Agent/Wiki flywheel, and knowledge debt queues.
-- **wiki-lint** — Wiki health check for P0/P1 graph health, source refs, frontmatter, links, provenance debt, clipping lifecycle, understanding integrity, and V6 promotion readiness.
+- **wiki-lint** — Wiki health check for graph integrity, provenance, links, clipping lifecycle, understanding, and promotion readiness.
 
 ### 🔄 Daily Loop
 - **daily-okr** — 7 Key Results daily knowledge compound cycle; may consume the scheduled daily knowledge-loop note when present.
@@ -27,9 +27,9 @@ V6 treats Obsidian as the agent's durable disk and governance layer. Do not turn
 - **session-learn** — Knowledge extraction with Closure Protocol.
 - **project-flow-ops** — Project triage and tracking.
 
-### 📊 Cost
-- **context-manager** — Context window and token budget management.
-- **token-cost-tracker** — Token usage estimation and tracking.
+### 📊 Context & Cost
+- **context-manager** — Runtime-derived context budgets, checkpoints, compaction, retrieval, and capability routing.
+- `token-cost-tracker` is a command under `commands/`, not an Agent Skill.
 
 ### 🏗️ Engineering
 - **agentic-engineering** — Agent-as-process workflow refactoring with autonomy defaults, delegated-action boundaries, state checkpoints, write-back, and verification gates.
@@ -52,12 +52,14 @@ When selecting a skill, read its frontmatter before executing:
 
 - `assumes` — required operating assumptions.
 - `conflicts_with` — boundaries that must not be silently overridden.
+- `metadata.profile` — `one-shot`, `stateful`, `loop`, or `high-risk` controls.
+- `## Failure Protocol` and `## Output Contract` — standard stop status and receipt.
 - `## Success Metrics` — the minimum observable result for one successful run.
 - `## Quality Gates` — checks that must pass before claiming completion.
 
 For wiki-writing skills, resolve paths from `system/config.md` when available. Defaults include `SOURCES_DIR=sources/`, `CONCEPTS_DIR=wiki/concepts/`, `ENTITIES_DIR=wiki/entities/`, and `LOG_FILE=system/log.md`.
 
-## V6 Promotion Gate
+## V7 Promotion Gate
 
 Promote wiki knowledge into a skill, SOP, schema rule, or automation only when:
 

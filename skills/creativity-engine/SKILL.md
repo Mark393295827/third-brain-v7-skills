@@ -1,147 +1,84 @@
 ---
 name: creativity-engine
-description: Generate, validate, and output new ideas based on existing knowledge. Combines combinatorial creativity, cross-domain analogy, and minimum experiments. Use when the user wants fresh ideas, new product concepts, or creative solutions.
-version: "1.2"
-updated: "2026-05-22"
-assumes: "The user wants divergent options and is willing to validate one minimum experiment."
-conflicts_with: "Do not present untested ideas as validated; route evidence claims through verify-before-claim or deep-research."
+description: Use when a defined problem needs diverse ideas, cross-domain combinations, and cheap experiments instead of a single untested answer.
+metadata:
+  version: "7.0.0"
+  updated: "2026-07-11"
+  profile: "one-shot"
+  assumes: "A problem, target user, and at least one meaningful constraint can be stated."
+  conflicts_with: "Unbounded brainstorming, novelty without utility, or treating generated ideas as validated opportunities."
 ---
 
 # Creativity Engine
 
-Generate novel ideas by combining existing knowledge across domains, then validate them through minimum experiments.
+<skill_contract>
+
+Create option value by combining mechanisms, constraints, and analogies, then convert the strongest options into minimum experiments.
 
 ## Usage Template
 
-**Prompt**
-```text
-Use creativity-engine on this challenge. Generate cross-domain combinations, rank them, and design the smallest test for the best idea.
-```
-
-**Use Case**
-- Producing new product ideas, content angles, experiments, or strategic options from existing knowledge.
-
-**Expected Result**
-- The agent returns a ranked idea set plus one minimum experiment.
-
-**Output Example**
-- 10 idea candidates, 3 finalists, 1 selected experiment, and a 7-day validation plan.
-
-**Verification Case**
-- Each finalist idea states the source ingredients, target user, expected value, and a testable next step.
-- Post-ingest ideas are saved as experiment notes when they have a plausible minimum test.
-
-**Verified Effect**
-- Brainstorming turns into ranked options with a smallest viable experiment for the best idea.
-
-## Success Metrics
-
-- Produces ranked options with source ingredients, target user, expected value, and risk for each finalist.
-- Selects one minimum experiment with a success signal, cost, and review date.
-- Saves the experiment when operating inside a configured wiki or creativity workspace.
-
-## When to Use
-
-- User wants "new ideas about X"
-- User is stuck on a problem and needs fresh angles
-- User wants to explore possibilities before committing
-- After a wiki ingest session — capitalize on new knowledge
+Provide: problem, target user, desired change, constraints, existing attempts, and experiment budget. Optional: domains or concepts to combine.
 
 ## Workflow
 
-### C1: Combinatorial Ideation — The Lego Building Blocks Method
+<intake>
 
-> "If you own one building block, you can build some cool stuff. If you get a second building block, you can build something more interesting. Get more building blocks, and very rapidly the number of things you can combine them into grows combinatorially or exponentially." — Andrew Ng
+Rewrite the request as `For [user], change [state] under [constraints], measured by [signal]`. Extract reusable building blocks: actors, assets, mechanisms, channels, incentives, and constraints.
 
-**The AI Building Blocks you should know:**
+</intake>
 
-| Block | What It Does | Combine With |
-|-------|--------------|--------------|
-| **Prompting** | Basic LLM interaction | Any other block |
-| **RAG** | Retrieve and inject context | Knowledge bases, docs |
-| **Evals** | Measure quality | Any output task |
-| **Guardrails** | Safety constraints | Production systems |
-| **Fine-tuning** | Custom behavior | Domain-specific tasks |
-| **Voice** | Speech I/O | Accessibility, hands-free |
-| **Agentic workflows** | Multi-step autonomous | Complex tasks |
-| **Tool use** | External API calls | Real-world actions |
-| **Embeddings** | Semantic similarity | Search, clustering |
-| **Vector DB** | Store/retrieve embeddings | Knowledge management |
+<unknowns_gate>
 
-**Combinatorial ideation process:**
+If no user, problem, or constraint is available, return `NEEDS_INPUT` with one discriminating probe. Treat market demand, technical feasibility, and user behavior as testable unknowns, not assumptions to hide.
 
-Scan the wiki for relevant concepts/entities, then combine them systematically:
+</unknowns_gate>
 
-```
-[Domain A concept] + [Domain B concept] = Novel idea
-```
+<execute>
 
-Example: AI + Property Maintenance → AI vision diagnosis for apartment repairs
+1. Generate 10-20 combinations across at least three mechanisms or domains.
+2. Include inversion, subtraction, constraint removal, and one distant analogy.
+3. Cluster duplicates by underlying mechanism, not wording.
+4. Score survivors on expected value, test difficulty, distinctiveness, reversibility, and evidence gap.
+5. Select three non-equivalent options.
+6. For each, define a minimum experiment: hypothesis, smallest artifact, target participant, success threshold, budget, stop rule, and learning captured on failure.
 
-Generate 10-20 ideas across these categories:
-- **Products** — something people pay for
-- **Services** — something people hire done
-- **Content** — something people learn from
-- **Automation tools** — something that saves time
-- **Business models** — a new way to capture value
+Do not optimize prose before option diversity. A useful failed experiment is better than an impressive concept with no falsifier.
 
-**The more building blocks you know, the more combinations are possible.**
+</execute>
 
-### C2: Cross-Domain Analogy
+<evaluate>
 
-For each promising idea, ask:
-- What other domain solves a similar problem?
-- What pattern can I borrow?
-- What would this look like in [biology/physics/sports/gaming]?
+Check that the top three differ in mechanism, fit constraints, expose their largest unknown, and can be tested cheaply. Remove ideas that are only features, slogans, or unsupported scale claims. Recombine once if all finalists share the same failure mode.
 
-### C3: Minimum Experiment Design
+</evaluate>
 
-For the top 3 ideas, design the cheapest test:
+## Failure Protocol
 
-| Idea | Hypothesis | Minimum Test | Success Signal | Cost |
-|-----|-----------|-------------|---------------|------|
-| 1 | If X then Y | Interview 5 users | ≥3 say "I'd pay for this" | Free |
-| 2 | ... | Landing page + ads | ≥5% signup rate | $50 |
-| 3 | ... | Manual prototype | Works for 1 case | Time |
+- `NEEDS_INPUT`: the problem frame lacks a user or constraint.
+- `INSUFFICIENT_EVIDENCE`: ranking depends on unavailable market or technical facts; mark provisional and probe.
+- `VERIFY_FAILED`: finalists are duplicates or have no falsifiable test; regenerate around different mechanisms.
+- `BUDGET_STOP`: no experiment fits the budget; return the cheapest information-gathering action.
 
-For Obsidian workflows, save the selected experiment to `CREATIVITY_DIR/experiments/` with:
-- source ingredients
-- combination formula
-- target user
-- hypothesis
-- minimum test
-- success signal
-- next output
+## Output Contract
 
-### C4: Output Asset
+Return `status`, `result` (idea clusters and top-three experiments), `evidence` (inputs and scoring basis), `unknowns`, and `next_action`.
 
-After validation, if the idea survives:
-- Write a structured output page
-- Link to all sources and concepts
-- Set status (seed → growing)
+## Edge Cases
 
-## Ideation Prompts
+- The requester supplies a favored solution: include it as one candidate, then generate alternatives from different mechanisms before ranking.
+- The domain is regulated or safety-critical: make approval and compliance discovery part of the experiment; do not test on live users without authorization.
 
-1. **What existing problem has a solution in another industry?**
-2. **If labor were free, what would I build?** (Then use AI to replace the labor)
-3. **What would the perfect version look like?** (Work backward)
-4. **What do people do manually that they hate?** (Automation opportunity)
-5. **What combination of wiki concepts has never been tried?**
+## Success Metrics
 
-## Classification Matrix
-
-Evaluate each idea:
-
-| Criterion | 1 (Low) | 3 (Medium) | 5 (High) |
-|-----------|---------|------------|----------|
-| Value | Nice-to-have | Saves time/money | Creates new capability |
-| Difficulty | Requires deep expertise | Feasible with existing tools | Weekend prototype |
-| Originality | Common | Unusual in this domain | Never seen before |
+- At least three materially different mechanisms survive evaluation.
+- Every finalist has a bounded, falsifiable experiment.
+- The next experiment reduces the largest decision-relevant unknown.
 
 ## Quality Gates
 
-- [ ] ≥10 ideas generated across ≥3 categories
-- [ ] Top 3 have minimum experiment designs
-- [ ] Each idea cites its source concept(s)
-- [ ] Selected experiment is saved to `CREATIVITY_DIR/experiments/` when working in an Obsidian vault
-- [ ] Validated ideas written to durable output
+- [ ] Problem, user, constraint, and signal are explicit.
+- [ ] Idea count and diversity thresholds are met.
+- [ ] Rankings state assumptions and evidence gaps.
+- [ ] Experiments include threshold, budget, and stop rule.
+
+</skill_contract>

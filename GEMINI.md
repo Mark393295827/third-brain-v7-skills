@@ -1,4 +1,4 @@
-# Third Brain V5 Skills — Gemini CLI
+# Third Brain V7 Skills — Gemini CLI
 
 This repository contains Agent Skills for the Gemini CLI environment. Place skills in `~/.gemini/skills/`.
 
@@ -25,11 +25,12 @@ This repository contains Agent Skills for the Gemini CLI environment. Place skil
 - **session-learn** — Knowledge extraction with Closure Protocol.
 - **project-flow-ops** — Project triage and tracking.
 
-### 📊 Cost
-- **context-manager** — Context window and token budget management.
-- **token-cost-tracker** — Token usage estimation and tracking.
+### 📊 Context & Cost
+- **context-manager** — Runtime-derived context budgets, checkpoints, compaction, retrieval, and capability routing.
+- `token-cost-tracker` is a command under `commands/`, not an Agent Skill.
 
 ### 🏗️ Engineering
+- **loop-engineering** — Bounded Goal/Loop/Automation/AutoResearch contracts with state, verification, retry, and recovery.
 - **agentic-engineering** — Agent-as-process workflow refactoring with autonomy defaults, delegated-action boundaries, state checkpoints, write-back, and verification gates.
 - **harness-engineering** — Agent runtime kernel design: permissions, tools as system calls, provenance ledgers, delegated-action gates, observability, and recovery.
 - **agent-teams-command** — Multi-agent process orchestration with ownership, IPC, async budget envelopes, integration, cleanup, and evidence gates.
@@ -49,6 +50,8 @@ When selecting a skill, read its frontmatter before executing:
 
 - `assumes` — required operating assumptions.
 - `conflicts_with` — boundaries that must not be silently overridden.
+- `metadata.profile` — `one-shot`, `stateful`, `loop`, or `high-risk` controls.
+- `## Failure Protocol` and `## Output Contract` — standard stop status and receipt.
 - `## Success Metrics` — the minimum observable result for one successful run.
 - `## Quality Gates` — checks that must pass before claiming completion.
 

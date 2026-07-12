@@ -111,7 +111,7 @@ Automata rule: local worker rules create global behavior. Every worker must know
 current state + evidence -> next action -> verifier -> next state | stop | escalate
 ```
 
-Self-reproduction rule: a team may generate reusable process artifacts, but it cannot install them as skills, hooks, schemas, or automations without the V6 promotion gate and a cheap check.
+Self-reproduction rule: a team may generate reusable process artifacts, but it cannot install them as skills, hooks, schemas, or automations without the V7 promotion gate and a cheap check.
 
 ## Ontology Command Board
 

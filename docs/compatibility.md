@@ -1,6 +1,6 @@
 # Compatibility
 
-Third Brain V6 Skills use the open Agent Skills-style `SKILL.md` format. Compatibility has two levels:
+Third Brain V7 Skills use the open Agent Skills-style `SKILL.md` format. Compatibility has two levels:
 
 1. Native skills: the tool can discover `SKILL.md` files directly.
 2. Rules/context adapter: the tool can read these skills through project rules, `AGENTS.md`, or manual prompt context.
@@ -27,7 +27,7 @@ bash install.sh cursor
 Recommended prompt:
 
 ```text
-Use the Third Brain V6 skill router. For this task, select the relevant skill from skills/*/SKILL.md, check assumes/conflicts_with, then follow its Usage Template, Workflow, Success Metrics, Quality Gates, and V6 promotion gate.
+Use the Third Brain V7 skill router. Select the relevant skills/*/SKILL.md, inspect metadata.profile plus assumes/conflicts_with, then follow Usage Template, Workflow, Failure Protocol, Output Contract, Success Metrics, Quality Gates, and the V7 promotion gate.
 ```
 
 ## Windsurf Setup
@@ -55,7 +55,7 @@ For tools without native skill discovery:
 3. Start with one explicit prompt:
 
 ```text
-Read AGENTS.md and the relevant file under skills/*/SKILL.md before acting. Check assumes/conflicts_with, follow the skill's Prompt, Use Case, Expected Result, Success Metrics, Verification Case, Quality Gates, and V6 promotion gate, and resolve wiki paths from system/config.md when present.
+Read AGENTS.md and the relevant skills/*/SKILL.md before acting. Check metadata.profile plus assumes/conflicts_with; follow Usage Template, Workflow, Failure Protocol, Output Contract, Success Metrics, Quality Gates, and the V7 promotion gate; resolve wiki paths from system/config.md when present.
 ```
 
 ## Notes

@@ -7,13 +7,13 @@ Use this checklist when publishing or refreshing the GitHub repository page.
 Recommended description:
 
 ```text
-Third Brain V6 — 19 Production-Ready Agent Skills for Claude / Codex / Cursor | Obsidian Knowledge OS + Agent Loops + AI Operations
+Third Brain V7 — 19 Profile-Aware Agent Skills for Claude / Codex / Cursor | Obsidian Knowledge OS + Verified Agent Loops
 ```
 
 Recommended Chinese description:
 
 ```text
-第三大脑 V6 — 19 个生产就绪的 Claude/Codex/Cursor 技能 | Obsidian 知识操作系统 + Agent Loop + AI 运营质量系统
+第三大脑 V7 — 19 个具备执行契约的 Claude/Codex/Cursor 技能 | Obsidian 知识系统 + 可验证 Agent Loop
 ```
 
 ## Topics
@@ -47,7 +47,7 @@ property-management
 ## Submission Blurb
 
 ```text
-Third Brain V6 Skills is a collection of 19 Agent Skills that turn AI coding agents and Obsidian into a persistent knowledge operating system. It supports Codex CLI, Claude Code, Gemini CLI, Cursor, and Windsurf, with workflows for LLM Wiki ingestion, daily knowledge loops, verification, agentic workflow design, harness design, multi-agent orchestration, startup evaluation, and AI Six Sigma operations design.
+Third Brain V7 is a collection of 19 profile-aware Agent Skills for a persistent Obsidian knowledge and agent execution system. It supports Codex CLI, Claude Code, Gemini CLI, Cursor, and Windsurf with explicit unknown handling, durable state, bounded retries, independent verification, and governed promotion.
 ```
 
 ## Maintenance Cadence

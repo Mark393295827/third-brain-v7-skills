@@ -1,7 +1,7 @@
-# Third Brain V6 Skills
+# Third Brain V7 Skills
 
 <p align="center">
-  <img src="assets/third-brain-v5-system-architecture.png" alt="Third Brain V6 knowledge OS architecture: LLM, Skills, Obsidian, behavior design, creativity engine, governance, and compounding loops" width="600">
+  <img src="assets/third-brain-v5-system-architecture.png" alt="Third Brain V7 knowledge OS architecture: LLM, Skills, Obsidian, behavior design, creativity engine, governance, and compounding loops" width="600">
 </p>
 
 **Production-ready Agent Skills for Claude Code, Codex, Gemini, Cursor, and Windsurf.** Build a persistent knowledge operating system with verification-first workflows, Obsidian provenance, scheduled loops, context management, and multi-agent orchestration.
@@ -61,16 +61,17 @@ Full guide: **[GUIDE.md](GUIDE.md)**
 
 ---
 
-## V6 Operating Model
+## V7 Operating Model
 
-V6 treats the wiki as the agent's durable disk and governance layer:
+V7 keeps the wiki as durable disk and governance, then gives every skill a profile-aware execution contract:
 
 ```text
 Input -> Source -> Wiki compile -> Daily loop -> Agent/Wiki flywheel -> Skill/SOP upgrade -> Verification
 ```
 
-The upgrade adds six hard defaults:
+The upgrade adds seven hard defaults:
 
+- **Profiles match risk**: one-shot, stateful, loop, and high-risk work load only the controls they need.
 - **Source provenance stays immutable**: raw source notes and block refs remain the audit layer.
 - **Loops have contracts**: Trigger -> Execute -> Verify -> State, with budgets and recovery.
 - **Context is zero-overhead by default**: hot paths load only what the task needs.
@@ -78,7 +79,7 @@ The upgrade adds six hard defaults:
 - **Teams need ownership**: multi-agent work requires write scopes, IPC, join gates, cleanup, and evidence.
 - **Rules promote through evidence**: wiki insights become schema or skill rules only after repeated support and a cheap check.
 
-See [V6 release notes](docs/release-notes-v6.md).
+See [V7 release notes](docs/release-notes-v7.md) and the [Agent Skills standard](docs/agent-skills-standard.md).
 
 ---
 
@@ -88,21 +89,21 @@ See [V6 release notes](docs/release-notes-v6.md).
 
 | Skill | What it does |
 |-------|-------------|
-| **[wiki-ingest](skills/wiki-ingest/SKILL.md)** | Capture sources (articles, PDFs, transcripts) into an interlinked wiki with source references, concept pages, and entity pages. Enforces the V6 source-to-skill promotion gate so pages explain *why* something matters and when it can change future agent behavior. |
-| **[verify-before-claim](skills/verify-before-claim/SKILL.md)** | **Iron rule**: No completion claims without fresh verification evidence. Run the proof command, show the output, then claim. Prevents "should work" hallucinations. Uses poker psychology (expected value thinking) to distinguish process from outcomes. |
+| **[wiki-ingest](skills/wiki-ingest/SKILL.md)** | Preserve an immutable source, compile linked understanding, enforce promotion boundaries, and verify every touched file. |
+| **[verify-before-claim](skills/verify-before-claim/SKILL.md)** | **Iron rule**: no completion claim without fresh, scope-matched evidence; consequential actions also require independent verification, approval, and rollback. |
 
 ### 📅 **Daily Loop**
 
 | Skill | What it does |
 |-------|-------------|
-| **[daily-okr](skills/daily-okr/SKILL.md)** | Execute a 7-KR cycle: Input → Cognition → Wiki → Behavior → Creativity → Output → Feedback. Includes **Stop Doing List** (Buffett/Munger) to identify what NOT to do. Score: 3=starting, 5=minimal loop, 7=quality, 10=flywheel. |
+| **[daily-okr](skills/daily-okr/SKILL.md)** | Execute a 7-KR cycle: Input → Cognition → Wiki → Behavior → Creativity → Output → Feedback, with an artifact or receipt for every completed KR. |
 
 ### 🎯 **Behavior & Creativity**
 
 | Skill | What it does |
 |-------|-------------|
-| **[behavior-design](skills/behavior-design/SKILL.md)** | Turn goals into habit systems. Decompose → minimum habits → triggers → SOPs → review. Includes Human Agency Scale (HAS) from BJ Fogg. |
-| **[creativity-engine](skills/creativity-engine/SKILL.md)** | Generate novel ideas via combinatorial creativity. Lego Building Blocks method (Andrew Ng), cross-domain analogies, minimum experiments. |
+| **[behavior-design](skills/behavior-design/SKILL.md)** | Turn outcomes into observable minimum behavior, cues, SOPs, recovery, evidence, and review. |
+| **[creativity-engine](skills/creativity-engine/SKILL.md)** | Generate mechanism-diverse options, rank evidence gaps, and define three bounded minimum experiments. |
 
 ### 🔬 **Research & Quality**
 
@@ -115,10 +116,10 @@ See [V6 release notes](docs/release-notes-v6.md).
 
 | Skill | What it does |
 |-------|-------------|
-| **[context-manager](skills/context-manager/SKILL.md)** | Manage LLM context window — token budgeting, prompt assembly, truncation strategies using Concrete Ideas framework (Andrew Ng) + Tokenmax techniques. |
+| **[context-manager](skills/context-manager/SKILL.md)** | Derive budgets at runtime, checkpoint state, compact with KEEP/SUMMARIZE/DROP/RETRIEVE, and route by capability. |
 | **[loop-engineering](skills/loop-engineering/SKILL.md)** | Turn repeatable tasks into bounded agent loops with a durable contract, independent verifier, hard budgets, explicit stop/recovery rules, and conservative topology selection. |
 | **[agentic-engineering](skills/agentic-engineering/SKILL.md)** | Design agent workflows as spec-driven macro actions with quality ceilings, verification gates, delegated-action boundaries, and state checkpoints. |
-| **[agent-teams-command](skills/agent-teams-command/SKILL.md)** | Orchestrate multi-agent fleets — ownership, IPC, async budget envelopes, integration joins, evidence gates. |
+| **[agent-teams-command](skills/agent-teams-command/SKILL.md)** | Admit and command multi-agent work with exclusive ownership, typed IPC, isolated writes, serial integration, evidence, and cleanup. |
 
 ---
 
@@ -132,28 +133,29 @@ See [V6 release notes](docs/release-notes-v6.md).
 
 ### 🔄 Daily Workflow
 
-- `daily-okr` — 7-KR closed loop with Stop Doing List (Buffett/Munger), daily score
+- `daily-okr` — 7-KR evidence cycle with minimum-day degradation and durable closeout
 - `cognitive-compile` — 8-section framework: Question → Facts → Concepts → Pattern Recognition → Conflict Detection → Hypothesis Generation
 
 ### 🎨 Behavior & Creativity
 
-- `behavior-design` — Goals → habits → triggers → SOPs → review (HAS framework)
-- `creativity-engine` — Combinatorial creativity: Lego Building Blocks, cross-domain analogies, minimum tests
+- `behavior-design` — Outcome → minimum behavior → cue → SOP → evidence → review
+- `creativity-engine` — Mechanism-diverse combinations, scoring, and falsifiable minimum tests
 
 ### 🔬 Research & Quality
 
 - `deep-research` — STOW-compatible research harness, evidence trails, source/claim ledgers
-- `verify-before-claim` — Verification gates, poker psychology (expected value), red-flag detection
+- `verify-before-claim` — Fresh scope-matched evidence, independent checks, approval, rollback
 
 ### 🔄 Learning & Flow
 
 - `session-learn` — 7 signal types: concepts, entities, corrections, patterns, ideas, decisions, gaps
 - `project-flow-ops` — Execution flow: triage, plan, track, review across projects
 
-### 📊 Context & Cost
+### 📊 Context
 
-- `context-manager` — Token budgeting, prompt assembly, truncation strategies
-- `token-cost-tracker` — Estimate, log, report token usage with built-in Python logger
+- `context-manager` — Runtime budgets, checkpoint replay, compaction, retrieval, capability routing
+
+Utility command: `commands/token-cost-tracker.md` estimates, logs, and reports token usage; it is not one of the 19 Agent Skills.
 
 ### 🏗️ Engineering
 
@@ -165,7 +167,7 @@ See [V6 release notes](docs/release-notes-v6.md).
 ### 💼 Strategy & Operations
 
 - `startup-evaluation` — Startup health: entrepreneurship, VC 5T, PMF, runway, team, unit economics
-- `anthropic-os` — Self-evolving work method engine: CASH growth, 70/30 rule, two-week rule, working backwards
+- `anthropic-os` — Governed operating-system experiments: Four-C, 3B, prediction errors, permission ladder
 - `ai-six-sigma-property-os` — AI + Ontology + DMAIC for property work orders, dispatch, quotes, evidence
 
 ---
@@ -187,7 +189,7 @@ External Sources ──→ wiki-ingest + knowledge-ops ──→ Knowledge Layer
                             ↓
                     verify-before-claim (quality gate)
                             ↓
-                Multi-agent teams (agentic-engineering)
+                Multi-agent teams (agent-teams-command)
 ```
 
 The system is a **closed loop**: ingest sources → process daily → extract learning → verify claims → promote rules → scale to teams.
@@ -196,7 +198,7 @@ The system is a **closed loop**: ingest sources → process daily → extract le
 
 ## Architecture & Design
 
-**Third Brain V6 treats agents as LLM OS processes:**
+**Third Brain V7 treats agents as LLM OS processes:**
 - LLM = CPU
 - Context = RAM
 - Wiki/Obsidian = Disk
@@ -214,7 +216,7 @@ The system is a **closed loop**: ingest sources → process daily → extract le
 | **🎯 Behavior & Creativity** | Turn knowledge into habits and novel ideas | behavior-design, creativity-engine |
 | **🔬 Research & Quality** | Verify before claiming, research with rigor | deep-research, verify-before-claim |
 | **🔄 Continuous Learning** | Extract patterns from every session | session-learn, project-flow-ops |
-| **📊 Context & Cost** | Manage the LLM's scarcest resource | context-manager, token-cost-tracker |
+| **📊 Context** | Manage hot context, durable checkpoints, and runtime budgets | context-manager |
 | **🏗️ Engineering** | Design bounded loops, harnesses, agent workflows, and multi-agent systems | loop-engineering, agentic-engineering, harness-engineering, agent-teams-command |
 | **💼 Strategy & Operations** | Evaluate startups, design AI quality systems | startup-evaluation, anthropic-os, ai-six-sigma-property-os |
 
@@ -227,7 +229,7 @@ Start small. Add skills as you need them.
 | Stage | Core Skills | Unlock When |
 |-------|------------|-------------|
 | **Week 1** | `wiki-ingest` + `verify-before-claim` | You can ingest 1 source/day + every claim has fresh evidence |
-| **Weeks 2-4** | + `daily-okr` + `session-learn` | Daily OKR score >70% for a week, learnings feed back to wiki |
+| **Weeks 2-4** | + `daily-okr` + `session-learn` | Daily artifacts and verified learnings feed back to the wiki |
 | **Month 2+** | + `cognitive-compile` + `behavior-design` + `creativity-engine` | Wiki has 50+ pages or repeated decisions need synthesis |
 | **Month 3+** | + `knowledge-ops` + `loop-engineering` + `harness-engineering` + `agentic-engineering` | Retrieval, looping reliability, permissions, or delegated actions become bottlenecks |
 | **Multi-agent** | + `agent-teams-command` + `project-flow-ops` | Work splits into separate owners with clear integration gates |
@@ -320,8 +322,8 @@ system/           ← Config, log, schema, templates
 ## What This Is NOT
 
 - **Not a chat wrapper.** Skills are executable prompts that agents follow; they're not productivity theater.
-- **Not a productivity tool with 100 metrics.** Daily OKR has 7 KRs; that's it. Scoring is 3/5/7/10, not a complex formula.
-- **Not an all-in-one framework.** Pick skills incrementally. You don't need all 18 to start.
+- **Not a productivity tool with 100 metrics.** Daily OKR has seven causally linked KRs with evidence.
+- **Not an all-in-one framework.** Pick skills incrementally. You don't need all 19 to start.
 - **Not prescriptive.** Adapt paths, frontmatter, and skill triggers to your workflow.
 
 ---

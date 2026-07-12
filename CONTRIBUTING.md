@@ -1,4 +1,4 @@
-# Contributing to Third Brain V5 Skills
+# Contributing to Third Brain V7 Skills
 
 Thanks for considering contributing! This project aims to make personal knowledge compounding accessible to everyone.
 
@@ -27,15 +27,21 @@ PRs are welcome! Please:
 
 1. **Read the PR template** at `.github/PULL_REQUEST_TEMPLATE.md` (if exists) or follow:
 2. **One skill per PR** — makes review faster
-3. **Follow the Skill format**:
+3. **Follow the V7 Skill format**:
    ```yaml
    ---
    name: your-skill
-   description: One-line description — when to use this skill
+   description: One-line owned transformation. Use when the trigger applies.
+   metadata:
+     version: "7.0.0"
+     updated: "YYYY-MM-DD"
+     profile: "one-shot"
+     assumes: "Required operating condition."
+     conflicts_with: "Boundary that must not be overridden."
    ---
    ```
-4. **Include Quality Gates** — every skill needs a completion checklist
-5. **Test your skill** — describe how you verified it works
+4. **Use the canonical template** — include Workflow, Failure Protocol, Output Contract, Edge Cases, Success Metrics, and Quality Gates
+5. **Run the linter** — `python tools/lint-agent-skills.py`
 
 ### 4. Release Small, Useful Updates
 
@@ -55,11 +61,12 @@ Every skill in this repo must have:
 
 | Element | Required | Example |
 |---------|----------|---------|
-| YAML frontmatter | ✅ | `name:`, `description:` |
-| When to Use | ✅ | List of trigger conditions |
-| Clear Workflow | ✅ | Step-by-step instructions |
-| Quality Gates | ✅ | Completion checklist |
-| Anti-patterns | ✅ | Common mistakes |
+| YAML frontmatter | ✅ | discovery fields plus nested V7 metadata |
+| Trigger | ✅ | complete `Use when` clause in `description` |
+| Structured Workflow | ✅ | intake, unknowns, execute, evaluate |
+| Failure + Output | ✅ | standard code and inspectable receipt |
+| Edge Cases | ✅ | at least two expensive failure examples |
+| Quality Gates | ✅ | objective completion checklist |
 
 ### Code of Conduct
 

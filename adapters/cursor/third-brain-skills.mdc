@@ -1,18 +1,17 @@
 ---
-description: Route knowledge, behavior, research, verification, and agent-team tasks to Third Brain V5 skill files.
+description: Route tasks to Third Brain V7 skill contracts with profile-aware controls.
 alwaysApply: false
 ---
 
-# Third Brain V5 Skill Router
+# Third Brain V7 Skill Router
 
 When the user asks for knowledge ingestion, daily review, research, verification, behavior design, creativity, startup evaluation, or agent-team orchestration:
 
 1. Inspect the relevant `skills/<skill-name>/SKILL.md`.
-2. Follow its `Usage Template` first.
-3. Check `assumes` and `conflicts_with` before acting.
-4. Then follow its workflow, `Success Metrics`, and quality gates.
-5. Report the expected output, verification evidence, and remaining risk.
-6. State the `Verified Effect` in plain language when summarizing the result.
+2. Read `metadata.profile`, `assumes`, and `conflicts_with` before acting.
+3. Follow `Usage Template` and `Workflow`, including the unknowns gate and evaluation.
+4. Emit only the standard failure codes defined by the skill.
+5. Return the skill's Output Contract with verification evidence and residual risk.
 
 For wiki-writing skills, resolve paths from `system/config.md` when present. Use defaults only when no project config exists.
 
@@ -30,11 +29,14 @@ Common routing:
 - Knowledge organization, deduplication, or vector search -> `skills/knowledge-ops/SKILL.md`
 - Wiki health check, broken links, or stale pages -> `skills/wiki-lint/SKILL.md`
 - Context limits or token budget -> `skills/context-manager/SKILL.md`
+- Project triage, WIP, blockers, or completion state -> `skills/project-flow-ops/SKILL.md`
+- Session closure or reusable learning extraction -> `skills/session-learn/SKILL.md`
+- Repeatable task, scheduled routine, or bounded correction loop -> `skills/loop-engineering/SKILL.md`
 - Agent workflow refactor or autonomy design -> `skills/agentic-engineering/SKILL.md`
 - Agent permissions, tools, observability, or runtime safety -> `skills/harness-engineering/SKILL.md`
 - Team operating system, growth method, or self-evolving work method -> `skills/anthropic-os/SKILL.md`
 - Multi-agent execution -> `skills/agent-teams-command/SKILL.md`
 
-Do not claim a workflow is complete unless the relevant verification case and success metrics are satisfied.
+Do not claim completion unless fresh evidence satisfies Success Metrics and Quality Gates.
 
-When routing to `deep-research`, require its preflight, source-access boundary, source ledger, claim ledger, activity trace, citations, and STOW handoff packet when follow-up wiki ingest is expected.
+For `high-risk` profiles, require independent verification, approval boundaries, rollback, and an audit receipt. For `stateful`, `loop`, and `high-risk` profiles, persist state before returning.

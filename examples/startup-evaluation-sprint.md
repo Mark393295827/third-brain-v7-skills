@@ -56,6 +56,6 @@ Decision: learn-more
 
 The workflow is complete when the recommendation is supported by named assumptions and at least one concrete validation test.
 
-## Verified Effect
+## Outcome
 
 The user moves from idea excitement to a practical validation plan with cheaper next steps.

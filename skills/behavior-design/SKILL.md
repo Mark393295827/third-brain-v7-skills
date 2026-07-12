@@ -1,139 +1,94 @@
 ---
 name: behavior-design
-description: Design a behavior change system — decompose a goal into minimum habits, define triggers, build SOPs, and set up review cycles. Use when the user wants to build a habit, change behavior, or achieve a personal goal.
-version: "1.1"
-updated: "2026-05-22"
-assumes: "The goal can be converted into repeated behavior with a concrete trigger and review metric."
-conflicts_with: "Do not treat one-off strategy decisions as habits; use project-flow-ops or anthropic-os first."
+description: Use when a goal must be converted into a repeatable behavior, cue, SOP, review cadence, and identity-aligned reinforcement.
+metadata:
+  version: "7.0.0"
+  updated: "2026-07-11"
+  profile: "stateful"
+  assumes: "The actor, desired outcome, and operating context can be observed or probed."
+  conflicts_with: "Coercive behavior design, vague motivation advice, or unmeasured habit claims."
 ---
 
-# Behavior Design System
+# Behavior Design
 
-Transform goals into actionable behavior systems through decomposition, habit design, and review.
+<skill_contract>
+
+Convert an outcome into the smallest observable behavior system that can survive low-motivation days. Preserve agency; optimize the environment before blaming the actor.
 
 ## Usage Template
 
-**Prompt**
-```text
-Use behavior-design for this goal. Decompose it into minimum habits, triggers, SOPs, review cadence, and failure handling.
-```
-
-**Use Case**
-- Converting a goal or intention into a behavior system the user can actually repeat.
-
-**Expected Result**
-- The agent creates a habit plan with trigger, minimum action, environment design, review metric, and fallback.
-
-**Output Example**
-- A behavior card with goal, trigger, 15-minute action, cue, reward, review metric, and fallback.
-
-**Verification Case**
-- The first action takes 15 minutes or less and has a concrete time, place, trigger, and success criterion.
-
-**Verified Effect**
-- A vague goal becomes a repeatable behavior loop with a trigger, minimum action, review metric, and fallback.
-
-## Success Metrics
-
-- Plan defines a concrete trigger, a minimum action of 15 minutes or less, a success metric, and a fallback.
-- First repetition can be attempted today without buying tools or redesigning the whole environment.
-- Review cadence and failure handling are written down.
-
-## When to Use
-
-- User says "I want to build a habit of X"
-- User has a goal but hasn't broken it into actions
-- User wants to change a behavior pattern
-- User is reviewing why a habit didn't stick
-- User wants to understand their relationship with AI tools
-
-## Core Architecture
-
-```
-Goal → Habits  → Cues → SOPs → Review → Reward
-           ↓
-     Identity narrative: "I am the kind of person who..."
-```
-
-## Human Agency Scale (HAS) — Stanford Framework
-
-When designing behavior systems involving AI tools, use the HAS framework to determine the right level of human involvement:
-
-| Level | Description | When to Use | Example |
-|:-----:|-------------|-------------|---------|
-| **H1** | AI handles entirely, no human | Routine, low-stakes tasks | Auto-lint, auto-format |
-| **H2** | AI needs minimal input | Tasks with clear success criteria | Code review, data entry |
-| **H3** | Equal partnership | Creative/analytical work | Research synthesis, design |
-| **H4** | Human drives, AI assists | High-stakes decisions | Investment analysis, strategy |
-| **H5** | Human essential, AI supports | Relationship/empathy tasks | Coaching, conflict resolution |
-
-**Key insight from Stanford research:**
-- 45.2% of occupations prefer H3 (equal partnership) as the dominant level
-- Workers generally prefer higher human agency than experts deem necessary
-- Skills shift: from information processing → interpersonal competence
-
-**Apply to behavior design:**
-- For habits involving AI: Choose the appropriate HAS level
-- For skill development: Focus on H4/H5 skills (interpersonal, strategic)
-- For automation: Start with H1/H2 tasks, gradually expand
+Provide: desired outcome, actor, context, current behavior, constraints, review horizon, and available evidence. Optional: failed attempts and environmental cues.
 
 ## Workflow
 
-### B1: Define the Goal
+<intake>
 
-Answer:
-- Why is this important?
-- What identity does it build? ("I want to be someone who...")
-- What does success look like in 3 months?
+1. Restate the outcome as an observable change, not an identity label.
+2. Establish baseline frequency, friction, trigger context, and hard constraints.
+3. Separate controllable behavior from lagging outcome.
+4. Set one review horizon and one owner.
 
-### B2: Decompose into Minimum Habits
+</intake>
 
-Break the goal into 3 minimum habits — actions so small they can't fail:
+<unknowns_gate>
 
-| Habit | Minimum Viable Action | Trigger | Frequency |
-|-------|----------------------|---------|-----------|
-| 1 | ≤2 minutes | After existing habit X | Daily |
-| 2 | ≤5 minutes | When situation Y occurs | 3x/week |
-| 3 | ≤15 minutes | At time Z | Weekly |
+Classify unknowns as known, probeable, testable, or blocked. If actor, target behavior, or safety boundary is absent, return `NEEDS_INPUT` with one minimal question. A reversible assumption is allowed only when labeled and paired with a same-cycle test.
 
-### B3: Define SOPs
+</unknowns_gate>
 
-For each habit, write the execution SOP:
+<execute>
 
-```
-WHEN [trigger]
-THEN:
-1. [step 1 — what to do]
-2. [step 2 — what to do]
-3. [step 3 — what to do]
-AFTER: [immediate reward]
+Build the HAS sequence:
 
-Barrier removal: [what prevents doing this?]
-```
+1. **H1 Goal:** translate the outcome into one leading behavior and one lagging measure.
+2. **H2 Habit:** define anchor, cue, location, and three effort levels: minimum (about 2 minutes), normal, and stretch.
+3. **H3 SOP:** write `trigger -> action -> evidence -> recovery -> stop` so a missed run has a next move.
+4. **H4 Review:** select a cadence; compare planned versus observed behavior and change one variable only.
+5. **H5 Identity:** use evidence-based reinforcement: “I am becoming X because I repeatedly did Y,” never unsupported affirmation.
 
-### B4: Set Up Review
+Reduce friction before adding motivation. Prefer defaults, visible cues, prepared tools, and short feedback latency. Keep the minimum behavior useful rather than ceremonial.
 
-- Daily: check off habit completion (≤30 sec)
-- Weekly: review completion rate + resistance patterns
-- Monthly: adjust habits + upgrade minimum bar
+</execute>
 
-### B5: Reframe Identity
+<evaluate>
 
-Instead of "I want to read more" → "I am a reader."
-Instead of "I want to exercise" → "I am someone who moves daily."
+Check that the behavior is observable, starts in a named context, fits the minimum effort budget, produces evidence, and has a recovery path. Reject plans that depend on constant willpower, hide coercion, or measure only outcomes. If the check fails, revise the highest-friction element once and re-evaluate.
 
-## Behavior Design Principles
+</evaluate>
 
-1. **Minimum start** (< 5 min) — if it takes willpower to start, the habit won't stick
-2. **Trigger binding** — attach new habit to an existing routine
-3. **Friction removal** — prepare the environment to make it easy
-4. **Immediate reward** — the brain needs dopamine within seconds, not months
-5. **Identity narrative** — lasting change comes from identity shift, not goal completion
+<state_contract>
+
+Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus baseline, current H1-H5 design, review date, and revision history. Update atomically after each review; never overwrite prior observations.
+
+</state_contract>
+
+## Failure Protocol
+
+- `NEEDS_INPUT`: a target, actor, or boundary is missing; ask one narrow probe.
+- `INSUFFICIENT_EVIDENCE`: baseline is unknown; run a short observation period before optimizing.
+- `VERIFY_FAILED`: the behavior is not observable, feasible, or linked to the outcome; revise one variable.
+- `BUDGET_STOP`: the review horizon or effort budget is exhausted; preserve state and report the next experiment.
+
+## Output Contract
+
+Return `status`, `result` (H1-H5 plan), `evidence` (baseline and measures), `unknowns`, and `next_action` (owner plus review date).
+
+## Edge Cases
+
+- Motivation is near zero: keep the cue and reduce the action to a useful minimum; do not expand the reward system.
+- Repeated misses occur despite compliance: treat the goal-behavior link as unverified and test a different leading behavior.
+
+## Success Metrics
+
+- One named cue reliably starts one observable minimum behavior.
+- Execution evidence is captured at the chosen cadence.
+- Reviews change the system using observed friction, not self-judgment.
 
 ## Quality Gates
 
-- [ ] Goal framed as identity, not outcome
-- [ ] 3 minimum habits defined (≤2/5/15 min)
-- [ ] Each habit has a clear trigger
-- [ ] Friction removal identified for each
-- [ ] Review schedule set
+- [ ] Outcome, leading behavior, and lagging measure are distinct.
+- [ ] Minimum action, recovery path, owner, and review date exist.
+- [ ] The design preserves agency and has no coercive mechanism.
+- [ ] Completion claims use observed behavior evidence.
+
+</skill_contract>

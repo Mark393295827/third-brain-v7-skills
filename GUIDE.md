@@ -1,6 +1,6 @@
-# Third Brain V6 Skills — Installation & Usage Guide
+# Third Brain V7 Skills — Installation & Usage Guide
 
-> **18 skills** transforming AI coding agents into a persistent knowledge compounding system. Compatible with Claude Code, Codex CLI, Gemini CLI, Cursor, Windsurf, and other rule/context-based AI IDEs.
+> **19 profile-aware skills** for a persistent knowledge and agent execution system. Compatible with Claude Code, Codex CLI, Gemini CLI, Cursor, Windsurf, and other rule/context-based AI IDEs.
 
 ---
 
@@ -23,7 +23,7 @@
 
 - One supported AI coding tool: **Claude Code**, **Codex CLI**, **Gemini CLI**, **Cursor**, **Windsurf**, or another tool that can read project rules/context files
 - **Git** (`git --version`)
-- **Python 3.8+** (for token-cost-tracker and vector features)
+- **Python 3.8+** (for linting, loop validation, token-cost utility, and optional vector adapters)
 - **Obsidian** (recommended for wiki knowledge base)
 
 ### One-Line Install
@@ -199,8 +199,8 @@ claude "Create a team of 3 agents to research this topic."
 
 | Skill | What It Does | Trigger Phrase |
 |-------|-------------|----------------|
-| **behavior-design** | Decompose goals into habits, triggers, SOPs, reviews. Includes HAS scale | "design a habit for X" |
-| **creativity-engine** | Combinatorial ideation via Lego Building Blocks method | "generate ideas about X" |
+| **behavior-design** | Convert outcomes into minimum behavior, cues, SOPs, evidence, recovery, and review | "design a habit for X" |
+| **creativity-engine** | Generate mechanism-diverse options and falsifiable minimum experiments | "generate ideas about X" |
 
 ### 🔬 Research & Quality
 
@@ -220,13 +220,15 @@ claude "Create a team of 3 agents to research this topic."
 
 | Skill | What It Does | Trigger Phrase |
 |-------|-------------|----------------|
-| **context-manager** | Token budget, prompt assembly, truncation strategies | "I'm hitting context limits" |
-| **token-cost-tracker** | Estimate, log, report token usage | "how many tokens will this cost?" |
+| **context-manager** | Runtime budgets, checkpoint replay, compaction, retrieval, capability routing | "I'm hitting context limits" |
+
+`token-cost-tracker` is a utility command under `commands/`, not an Agent Skill.
 
 ### 🏗️ Engineering
 
 | Skill | What It Does | Trigger Phrase |
 |-------|-------------|----------------|
+| **loop-engineering** | Designs bounded Goal/Loop/Automation/AutoResearch contracts with state and recovery | "turn this into a verified loop" |
 | **agentic-engineering** | Refactors workflows into spec-driven macro actions with quality ceilings, delegated-action boundaries, autonomy defaults, write-back, and verification | "make this workflow more agentic" |
 | **harness-engineering** | Agent runtime kernel: permissions, tools as system calls, delegated-action gates, provenance ledgers, observability, recovery, adversarial review | "how do I make this agent safe?" |
 | **agent-teams-command** | Multi-agent macro action orchestration with ownership, IPC, async budget envelopes, integration, cleanup, evidence gates, and red-team review | "create an agent team to build X" |
@@ -287,7 +289,8 @@ Step 1 — Plan with Context:
    Run a cognitive compile on the best architecture."
 
 Step 2 — Create Agent Team:
-  "Create a team of 3 teammates using Sonnet.
+  "Create a team of 3 teammates and route them by implementation,
+   domain, and independent-evaluation capability.
    Teammate 1: Frontend (React).
    Teammate 2: Backend (FastAPI).
    Teammate 3: QA (Playwright tests).
@@ -407,29 +410,21 @@ For strategic decisions:
 
 ## 7. Advanced Configurations
 
-### 7.1 Model Selection by Task
+### 7.1 Capability Routing by Task
 
-| Task | Recommended Model | Rationale |
-|------|------------------|-----------|
-| Daily OKR | Sonnet | Fast, cheap for routine tasks |
-| Cognitive Compile | Opus | Deep reasoning needed |
-| Wiki Ingest | Sonnet | Structured output |
-| Agent Teams | Sonnet (default) / Opus (complex) | Balance speed vs quality |
-| Deep Research | Opus | Evidence synthesis, activity trace, and STOW handoff |
-| Creativity Engine | Sonnet | Creative fluency |
-| Token Estimation | Haiku | Fast, cheap classification |
+| Task | Required capability | Runtime preference |
+|------|---------------------|-------------------|
+| Daily OKR | Structured extraction, low latency | Lowest-cost capable route |
+| Cognitive Compile | Deep reasoning, evidence separation | Reasoning route with adequate context |
+| Wiki Ingest | File/tool use, structured output | Reliable tool-use route |
+| Agent Teams | Role-specific capability plus independent evaluator | Smallest justified team |
+| Deep Research | Search, synthesis, citation discipline | Research-capable route with current access |
+| Creativity Engine | Divergence plus constraint evaluation | Fast route unless domain risk is high |
+| Token Estimation | Arithmetic or deterministic calculator | Script/tool before a model |
 
-### 7.2 Custom Settings
+### 7.2 Runtime Settings
 
-```json
-{
-  // .claude/settings.json additions
-  "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
-  },
-  "teammateMode": "auto"
-}
-```
+Discover team, sandbox, connector, and approval settings from the installed runtime. Keep product/version-specific flags in local configuration, not durable skills; verify the feature is active before claiming workers were launched.
 
 ### 7.3 Git Hooks Integration
 
@@ -448,7 +443,7 @@ chmod +x .git/hooks/post-commit
 claude "Estimate token cost for a cognitive compile on this 50-page PDF."
 
 # Log after tasks
-claude "Log this task: cognitive-compile, opus-4.6, 150K input, 35K output."
+claude "Log this task: cognitive-compile, runtime-model-id, 150K input, 35K output, using today's billing rates."
 
 # Weekly report
 claude "Generate my weekly token report."
@@ -461,12 +456,12 @@ claude "Generate my weekly token report."
 | Issue | Likely Cause | Solution |
 |-------|-------------|----------|
 | Skill not found | Skills not copied to correct directory | Run `cp -r skills/* ~/.claude/skills/` |
-| Agent Teams not working | Experimental flag not set | Add `"experimental.agentTeams": true` to settings |
-| Token cost too high | Using Opus for simple tasks | Switch to Sonnet; use context-manager budget rules |
+| Agent Teams not working | Runtime lacks workers or team mode is disabled | Inspect current runtime capabilities/settings; use one process if unavailable |
+| Token cost too high | Capability route or context scope is oversized | Use runtime pricing plus context-manager budget and compaction rules |
 | Wiki links broken | Wiki structure not set up or config paths mismatch | Check `system/config.md`, then create the configured concept/entity folders. |
 | Vector search failing | ChromaDB not installed | `pip install chromadb sentence-transformers` |
-| Session-learn empty | Session too short (<5 tool calls) | Work longer or trigger manually |
-| Cognitive compile too long | Topic too broad | Narrow the question; use concrete ideas |
+| Session-learn empty | No reusable, source-grounded delta exists | Return no-op evidence or provide the missing session artifact |
+| Cognitive compile too long | Question or source boundary is too broad | Narrow the decision question and preserve source locators |
 | LLM context full | No truncation strategy | Use context-manager to budget and trim |
 
 ### Quick Diagnostics
@@ -511,7 +506,7 @@ cat .token-log.csv | tail -5
 ┌─────────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────┐
 │ daily-okr   │ │cognitive │ │ behavior │ │ creativity   │
 │ (7 KR loop) │ │-compile  │ │ -design  │ │ -engine      │
-│ + Stop List │ │          │ │ + HAS    │ │ + Lego Block │
+│ + evidence  │ │ 8 parts  │ │ + review │ │ + experiments│
 └─────────────┘ └──────────┘ └──────────┘ └──────────────┘
         │            │            │              │
         └────────────┼────────────┼──────────────┘
@@ -520,7 +515,7 @@ cat .token-log.csv | tail -5
     │ verify-before-claim   ← quality gate          │
     │ deep-research         ← synthesis             │
     │ project-flow-ops      ← execution             │
-    │ token-cost-tracker    ← cost control          │
+    │ loop-engineering      ← bounded execution     │
     │ context-manager       ← context optimization  │
     │ harness-engineering   ← agent infrastructure  │
     └───────────────────────────────────────────────┘

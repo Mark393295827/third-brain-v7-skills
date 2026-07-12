@@ -8,7 +8,7 @@ ADAPTERS_DIR="$(dirname "$0")/adapters"
 CONFIG_FILE="$(dirname "$0")/system/config.md"
 TARGET_ARG="${1:-auto}"
 
-echo "=== Third Brain V5 Skills Installer ==="
+echo "=== Third Brain V7 Skills Installer ==="
 echo ""
 
 # Detect agent harness

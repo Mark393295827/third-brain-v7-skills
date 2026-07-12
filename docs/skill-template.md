@@ -1,6 +1,6 @@
 # Base Skill Template
 
-Use this V7 template when creating or refactoring a skill. Keep only the blocks the workflow needs. Target 120-250 `SKILL.md` lines; move detailed domain material and long examples into `references/`.
+Use this V7 template when creating or refactoring a skill. Keep the hot path below 350 `SKILL.md` lines; move detailed domain material and long examples into `references/`.
 
 ## Execution Profiles
 
@@ -20,8 +20,9 @@ Do not hard-code model brands, prices, or context-window sizes. Select runtime c
 name: skill-name
 description: Perform the core transformation and name its output. Use when the user asks for the specific task, artifact, or workflow this skill owns.
 metadata:
-  version: "7.0"
+  version: "7.0.0"
   updated: "YYYY-MM-DD"
+  profile: "one-shot"
   assumes: "State the minimum condition required to execute safely."
   conflicts_with: "State the boundary or workflow this skill must not silently override."
 ---
@@ -33,7 +34,6 @@ metadata:
   <output>Durable result or concrete answer.</output>
   <done>Observable evidence that proves completion.</done>
   <non_goals>Adjacent work this skill must not absorb.</non_goals>
-</skill_contract>
 
 ## Usage Template
 
@@ -56,7 +56,7 @@ Budget: [attempt, time, tool, token, or cost cap]
 - Assumptions, unresolved unknowns, and residual risk are explicit.
 - Multi-call work can resume from the state artifact without replaying chat history.
 
-## Control Flow
+## Workflow
 
 <intake>
 1. Read the objective, local instructions, prior state, and minimum required artifacts.
@@ -96,7 +96,7 @@ Budget: [attempt, time, tool, token, or cost cap]
 - Preserve the last known-good artifact and rollback path.
 </retry_policy>
 
-<state_contract required="multi-call-or-loop-work">
+<state_contract>
 ```yaml
 schema_version: 1
 objective: ""
@@ -140,9 +140,10 @@ Fallback order:
 <receipt>
 ```yaml
 status: success | needs-input | blocked | verify-failed | no-progress | budget-stop
-summary: ""
+result: ""
+evidence: []
+unknowns: []
 artifacts: []
-verification: []
 attempts: 0
 assumptions: []
 residual_risks: []
@@ -168,17 +169,8 @@ Never describe an automatic trigger unless a command, hook, workflow, or schedul
 
 ## Edge Cases
 
-### Ambiguous irreversible choice
-
-Input: "Migrate the production database to the best schema."
-
-Response: Emit `NEEDS_INPUT` because "best" hides a user-owned architecture decision and production mutation. Ask one question identifying the decision that changes the migration design; do not create or apply a migration.
-
-### Verification fails after a plausible output
-
-Input: A generated configuration parses but its integration test fails.
-
-Response: Record the failing test, change one hypothesis, and retry within the cap. If the same failure repeats, emit `NO_PROGRESS` or `VERIFY_FAILED`, preserve the last known-good artifact, and provide the state path.
+- **Ambiguous irreversible choice:** for "Migrate production to the best schema," emit `NEEDS_INPUT` because “best” hides a user-owned decision; ask one discriminating question and do not mutate production.
+- **Verification fails after plausible output:** record the failing integration test, change one hypothesis, and retry within the cap; on repetition emit `NO_PROGRESS` or `VERIFY_FAILED` and preserve the last known-good artifact.
 
 ## Quality Gates
 
@@ -205,6 +197,8 @@ Response: Record the failing test, change one hypothesis, and retry within the c
 - Keeping state only in conversation.
 - Retrying without new evidence or a changed hypothesis.
 - Treating a partial result, timeout, or budget stop as success.
+
+</skill_contract>
 ````
 
 ## Refactor Rule

@@ -1,4 +1,4 @@
-# Third Brain V5 Skills — Claude Code
+# Third Brain V7 Skills — Claude Code
 
 For detailed installation, usage, and workflow scenarios, see **[GUIDE.md](GUIDE.md)**.
 
@@ -12,7 +12,7 @@ You have access to the following Agent Skills. Each skill is a markdown file in 
 - **wiki-lint** — Health-check the wiki across P0/P1 graph health, source refs, frontmatter, links, provenance debt, clipping lifecycle, understanding integrity, and drift.
 
 ### 🔄 Daily Loop
-- **daily-okr** — 7 Key Results daily cycle: Input → Cognition → Wiki → Behavior → Creativity → Output → Feedback. Includes Stop Doing List.
+- **daily-okr** — 7 Key Results daily cycle: Input → Cognition → Wiki → Behavior → Creativity → Output → Feedback, each with evidence.
 - **cognitive-compile** — 8-section deep learning compile: Question → Facts → Concepts → Patterns → Conflicts → Hypotheses → Decision → Action.
 
 ### 🎨 Behavior & Creativity
@@ -21,17 +21,18 @@ You have access to the following Agent Skills. Each skill is a markdown file in 
 
 ### 🔬 Research & Quality
 - **deep-research** — STOW-compatible research harness with ChatGPT-style preflight, source/claim ledgers, activity trace, citations, privacy checks, and wiki-ingest handoff.
-- **verify-before-claim** — No completion claims without fresh verification evidence. Includes expected value thinking.
+- **verify-before-claim** — No completion claims without fresh, scope-matched verification evidence.
 
 ### 🔄 Learning
 - **session-learn** — Extract 7 knowledge signal types from sessions. Closure Protocol for feedback loops.
 - **project-flow-ops** — Triage, plan, track, review across projects.
 
-### 📊 Cost
-- **context-manager** — Token budgeting, prompt assembly, truncation strategies. Tokenmaxxing vs Efficiency.
-- **token-cost-tracker** — Command: estimate, log, report token usage.
+### 📊 Context & Cost
+- **context-manager** — Runtime-derived budgets, checkpoints, compaction, retrieval, and capability routing.
+- `token-cost-tracker` — command for estimate/log/report; it is not an Agent Skill.
 
 ### 🏗️ Engineering
+- **loop-engineering** — Bounded Goal/Loop/Automation/AutoResearch contracts with state, verification, retry, and recovery.
 - **agentic-engineering** — Refactor skills and workflows as agent processes with autonomy defaults, delegated-action boundaries, state checkpoints, write-back, and verification gates.
 - **harness-engineering** — Agent runtime kernel: three-tier permissions, tools as system calls, provenance ledgers, delegated-action gates, observability, recovery, and closed-loop design.
 - **agent-teams-command** — Multi-agent process orchestration with ownership, IPC, async budget envelopes, integration, cleanup, and evidence gates.
@@ -50,7 +51,6 @@ Invoke any skill naturally:
 - "Launch Anthropic OS for my team" — includes 3B creativity algorithms
 - "Design my Property Agent OS with AI Six Sigma"
 - "Apply 3B to our growth strategy" — Bending/Breaking/Blending
-- "Bias to yes on this decision" — Costolo operator mode
 - "Estimate token cost for this task"
 
 ## Skill Contract
@@ -59,6 +59,8 @@ Before executing a selected skill, read the skill frontmatter and enforce:
 
 - `assumes`: required operating assumptions for safe use.
 - `conflicts_with`: workflows or assumptions that must not be silently overridden.
+- `metadata.profile`: `one-shot`, `stateful`, `loop`, or `high-risk` control depth.
+- `## Failure Protocol` and `## Output Contract`: standard stop status and receipt.
 - `## Success Metrics`: minimum measurable result for one successful run.
 - `## Quality Gates`: checks required before completion claims.
 
@@ -82,19 +84,6 @@ LLM=CPU · Context=RAM · Storage=Disk · Tools=System Calls · Skills=Programs 
 - **Breaking**: Eliminate worst-performing patterns; break path dependency
 - **Blending**: Fuse elements from different domains for novel patterns
 
-### Operator Mode (Costolo)
-- **Bias to Yes**: Only direct manager can say no
-- **DRI**: Directly Responsible Individual over group consensus
-- **Speed**: "If this takes 6 weeks, what would make it 2 weeks?"
-
 ### Agent Teams
 
-Agent Teams are experimental. Enable via `settings.local.json`:
-```json
-{
-  "experimental.agentTeams": true,
-  "teammateMode": "auto"
-}
-```
-Requires Claude Code v2.1.32+.
-Use `agent-teams-command` skill for multi-agent orchestration (Ender's Game approach).
+When the runtime exposes isolated workers, use `agent-teams-command` for admission, ownership, IPC, integration, evidence, and cleanup. Do not bind the durable skill to a product version or model name.

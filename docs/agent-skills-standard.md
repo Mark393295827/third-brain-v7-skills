@@ -17,15 +17,16 @@ Do not add auxiliary READMEs, changelogs, installation guides, or process diarie
 
 ## Frontmatter
 
-Keep discovery fields at the top level and V6/V7 governance fields under `metadata`:
+Keep discovery fields at the top level and V7 governance fields under `metadata`:
 
 ```yaml
 ---
 name: skill-name
 description: State the owned transformation and complete "Use when" trigger.
 metadata:
-  version: "7.0"
+  version: "7.0.0"
   updated: "YYYY-MM-DD"
+  profile: "one-shot | stateful | loop | high-risk"
   assumes: "Required operating condition."
   conflicts_with: "Boundary that must not be overridden."
 ---
@@ -39,9 +40,10 @@ Every `SKILL.md` must contain:
 
 - `## Usage Template`
 - `## Success Metrics`
-- `## Control Flow`
+- `## Workflow`
 - `## Failure Protocol`
 - `## Output Contract`
+- `## Edge Cases`
 - `## Quality Gates`
 
 Use the canonical [Base Skill Template](skill-template.md). Delete optional blocks that do not apply, but preserve the required behavior:
@@ -69,7 +71,7 @@ Use three loading levels:
 2. Activation: compact `SKILL.md` control flow.
 3. Execution: load references or run scripts only when routed by the hot path.
 
-Target 120-250 lines. Treat 350 lines as a refactor warning and 500 as a hard failure. Keep references one level from `SKILL.md` and give long references a table of contents.
+Keep `SKILL.md` below 350 lines. Prefer an 80-200 line hot path when the domain permits it. Keep references one level from `SKILL.md` and give long references a table of contents.
 
 ## Model Adaptability
 
