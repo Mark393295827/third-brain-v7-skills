@@ -2,6 +2,8 @@
 
 V7 refactors all 19 Agent Skills around one profile-aware execution contract derived from bounded loop design, explicit unknown handling, and high-signal modular architecture.
 
+Operational guidance: [V7 最大潜力使用手册](v7-max-potential-guide-zh.md).
+
 ## Execution Contract
 
 Every skill now provides:

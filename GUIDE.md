@@ -56,7 +56,7 @@ cp -r skills/* ~/.claude/skills/
 
 # Verify installation
 ls ~/.claude/skills/ | wc -l
-# Expected output: 18
+# Expected output: 19
 ```
 
 #### Codex CLI
@@ -105,18 +105,11 @@ cp commands/* ~/.claude/commands/
 
 ## 2. Platform Setup
 
-### 2.1 Agent Teams (Optional, Experimental)
+### 2.1 Agent Teams (Optional)
 
-Enable multi-agent orchestration in `.claude/settings.local.json`:
+First inspect whether the installed runtime exposes isolated workers, task state, and integration controls. Product/version-specific flags belong in local runtime configuration, not durable skills. If workers are unavailable, use one agent plus an independent verifier.
 
-```json
-{
-  "experimental.agentTeams": true,
-  "teammateMode": "auto"
-}
-```
-
-Requires Claude Code v2.1.32+.
+Use `agent-teams-command` only after its admission gate shows that independent workstreams justify coordination and review cost.
 
 ### 2.2 Wiki Path Configuration
 
@@ -144,7 +137,7 @@ Minimum required variables:
 ```bash
 # Create token log
 touch .token-log.csv
-echo "date,task,model,input_tokens,output_tokens,cost,notes" > .token-log.csv
+echo "date,task,model_id,capability_class,input_tokens,cached_input_tokens,output_tokens,input_rate,cached_input_rate,output_rate,currency,cost,rate_source,notes" > .token-log.csv
 ```
 
 ### 2.4 Vector Search (Optional, for knowledge-ops)

@@ -49,6 +49,8 @@ See the **[3-Minute Quickstart](examples/3-minute-quickstart.md)** for a complet
 
 Full guide: **[GUIDE.md](GUIDE.md)**
 
+中文进阶手册：**[V7 最大潜力使用手册](docs/v7-max-potential-guide-zh.md)**
+
 ---
 
 ## The Problem
@@ -314,6 +316,7 @@ system/           ← Config, log, schema, templates
 | [tools/index.html](tools/index.html) | Visual skill navigator and dashboard |
 | [tools/token-calculator.html](tools/token-calculator.html) | Token cost calculator |
 | [GUIDE.md](GUIDE.md) | Full installation & troubleshooting |
+| [V7 最大潜力使用手册](docs/v7-max-potential-guide-zh.md) | Profile、知识飞轮、Agent 工程、治理和 30 天采用路径 |
 | [CLAUDE.md](CLAUDE.md) | Claude Code setup |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute skills |
 
