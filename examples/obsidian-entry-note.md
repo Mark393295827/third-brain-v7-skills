@@ -1,6 +1,6 @@
-# Third Brain V5 Home
+# Third Brain V7 Home
 
-Use this as a lightweight Obsidian entry note. Copy the content into your vault as `Third Brain V5 Home.md`.
+Use this as a lightweight Obsidian entry note named `Third Brain V7 Home.md`.
 
 ## Today
 

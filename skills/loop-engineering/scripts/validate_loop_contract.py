@@ -42,6 +42,44 @@ FIELD_ALIASES = {
     "change budget": "review budget",
     "review bandwidth": "review budget",
 }
+KNOWN_FIELD_RE = re.compile(
+    r"(?:^\s*(?:[-*+]\s+)?|[ \t]{2,})(?:\*\*)?"
+    rf"(?P<field>{'|'.join(re.escape(field) for field in sorted(REQUIRED | FIELD_ALIASES.keys(), key=len, reverse=True))})"
+    r"(?:\*\*)?\s*:",
+    re.IGNORECASE,
+)
+NUMERIC_CAP_RE = re.compile(r"(?<![\w.])[+-]?(?:\d+(?:\.\d*)?|\.\d+)")
+UNBOUNDED_CAP_RE = re.compile(
+    r"\b(?:unlimited|unbounded|uncapped|infinite|indefinitely|forever|open[- ]ended)\b"
+    r"|\b(?:no|without)\s+(?:an?\s+)?"
+    r"(?:(?:upper|hard|fixed)\s+)?(?:limit|maximum|cap|bound|end)\b"
+    r"|\b(?:repeat|continue|retry|run|loop)\b.{0,32}"
+    r"\b(?:as long as|while)\s+(?:needed|required|necessary)\b",
+    re.IGNORECASE,
+)
+NUMERIC_TOKEN = r"(?<![\w.])(?P<cap>[+-]?(?:\d+(?:\.\d*)?|\.\d+))"
+CAP_UNIT_PATTERNS = {
+    "max iterations": re.compile(
+        NUMERIC_TOKEN + r"\s*(?:iterations?|runs?|cycles?|attempts?)\b",
+        re.IGNORECASE,
+    ),
+    "time limit": re.compile(
+        NUMERIC_TOKEN
+        + r"\s*(?:milliseconds?|ms|seconds?|minutes?|hours?|days?)\b",
+        re.IGNORECASE,
+    ),
+    "budget": re.compile(
+        NUMERIC_TOKEN
+        + r"\s*(?:(?:tool|api|model)\s+)?"
+        + r"(?:calls?|tokens?|credits?|usd|dollars?)\b",
+        re.IGNORECASE,
+    ),
+    "review budget": re.compile(
+        NUMERIC_TOKEN
+        + r"\s*(?:changed\s+lines?|lines?|files?|diffs?|reviews?)\b",
+        re.IGNORECASE,
+    ),
+}
 MODE_ALIASES = {
     "goal-oriented agent": "goal",
     "interval loop": "loop",
@@ -56,6 +94,19 @@ def normalize(field: str) -> str:
 def parse_contract(path: Path) -> dict[str, str]:
     fields: dict[str, str] = {}
     for line in path.read_text(encoding="utf-8").splitlines():
+        matches = list(KNOWN_FIELD_RE.finditer(line))
+        if matches:
+            for index, match in enumerate(matches):
+                key = normalize(match.group("field"))
+                key = FIELD_ALIASES.get(key, key)
+                value_end = matches[index + 1].start() if index + 1 < len(matches) else len(line)
+                value = line[match.end() : value_end].strip()
+                if key not in fields or not fields[key]:
+                    fields[key] = value
+                elif value:
+                    fields[key] = f"{fields[key]}; {value}"
+            continue
+
         match = FIELD_RE.match(line)
         if match:
             key = normalize(match.group(1))
@@ -63,6 +114,14 @@ def parse_contract(path: Path) -> dict[str, str]:
             value = match.group(2).strip()
             fields[key] = f"{fields[key]}; {value}" if key in fields else value
     return fields
+
+
+def numeric_caps(field: str, value: str) -> list[float]:
+    pattern = CAP_UNIT_PATTERNS[field]
+    scoped = [float(match.group("cap")) for match in pattern.finditer(value)]
+    if scoped:
+        return scoped
+    return [float(match.group()) for match in NUMERIC_CAP_RE.finditer(value)]
 
 
 def validate(fields: dict[str, str], strict: bool) -> list[str]:
@@ -83,8 +142,14 @@ def validate(fields: dict[str, str], strict: bool) -> list[str]:
 
     for field in ("max iterations", "time limit", "budget", "review budget"):
         value = normalize(fields.get(field, ""))
-        if value and not re.search(r"\d", value):
+        if value and UNBOUNDED_CAP_RE.search(value):
             errors.append(f"{field} must contain a finite numeric cap")
+            continue
+        caps = numeric_caps(field, value)
+        if value and not caps:
+            errors.append(f"{field} must contain a finite numeric cap")
+        elif any(cap <= 0 for cap in caps):
+            errors.append(f"{field} must contain a positive finite numeric cap")
 
     review_budget = normalize(fields.get("review budget", ""))
     if strict:
@@ -112,8 +177,12 @@ def validate(fields: dict[str, str], strict: bool) -> list[str]:
             errors.append("external or production boundary requires approval and rollback")
 
     if strict and topology == "manager-workers":
-        if "integration" not in normalize(fields.get("recovery", "")) and "integration" not in boundary:
-            errors.append("manager-workers requires an integration rule in recovery or permission boundary")
+        integration_controls = f"{normalize(fields.get('recovery', ''))} {boundary}"
+        if "integration gate" not in integration_controls:
+            errors.append(
+                "manager-workers requires an explicit integration gate "
+                "in recovery or permission boundary"
+            )
 
     if strict and mode == "automation":
         trigger = normalize(fields.get("trigger", ""))

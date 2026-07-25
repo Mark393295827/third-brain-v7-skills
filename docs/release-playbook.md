@@ -20,12 +20,33 @@ Run this once per week:
 4. Small "wow" improvements that make the first successful run faster.
 5. Larger new skills or architecture changes.
 
+## Required Verification
+
+Run these commands after the final material change. CI runs the same checks on Python 3.8 and 3.13, covering the declared minimum and current runtime:
+
+```bash
+python tools/lint-agent-skills.py
+python -m unittest discover -s tools -p "test_*.py" -v
+python -m unittest discover -s experiments/graph-engineering/tests -p "test_*.py" -v
+git diff --check
+python skills/loop-engineering/scripts/validate_loop_contract.py skills/loop-engineering/references/ci-repair-loop-example.md --strict
+python skills/graph-engineering/scripts/validate_graph_contract.py skills/graph-engineering/references/diamond-graph-example.json --strict
+```
+
+Record the command, exit status, and key output in the PR. A partial or stale run does not support a release claim.
+
 ## Small Release Checklist
 
 - [ ] Fix or improve 1-2 focused things.
 - [ ] Add or update a usage example.
 - [ ] Update `CHANGELOG.md`.
-- [ ] Verify install commands still work.
+- [ ] Run the Agent Skills linter.
+- [ ] Run full unittest discovery.
+- [ ] Run the bounded Graph architecture experiment tests.
+- [ ] Run `git diff --check`.
+- [ ] Run the strict Loop contract example.
+- [ ] Run the strict Graph contract example.
+- [ ] Verify changed install targets still work.
 - [ ] Create a GitHub Release with a short changelog.
 - [ ] Reply to the issues or PRs that the release addresses.
 

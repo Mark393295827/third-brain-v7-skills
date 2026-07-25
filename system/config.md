@@ -1,11 +1,11 @@
 ---
-title: "Third Brain V5 Path Configuration"
+title: "Third Brain V7 Path Configuration"
 type: system-config
 updated: "2026-05-22"
 status: default
 ---
 
-# Third Brain V5 Path Configuration
+# Third Brain V7 Path Configuration
 
 This file is the default path contract for skills that read from or write to a wiki vault. Projects may override these values in their local `system/config.md`, `CLAUDE.md`, or equivalent agent rules file.
 

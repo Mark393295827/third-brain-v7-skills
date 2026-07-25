@@ -12,6 +12,12 @@
 
 ## Verification
 
+- [ ] `python tools/lint-agent-skills.py`
+- [ ] `python -m unittest discover -s tools -p "test_*.py" -v`
+- [ ] `python -m unittest discover -s experiments/graph-engineering/tests -p "test_*.py" -v`
+- [ ] `git diff --check`
+- [ ] `python skills/loop-engineering/scripts/validate_loop_contract.py skills/loop-engineering/references/ci-repair-loop-example.md --strict`
+- [ ] `python skills/graph-engineering/scripts/validate_graph_contract.py skills/graph-engineering/references/diamond-graph-example.json --strict`
 - [ ] I tested the changed install or usage path.
 - [ ] I checked affected links and file paths.
 - [ ] I checked `system/config.md` compatibility for wiki-writing changes.

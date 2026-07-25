@@ -1,112 +1,94 @@
 ---
 name: project-flow-ops
-description: Operate execution flow — triage tasks, manage priorities, keep progress structured. Use when the user needs backlog control, task planning, or workflow coordination across projects.
-version: "1.1"
-updated: "2026-05-22"
-assumes: "There is a backlog or set of projects that can be ranked and reviewed."
-conflicts_with: "Do not replace behavior-design for habit formation or agent-teams-command for active multi-agent orchestration."
+description: Use when projects or tasks need explicit state, WIP control, ownership, definitions of done, blocker handling, and verified closure.
+metadata:
+  version: "7.1.0"
+  updated: "2026-07-25"
+  profile: "stateful"
+  assumes: "Project state can be persisted and each active task can have one accountable owner."
+  conflicts_with: "Hidden WIP, status by intuition, or marking work complete without a fresh verification receipt."
 ---
 
-# Project Flow Operations
+# Project Flow Ops
 
-Keep execution structured and progress visible — triage, plan, track, and review across projects.
+<skill_contract>
+  <input>Project objective, tasks, owners, dependencies, budgets, artifacts, current states, and definitions of done.</input>
+  <output>A WIP-limited project state with ranked work, explicit blockers, bounded actions, and verified closure receipts.</output>
+  <done>Every active item has one owner and observable artifact, and completion is backed by its named fresh verification.</done>
+  <non_goals>Hidden WIP, duplicate ownership, status by intuition, backlog accumulation, or completion without evidence.</non_goals>
+
+Maintain a small, inspectable project state machine: `BACKLOG -> ACTIVE -> BLOCKED | COMPLETED`. Optimize flow and verified outcomes, not task volume.
 
 ## Usage Template
 
-**Prompt**
-```text
-Use project-flow-ops to triage this backlog. Rank priorities, identify blockers, and produce the next execution plan.
-```
-
-**Use Case**
-- Turning scattered tasks or competing projects into a clear action queue.
-
-**Expected Result**
-- The agent returns prioritized work, blockers, next actions, and review cadence.
-
-**Output Example**
-- A ranked backlog with status, owner, next action, blocker, priority reason, and review date.
-
-**Verification Case**
-- Every top-priority item has an owner, next action, status, and reason for priority.
-
-**Verified Effect**
-- A messy backlog becomes a ranked execution queue with visible blockers and review cadence.
-
-## Success Metrics
-
-- Top-priority items each have owner, status, blocker, next action, and review date.
-- Backlog is ranked with a reason for priority instead of only grouped by theme.
-- Output identifies one immediate next action and one item to defer or drop.
-
-## When to Use
-
-- User says "what should I work on next?"
-- Starting a new task or project
-- Reviewing progress or blocked items
-- User feels overwhelmed or unclear on priorities
+Provide: project objective, current tasks, owners, dependencies, time budget, artifacts, and definition of done. Optional: prior review receipts.
 
 ## Workflow
 
-### P1: Triage — What's Active?
+<intake>
 
-Scan current state:
+Normalize each item into `{id, objective, owner, state, artifact, definition_of_done, budget, dependencies}`. Reject duplicate ownership and distinguish waiting from active execution.
 
-```
-ACTIVE:   What's in progress now? (limit: 1-2)
-BACKLOG:  What's waiting? (ordered by priority)
-BLOCKED:  What's stuck and why?
-COMPLETED: What's done since last review?
-```
+</intake>
 
-For each blocked item: identify the **one thing** that unblocks it.
+<unknowns_gate>
 
-### P2: Plan — What's Next?
+If an active item lacks an owner, artifact, or observable definition of done, return `NEEDS_INPUT`. Probe the ambiguity with the largest impact on scheduling; do not guess priority from wording alone.
 
-Select the next task from the backlog with clear scope:
+</unknowns_gate>
 
-```
-Task: [one-line description]
-Why now: [urgency or opportunity]
-Definition of done: [what "done" looks like]
-Timebox: [max time to spend]
-```
+<execute>
 
-Rule: **One task at a time.** Context switching is the productivity killer.
+1. Rank work by objective impact, urgency, dependency leverage, and cost of delay.
+2. Limit `ACTIVE` to one or two items per owner.
+3. Decompose the selected item until one bounded action can produce a reviewable artifact.
+4. For a blocker, record owner, missing condition, evidence, next probe, and review time; move independent work forward.
+5. Run the verification named in the definition of done.
+6. Move to `COMPLETED` only with a fresh receipt; otherwise keep `ACTIVE` or `BLOCKED`.
+7. At review, remove stale backlog items and state the next constraint.
 
-### P3: Execute — Focus & Track
+</execute>
 
-During execution:
-- Break the task into ≤15 minute steps
-- Verify after each step (verify-before-claim)
-- Check in after timebox expires — extend or pivot
+<evaluate>
 
-### P4: Review — Close & Learn
+Check state-transition legality, WIP limits, ownership, artifact existence, and completion evidence. Use an independent check for consequential deliverables. If verification fails, reopen the item with the failure evidence and smallest corrective action.
 
-After completion:
-- What did we learn?
-- What should be documented? → wiki or SOP
-- What's next?
+</evaluate>
 
-## Priority Framework
+<state_contract>
 
-| Priority | Criteria | Action |
-|----------|----------|--------|
-| 🔴 Critical | Blocks others, deadline imminent | Do now |
-| 🟡 Important | Moves key metric, this week | Schedule today |
-| 🟢 Normal | Valuable, no deadline | Backlog |
-| ⚪ Low | Nice-to-have | Someday/maybe |
+Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus project objective, task ledger, dependency map, WIP count, transition history, and receipts. Transitions are append-only events; current state is derived from the latest valid event.
 
-## Anti-patterns
+</state_contract>
 
-- **Doing everything** — multitasking reduces throughput for everyone
-- **Perfectionism** — done beats perfect for early-stage work
-- **No timebox** — unbounded tasks expand to fill all available time
+## Failure Protocol
+
+- `NEEDS_INPUT`: ownership, priority boundary, or definition of done is missing.
+- `BLOCKED_DEPENDENCY`: execution cannot continue; preserve the blocker contract and review time.
+- `VERIFY_FAILED`: the artifact fails its named check; reopen rather than relabel completion.
+- `NO_PROGRESS`: two reviews produce no new evidence; reduce scope, change strategy, or escalate.
+- `BUDGET_STOP`: stop active work, persist state, and report the highest-value next action.
+
+## Output Contract
+
+Return `status`, `result` (project board and transition decisions), `evidence` (artifacts and receipts), `unknowns`, and `next_action` with owner and review time.
+
+## Edge Cases
+
+- Everything is marked urgent: use cost of delay and dependency leverage, then force one explicit tradeoff.
+- A task is 90% complete but verification is unavailable: keep it active or blocked; never infer the final 10%.
+
+## Success Metrics
+
+- Active WIP remains within the declared limit.
+- Every completed task has an artifact and fresh verification receipt.
+- Blocked work names an owner, next probe, and review time.
 
 ## Quality Gates
 
-- [ ] Active items limited to 1-2
-- [ ] Blocked items have an unblock action identified
-- [ ] Next task has definition of done and timebox
-- [ ] Completed items reviewed for documentation needs
-- [ ] Priority labels applied
+- [ ] Every active task has one owner and bounded budget.
+- [ ] State transitions are legal and traceable.
+- [ ] Completion evidence is fresh and objective.
+- [ ] The next constraint is explicit after each review.
+
+</skill_contract>

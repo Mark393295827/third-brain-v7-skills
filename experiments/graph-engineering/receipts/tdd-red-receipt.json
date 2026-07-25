@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "phase": "RED",
+  "timestamp_utc": "2026-07-25T03:01:00.4105983Z",
+  "command": "python -m unittest discover -s experiments\\graph-engineering\\tests -v",
+  "exit_code": 1,
+  "expected_failure": true,
+  "summary": {
+    "tests_run": 21,
+    "passed": 4,
+    "failures": 4,
+    "errors": 13,
+    "duration_seconds": 3.814
+  },
+  "unmet_contracts": [
+    "failure-node binding and exactly-one-failure validation",
+    "retry-isolation evidence contract",
+    "bidirectional architecture admission",
+    "Task B intermediate-output verification",
+    "fixture and implementation provenance",
+    "independent-review handoff semantics",
+    "review-load and side-effect evidence boundaries",
+    "total-deadline boundary checks",
+    "Python 3.8 runtime API compatibility"
+  ]
+}

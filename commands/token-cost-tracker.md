@@ -1,112 +1,73 @@
 ---
 name: token-cost-tracker
-description: Estimate and track token usage and cost across the knowledge pipeline. Run before expensive tasks to budget, after tasks to log actuals.
+description: Estimate, log, and report token usage using runtime-supplied billing rates; never rely on embedded model prices.
 usage: "token-cost-tracker [estimate|log|report] [options]"
 ---
 
 # Token Cost Tracker
 
-Estimate, log, and report token usage across the knowledge compounding pipeline.
+This is a utility command, not an Agent Skill. Pricing and model catalogs change; obtain rates from the current runtime/provider billing source and record its timestamp.
 
-## Commands
+## Inputs
 
-### `token-cost-tracker estimate`
-
-Estimate cost before running a task:
-
+```yaml
+task: ""
+model_id: "runtime identifier"
+capability_class: fast | reasoning | multimodal | evaluator | other
+input_tokens: 0
+cached_input_tokens: 0
+output_tokens: 0
+rates_per_million:
+  input: null
+  cached_input: null
+  output: null
+currency: ""
+rate_source: ""
+rate_checked_at: ""
 ```
-token-cost-tracker estimate --task ingest --sources 3 --avg-tokens 5000
-  → Estimated: ~15K input + ~3K output = $0.06 (Sonnet)
 
-token-cost-tracker estimate --task compile --depth deep
-  → Estimated: ~200K input + ~50K output = $3.75 (Opus)
+If rates are unavailable, return token totals and `cost_status: unknown`; do not guess a price.
+
+## Estimate
+
+Use measured source size, a comparable prior run, or an explicit low/base/high token range. Calculate each scenario:
+
+```text
+cost = (input_tokens / 1,000,000 * input_rate)
+     + (cached_input_tokens / 1,000,000 * cached_input_rate)
+     + (output_tokens / 1,000,000 * output_rate)
 ```
 
-### `token-cost-tracker log`
+Report assumptions, rate source/age, and the budget stop threshold. Do not infer token count from pages without labeling the conversion assumption.
 
-Log actual usage after a task (append to `.token-log.csv`):
+## Log
+
+Append actual usage to `.token-log.csv`:
 
 ```csv
-date,task,model,input_tokens,output_tokens,cost,notes
-2026-05-06,ingest-harness-blog,sonnet-4.6,45231,8732,0.16,3 sources ingested
-2026-05-06,compile-ai-agent,opus-4.6,198432,43211,5.23,7-step cognitive compile
+date,task,model_id,capability_class,input_tokens,cached_input_tokens,output_tokens,input_rate,cached_input_rate,output_rate,currency,cost,rate_source,notes
+2026-07-11,wiki-ingest,runtime-model,reasoning,45231,12000,8732,0,0,0,USD,,provider-billing-page,rate unavailable at log time
 ```
 
-### `token-cost-tracker report`
+Never rewrite historical rates. A later reconciliation appends a correction row referencing the original record.
 
-Generate weekly/monthly summary:
+## Report
 
-```
-token-cost-tracker report --period weekly
-  → Weekly Summary (May 4-10)
-     Total tokens: 1,234,567
-     Total cost:   $23.45
-     Breakdown:
-       Opus:    $15.20 (65%)
-       Sonnet:  $7.80 (33%)
-       Haiku:   $0.45 (2%)
-     By task:
-       ingest:      $8.20 (8 tasks)
-       compile:     $10.50 (2 compiles)
-       session-lrn: $2.40 (12 sessions)
-       lint:        $0.35 (4 checks)
-```
+For the requested period return:
 
-## Per-Task Cost Benchmarks
+- input, cached-input, output, and total tokens;
+- known cost by currency (never combine currencies silently);
+- unknown-cost rows requiring reconciliation;
+- breakdown by task, capability class, and model id;
+- estimate-versus-actual error when estimates exist;
+- largest cost driver and one bounded optimization test.
 
-| Task | Model | Typical Tokens | Typical Cost |
-|------|-------|:--------------:|:------------:|
-| wiki-ingest (1 source) | Sonnet | 15K-50K | $0.05-0.15 |
-| wiki-ingest (bulk, 5) | Sonnet | 100K-300K | $0.30-0.90 |
-| cognitive-compile | Opus | 200K-500K | $3.00-7.50 |
-| session-learn | Sonnet | 50K-150K | $0.15-0.45 |
-| deep-research (evidence brief) | Opus | 80K-250K | $1.20-3.75 |
-| deep-research (standard/heavy) | Opus | 300K-1.5M | $4.50-22.50 |
-| daily-okr (full) | Sonnet+Haiku | 30K-80K | $0.10-0.25 |
-| wiki-lint | Haiku | 10K-30K | $0.01-0.03 |
-| context-manager | Haiku | 5K-15K | ~$0.01 |
+## Failure Rules
 
-## Python Logger Script
+- Missing token counts: return `NEEDS_INPUT`.
+- Missing rates: compute usage only and mark cost unknown.
+- Stale rates: use only when the user accepts the dated estimate; otherwise refresh.
+- Mixed currencies: report separately or convert with an explicit dated exchange rate.
+- Log path not writable: return `BLOCKED_PERMISSION`; do not claim the row was saved.
 
-Save as `scripts/token-logger.py`:
-
-```python
-"""Simple token cost tracker for LLM pipeline."""
-import csv, os, json
-from datetime import datetime, timedelta
-
-LOG_FILE = ".token-log.csv"
-MODEL_PRICES = {
-    "opus-4.6":    {"input": 15.00, "output": 75.00},
-    "sonnet-4.6":  {"input": 3.00,  "output": 15.00},
-    "haiku-3.5":   {"input": 0.80,  "output": 4.00},
-}
-
-def log_usage(task, model, input_tokens, output_tokens, notes=""):
-    cost = (input_tokens / 1e6 * MODEL_PRICES[model]["input"] +
-            output_tokens / 1e6 * MODEL_PRICES[model]["output"])
-    row = [datetime.now().isoformat()[:10], task, model,
-           input_tokens, output_tokens, round(cost, 4), notes]
-    with open(LOG_FILE, "a", newline="") as f:
-        csv.writer(f).writerow(row)
-    return cost
-
-def report(period="weekly"):
-    days = 7 if period == "weekly" else 30
-    cutoff = datetime.now() - timedelta(days=days)
-    total_cost = 0
-    task_breakdown = {}
-    with open(LOG_FILE) as f:
-        for row in csv.DictReader(f):
-            date = datetime.strptime(row["date"], "%Y-%m-%d")
-            if date < cutoff: continue
-            total_cost += float(row["cost"])
-            task_name = row["task"]
-            task_breakdown[task_name] = task_breakdown.get(task_name, 0) + float(row["cost"])
-    return {"total": round(total_cost, 2), "tasks": task_breakdown}
-
-if __name__ == "__main__":
-    import sys
-    if sys.argv[1] == "report":
-        print(json.dumps(report(sys.argv[2] if len(sys.argv) > 2 else "weekly"), indent=2))
-```
+Use `tools/token-calculator.html` for interactive manual calculations when appropriate.

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "phase": "GREEN",
+  "timestamp_utc": "2026-07-25T03:09:20.8655650Z",
+  "test_command": "python -m unittest discover -s experiments\\graph-engineering\\tests -v",
+  "test_exit_code": 0,
+  "test_summary": {
+    "tests_run": 21,
+    "passed": 21,
+    "failures": 0,
+    "errors": 0,
+    "duration_seconds": 4.756
+  },
+  "concurrency_stability_probe": {
+    "test": "test_task_a_graph_is_concurrent_correct_and_recovers_node_locally",
+    "repetitions": 10,
+    "passed": 10,
+    "failed": 0
+  },
+  "benchmark_command": "python experiments\\graph-engineering\\benchmark.py",
+  "benchmark_exit_code": 0,
+  "artifact_status": "EVIDENCE_COMPLETE",
+  "review_decision": "DEFERRED_TO_INDEPENDENT_REVIEW",
+  "agent_recommendation": "NONE",
+  "historical_provenance": {
+    "scope": "captured at the original GREEN run; not current artifact authentication",
+    "fixture_sha256": "31dccfe0246e2acf86cf3b2cfb1365ef42ab061e3a5f013328a236ae8fde850e",
+    "implementation_sha256": "0939968d2bd4412f46e4d7e7c41b80159ee925c3c914be9581486a5bb391574f"
+  },
+  "benchmark_receipt_identity": "not pinned; rerun the benchmark for a fresh receipt",
+  "python_38_compatibility": {
+    "ast_feature_version_check": "PASS",
+    "forbidden_api_checks": {
+      "Path.is_relative_to": "ABSENT",
+      "Executor.shutdown.cancel_futures": "ABSENT"
+    },
+    "native_python_38_runtime_available": false
+  }
+}

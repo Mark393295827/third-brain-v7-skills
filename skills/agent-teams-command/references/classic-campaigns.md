@@ -7,7 +7,7 @@ Use these as copy-ready templates when `agent-teams-command` needs concrete mult
 ```text
 GOAL: Build a full-stack app (REST API + React) running on localhost.
 
-ORDERS: Create a team of 3 teammates using Sonnet.
+ORDERS: Create a team of 3 teammates; route each by implementation/tool-use capability and runtime policy.
 
 RISK BUDGET:
   Max blast radius: each teammate edits only its owned directory.
@@ -43,7 +43,7 @@ QUALITY GATES:
 ```text
 GOAL: Evaluate PostgreSQL -> MongoDB migration feasibility.
 
-ORDERS: Create a team of 3 teammates using Opus.
+ORDERS: Create a team of 3 teammates; route each by deep-reasoning/research capability and runtime policy.
 
 RISK BUDGET:
   Max blast radius: research artifacts only; no production data or schema writes.
@@ -72,7 +72,7 @@ TEAMMATE 3 (CRITIC)
 ```text
 GOAL: Find and fix all security vulnerabilities in the auth module.
 
-ORDERS: Create a team of 2 teammates using Sonnet.
+ORDERS: Create a team of 2 teammates; route each by security-analysis or implementation capability.
 
 RISK BUDGET:
   Max blast radius: AUDITOR reads broadly; FIXER edits only src/auth/ after issue handoff.
@@ -97,7 +97,7 @@ TEAMMATE 2 (FIXER)
 ```text
 GOAL: Turn one messy operator workflow into a verified agent-assisted workflow.
 
-ORDERS: Create a team of 4 teammates using Sonnet.
+ORDERS: Create a team of 4 teammates; route by domain discovery, modeling, implementation, and evaluation capability.
 
 RISK BUDGET:
   Max blast radius: discovery artifacts and sandbox branch only; no production mutation.

@@ -1,0 +1,190 @@
+{
+  "schema_version": "1.0",
+  "graph_id": "bounded-diamond",
+  "objective": "Process two independent branches and verify one join.",
+  "non_goals": [
+    "No external mutation.",
+    "No dynamic expansion."
+  ],
+  "owner": "integration-owner",
+  "artifact_path": ".agent-state/graph/artifacts",
+  "state_path": ".agent-state/graph/state.json",
+  "entry_nodes": [
+    "source"
+  ],
+  "terminal_nodes": [
+    "reduce"
+  ],
+  "budgets": {
+    "max_nodes": 4,
+    "max_concurrency": 2,
+    "max_attempts_per_node": 2,
+    "wall_time_seconds": 300,
+    "tool_calls": 20,
+    "review_changed_lines": 500
+  },
+  "permission_boundary": {
+    "allowed": [
+      "Read repository files.",
+      "Write declared artifacts."
+    ],
+    "denied": [
+      "Production deployment.",
+      "External publication."
+    ],
+    "approval_required": [],
+    "rollback": "Restore the last verified graph checkpoint."
+  },
+  "nodes": [
+    {
+      "id": "source",
+      "kind": "deterministic",
+      "owner": "integration-owner",
+      "inputs": [],
+      "outputs": [
+        "work_item"
+      ],
+      "reads": [
+        "input.json"
+      ],
+      "writes": [],
+      "verifier": "Input schema validation passes.",
+      "timeout_seconds": 30,
+      "max_attempts": 1,
+      "tool_calls": 2,
+      "effect_class": "read-only",
+      "idempotency": "Pure read and parse.",
+      "compensation": ""
+    },
+    {
+      "id": "worker-a",
+      "kind": "agent",
+      "owner": "worker-a-owner",
+      "inputs": [
+        "work_item"
+      ],
+      "outputs": [
+        "candidate"
+      ],
+      "reads": [
+        "input.json"
+      ],
+      "writes": [
+        ".agent-state/graph/artifacts/worker-a.json"
+      ],
+      "verifier": "Candidate A schema and targeted check pass.",
+      "timeout_seconds": 90,
+      "max_attempts": 2,
+      "tool_calls": 6,
+      "effect_class": "reversible",
+      "idempotency": "Overwrite the same isolated artifact atomically.",
+      "compensation": "Restore the prior isolated artifact."
+    },
+    {
+      "id": "worker-b",
+      "kind": "agent",
+      "owner": "worker-b-owner",
+      "inputs": [
+        "work_item"
+      ],
+      "outputs": [
+        "candidate"
+      ],
+      "reads": [
+        "input.json"
+      ],
+      "writes": [
+        ".agent-state/graph/artifacts/worker-b.json"
+      ],
+      "verifier": "Candidate B schema and targeted check pass.",
+      "timeout_seconds": 90,
+      "max_attempts": 2,
+      "tool_calls": 6,
+      "effect_class": "reversible",
+      "idempotency": "Overwrite the same isolated artifact atomically.",
+      "compensation": "Restore the prior isolated artifact."
+    },
+    {
+      "id": "reduce",
+      "kind": "deterministic",
+      "owner": "integration-owner",
+      "inputs": [
+        "candidate"
+      ],
+      "outputs": [
+        "verified_result"
+      ],
+      "reads": [
+        ".agent-state/graph/artifacts/worker-a.json",
+        ".agent-state/graph/artifacts/worker-b.json"
+      ],
+      "writes": [
+        ".agent-state/graph/artifacts/result.json"
+      ],
+      "verifier": "Join inputs are complete and final result check passes.",
+      "timeout_seconds": 60,
+      "max_attempts": 1,
+      "tool_calls": 4,
+      "effect_class": "reversible",
+      "idempotency": "Deterministic reduce into one atomic artifact.",
+      "compensation": "Restore the prior verified result."
+    }
+  ],
+  "edges": [
+    {
+      "from": "source",
+      "to": "worker-a",
+      "type": "data",
+      "payload_schema": "work_item",
+      "condition": "always",
+      "failure_route": ""
+    },
+    {
+      "from": "source",
+      "to": "worker-b",
+      "type": "data",
+      "payload_schema": "work_item",
+      "condition": "always",
+      "failure_route": ""
+    },
+    {
+      "from": "worker-a",
+      "to": "reduce",
+      "type": "data",
+      "payload_schema": "candidate",
+      "condition": "verified",
+      "failure_route": ""
+    },
+    {
+      "from": "worker-b",
+      "to": "reduce",
+      "type": "data",
+      "payload_schema": "candidate",
+      "condition": "verified",
+      "failure_route": ""
+    }
+  ],
+  "joins": [
+    {
+      "id": "candidate-reduce",
+      "target": "reduce",
+      "mode": "reduce",
+      "inputs": [
+        "worker-a",
+        "worker-b"
+      ],
+      "verifier": "Both candidate receipts are fresh and schema-valid.",
+      "quorum": null
+    }
+  ],
+  "stop_conditions": [
+    "The terminal verifier passes.",
+    "Any graph or node budget is exhausted.",
+    "The same failure signature repeats twice."
+  ],
+  "recovery": {
+    "checkpoint": ".agent-state/graph/checkpoint.json",
+    "write_back": ".agent-state/graph/events.jsonl",
+    "whole_graph_rerun": false
+  }
+}

@@ -1,0 +1,396 @@
+{
+  "budgets": {
+    "configured": {
+      "external_side_effect_limit": 0,
+      "max_concurrency": 3,
+      "max_nodes": 5,
+      "max_retries_per_node": 1,
+      "max_review_load_units": 12,
+      "max_task_wall_time_seconds": 2.0,
+      "max_total_wall_time_seconds": 8.0,
+      "trials": 3
+    },
+    "observed": {
+      "max_concurrency": 3,
+      "max_nodes": 5,
+      "max_retries_per_node": 1,
+      "max_review_load_proxy_units": 9,
+      "max_single_task_wall_time_seconds": 0.242074,
+      "total_wall_time_seconds": 1.210883
+    },
+    "total_deadline_boundaries_checked": [
+      "before_trial_1",
+      "before_task_a_loop_trial_1",
+      "after_task_a_loop_trial_1",
+      "before_task_a_graph_trial_1",
+      "after_task_a_graph_trial_1",
+      "after_trial_1",
+      "before_trial_2",
+      "before_task_a_graph_trial_2",
+      "after_task_a_graph_trial_2",
+      "before_task_a_loop_trial_2",
+      "after_task_a_loop_trial_2",
+      "after_trial_2",
+      "before_trial_3",
+      "before_task_a_loop_trial_3",
+      "after_task_a_loop_trial_3",
+      "before_task_a_graph_trial_3",
+      "after_task_a_graph_trial_3",
+      "after_trial_3",
+      "before_task_b",
+      "after_task_b",
+      "before_receipt"
+    ],
+    "within_limits": true
+  },
+  "experiment": {
+    "claim_scope": "local architectural verification of exactly two static fixtures; not a universal performance or production claim",
+    "id": "loop-vs-graph-static-architecture-v1",
+    "production_claim": false,
+    "runtime": {
+      "minimum_supported_python": "3.8",
+      "platform": "Windows",
+      "python": "3.13.5"
+    },
+    "timestamp_utc": "2026-07-25T03:45:29.794644+00:00",
+    "universal_performance_claim": false,
+    "verification_class": "LOCAL_ARCHITECTURAL_VERIFICATION",
+    "workloads": "deterministic local sleeps and pure transformations"
+  },
+  "external_side_effect_boundary": {
+    "declared_boundary": "no network, subprocess, credential, or external-system API paths; the selected receipt is the only durable write",
+    "dynamic_execution_calls_found": [],
+    "forbidden_import_roots_found": [],
+    "imported_module_roots": [
+      "__future__",
+      "argparse",
+      "ast",
+      "concurrent",
+      "datetime",
+      "hashlib",
+      "json",
+      "math",
+      "pathlib",
+      "platform",
+      "statistics",
+      "threading",
+      "time",
+      "typing"
+    ],
+    "limitation": "This is a design and source audit, not runtime syscall, filesystem, or network instrumentation.",
+    "method": "DESIGN_AND_SOURCE_AUDIT",
+    "result": "NO_EXTERNAL_EFFECT_CAPABILITY_FOUND_IN_AUDITED_SOURCE",
+    "runtime_instrumented": false,
+    "source_audit_passed": true
+  },
+  "independent_review_handoff": {
+    "agent_recommendation": "NONE",
+    "artifact_status": "EVIDENCE_COMPLETE",
+    "criteria": {
+      "all_runtime_budgets_respected": true,
+      "source_audit_boundary_passed": true,
+      "task_a_correct": true,
+      "task_a_failing_node_attempts_match": true,
+      "task_a_graph_node_local_only": true,
+      "task_a_positively_admitted_to_graph": true,
+      "task_a_retry_count_matches": true,
+      "task_a_selected_graph_executed": true,
+      "task_a_unaffected_nodes_single_attempt": true,
+      "task_b_all_intermediate_outputs_verified": true,
+      "task_b_graph_scheduler_skipped": true,
+      "task_b_rejected_to_loop": true
+    },
+    "decision": "DEFERRED_TO_INDEPENDENT_REVIEW",
+    "evidence_gate_passed": true,
+    "excluded_claims": [
+      "universal Graph performance superiority",
+      "dynamic or cyclic graph safety",
+      "production scalability",
+      "model-token or cost improvement",
+      "runtime proof of external-side-effect absence",
+      "measured human review effort"
+    ],
+    "promotion_authority": "independent reviewer",
+    "review_scope": "only the two declared static fixtures"
+  },
+  "local_artifacts": {
+    "durable_write": "the caller-selected receipt path, constrained to this experiment directory"
+  },
+  "provenance": {
+    "fixture": {
+      "algorithm": "sha256",
+      "path": "fixtures/architecture_tasks.json",
+      "sha256": "31dccfe0246e2acf86cf3b2cfb1365ef42ab061e3a5f013328a236ae8fde850e"
+    },
+    "implementation": {
+      "algorithm": "sha256",
+      "path": "benchmark.py",
+      "sha256": "df43566278b37f616a03088ff99a3629aff5fcea7e28fe3f70814dee1123bb6f"
+    }
+  },
+  "schema_version": "1.1",
+  "task_a": {
+    "admission_decision": {
+      "claim_scope": "only the declared static fixture",
+      "gate_wall_time_seconds": 4.8e-05,
+      "metrics": {
+        "estimated_critical_path_payback_seconds": 0.12,
+        "estimated_graph_critical_path_seconds": 0.12,
+        "estimated_sequential_seconds": 0.24,
+        "independent_width": 3,
+        "review_load_proxy": {
+          "additional_units": 3,
+          "graph_units": 9,
+          "is_proxy": true,
+          "loop_units": 6,
+          "not_measured_human_review": true,
+          "unit_definition": "one proxy unit per branch artifact, retry diagnosis, join check, and architecture-control check"
+        }
+      },
+      "reason_codes": [
+        "STATIC_FIXTURE_GATE_PASSED"
+      ],
+      "selected": "GRAPH",
+      "thresholds": {
+        "max_additional_review_load_units": 3,
+        "minimum_critical_path_payback_seconds": 0.05,
+        "minimum_independent_width": 2
+      },
+      "topology": "static_diamond"
+    },
+    "correctness": {
+      "graph_all_trials_passed": true,
+      "loop_all_trials_passed": true,
+      "passed": true,
+      "verifier": "exact deterministic equality at every static join"
+    },
+    "graph_scheduler_invocations": 3,
+    "id": "independent-static-diamond",
+    "loop_execution_role": "serial comparison baseline only",
+    "measured_wall_time_seconds": {
+      "graph": {
+        "median": 0.123616,
+        "trials": [
+          0.127263,
+          0.122919,
+          0.123616
+        ]
+      },
+      "graph_speedup_ratio_for_these_fixtures_only": 1.957,
+      "loop": {
+        "median": 0.241908,
+        "trials": [
+          0.241499,
+          0.241908,
+          0.242074
+        ]
+      }
+    },
+    "observed_peak_concurrency": {
+      "graph": 3,
+      "loop": 1
+    },
+    "orchestration_overhead": {
+      "definition": "scheduler setup, dispatch, result collection, and cleanup; worker wait time is excluded",
+      "graph_measured_seconds_median": 0.001979,
+      "loop_measured_seconds_median": 9e-06
+    },
+    "retry_recovery": {
+      "all_unaffected_nodes_single_attempt": true,
+      "failing_node_attempts_match": true,
+      "graph_all_trials_recovered": true,
+      "graph_attempts": [
+        {
+          "checksum": 2,
+          "sum": 1,
+          "unique_sorted": 1
+        },
+        {
+          "checksum": 2,
+          "sum": 1,
+          "unique_sorted": 1
+        },
+        {
+          "checksum": 2,
+          "sum": 1,
+          "unique_sorted": 1
+        }
+      ],
+      "graph_contracts": [
+        {
+          "actual_attempts": {
+            "checksum": 2,
+            "sum": 1,
+            "unique_sorted": 1
+          },
+          "all_unaffected_nodes_single_attempt": true,
+          "expected_attempts": {
+            "checksum": 2,
+            "sum": 1,
+            "unique_sorted": 1
+          },
+          "failing_node": "checksum",
+          "failing_node_attempts_match": true,
+          "node_local_only": true,
+          "passed": true,
+          "retry_count_matches": true
+        },
+        {
+          "actual_attempts": {
+            "checksum": 2,
+            "sum": 1,
+            "unique_sorted": 1
+          },
+          "all_unaffected_nodes_single_attempt": true,
+          "expected_attempts": {
+            "checksum": 2,
+            "sum": 1,
+            "unique_sorted": 1
+          },
+          "failing_node": "checksum",
+          "failing_node_attempts_match": true,
+          "node_local_only": true,
+          "passed": true,
+          "retry_count_matches": true
+        },
+        {
+          "actual_attempts": {
+            "checksum": 2,
+            "sum": 1,
+            "unique_sorted": 1
+          },
+          "all_unaffected_nodes_single_attempt": true,
+          "expected_attempts": {
+            "checksum": 2,
+            "sum": 1,
+            "unique_sorted": 1
+          },
+          "failing_node": "checksum",
+          "failing_node_attempts_match": true,
+          "node_local_only": true,
+          "passed": true,
+          "retry_count_matches": true
+        }
+      ],
+      "graph_replayed_nodes": [
+        [
+          "checksum"
+        ],
+        [
+          "checksum"
+        ],
+        [
+          "checksum"
+        ]
+      ],
+      "injected_node": "checksum",
+      "node_local_only": true,
+      "retry_count_matches": true
+    },
+    "review_load_proxy": {
+      "additional_units": 3,
+      "graph_units": 9,
+      "is_proxy": true,
+      "loop_units": 6,
+      "not_measured_human_review": true,
+      "unit_definition": "one proxy unit per branch artifact, retry diagnosis, join check, and architecture-control check"
+    },
+    "selected_architecture_executed": true
+  },
+  "task_b": {
+    "admission_decision": {
+      "claim_scope": "only the declared static fixture",
+      "gate_wall_time_seconds": 5.7e-05,
+      "metrics": {
+        "estimated_critical_path_payback_seconds": 0.0,
+        "estimated_graph_critical_path_seconds": 0.06,
+        "estimated_sequential_seconds": 0.06,
+        "independent_width": 1,
+        "review_load_proxy": {
+          "additional_units": 3,
+          "graph_units": 9,
+          "is_proxy": true,
+          "loop_units": 6,
+          "not_measured_human_review": true,
+          "unit_definition": "one proxy unit per step check, final check, admission check, and graph edge contract"
+        }
+      },
+      "reason_codes": [
+        "INSUFFICIENT_INDEPENDENT_WIDTH",
+        "INSUFFICIENT_CRITICAL_PATH_PAYBACK"
+      ],
+      "selected": "LOOP",
+      "thresholds": {
+        "max_additional_review_load_units": 3,
+        "minimum_critical_path_payback_seconds": 0.05,
+        "minimum_independent_width": 2
+      },
+      "topology": "sequence"
+    },
+    "budget_status": {
+      "within_review_proxy_limit": true,
+      "within_task_time_limit": true
+    },
+    "correctness": {
+      "expected": 1024,
+      "observed": 1024,
+      "passed": true,
+      "step_receipts": [
+        {
+          "expected_output": 12,
+          "input": 7,
+          "mismatch": null,
+          "node": "add",
+          "output": 12,
+          "verified": true
+        },
+        {
+          "expected_output": 36,
+          "input": 12,
+          "mismatch": null,
+          "node": "multiply",
+          "output": 36,
+          "verified": true
+        },
+        {
+          "expected_output": 32,
+          "input": 36,
+          "mismatch": null,
+          "node": "subtract",
+          "output": 32,
+          "verified": true
+        },
+        {
+          "expected_output": 1024,
+          "input": 32,
+          "mismatch": null,
+          "node": "square",
+          "output": 1024,
+          "verified": true
+        }
+      ],
+      "verifier": "exact equality at every declared intermediate and final output"
+    },
+    "measured_wall_time_seconds": 0.061935,
+    "orchestration_overhead": {
+      "admission_gate_seconds": 5.7e-05,
+      "avoided_graph_operation_proxy": 5,
+      "graph_execution_skipped": true,
+      "graph_scheduler_invocations": 0
+    },
+    "retry_recovery": {
+      "reason": "no failure is injected into Task B",
+      "recovered": false,
+      "retry_count": 0
+    },
+    "review_load_proxy": {
+      "additional_units": 3,
+      "graph_units": 9,
+      "is_proxy": true,
+      "loop_units": 6,
+      "not_measured_human_review": true,
+      "unit_definition": "one proxy unit per step check, final check, admission check, and graph edge contract",
+      "units": 6
+    }
+  }
+}
