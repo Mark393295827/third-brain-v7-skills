@@ -2,8 +2,8 @@
 name: deep-research
 description: Use when a decision-relevant question needs multi-source search, claim-level citations, contradiction handling, uncertainty, or a durable wiki handoff.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "high-risk"
   assumes: "The question benefits from multiple sources and authorized source access is available."
   conflicts_with: "Link collection without synthesis, uncited material claims, privacy leakage, or autonomous experiments without objective evaluation."
@@ -12,6 +12,10 @@ metadata:
 # Deep Research
 
 <skill_contract>
+  <input>Decision-relevant question, audience, scope, recency, source and privacy boundaries, budget, and required deliverable.</input>
+  <output>An answer-first synthesis with source and claim ledgers, citations, contradictions, uncertainty, and durable handoff.</output>
+  <done>Decision-critical claims are traceable and adversarially checked, unresolved gaps are explicit, and the stop rule is met.</done>
+  <non_goals>Link collection, uncited material claims, privacy leakage, exhaustive search, or autonomous high-impact experiments.</non_goals>
 
 Research is an evidence loop, not a volume contest. Define the decision, gather the minimum diverse evidence, maintain source and claim ledgers, attack the synthesis, then stop when additional search no longer changes the answer.
 

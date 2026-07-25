@@ -7,13 +7,13 @@ Use this checklist when publishing or refreshing the GitHub repository page.
 Recommended description:
 
 ```text
-Third Brain V7 — 19 Profile-Aware Agent Skills for Claude / Codex / Cursor | Obsidian Knowledge OS + Verified Agent Loops
+Third Brain V7.1 — 20 Profile-Aware Agent Skills for Claude / Codex / Cursor | Obsidian Knowledge OS + Verified Loops + Bounded Static Graphs
 ```
 
 Recommended Chinese description:
 
 ```text
-第三大脑 V7 — 19 个具备执行契约的 Claude/Codex/Cursor 技能 | Obsidian 知识系统 + 可验证 Agent Loop
+第三大脑 V7.1 — 20 个具备执行契约的 Claude/Codex/Cursor 技能 | Obsidian 知识系统 + 可验证 Loop + 有界静态 Graph
 ```
 
 ## Topics
@@ -47,7 +47,7 @@ property-management
 ## Submission Blurb
 
 ```text
-Third Brain V7 is a collection of 19 profile-aware Agent Skills for a persistent Obsidian knowledge and agent execution system. It supports Codex CLI, Claude Code, Gemini CLI, Cursor, and Windsurf with explicit unknown handling, durable state, bounded retries, independent verification, and governed promotion.
+Third Brain V7.1 is a collection of 20 profile-aware Agent Skills for a persistent Obsidian knowledge and agent execution system. It supports Codex CLI, Claude Code, Gemini CLI, Cursor, and Windsurf with explicit unknown handling, durable state, bounded retries, bounded static dependency graphs, independent verification, and governed promotion.
 ```
 
 ## Maintenance Cadence

@@ -8,14 +8,26 @@ ADAPTERS_DIR="$(dirname "$0")/adapters"
 CONFIG_FILE="$(dirname "$0")/system/config.md"
 TARGET_ARG="${1:-auto}"
 
-echo "=== Third Brain V7 Skills Installer ==="
+copy_skills() {
+    local destination="$1"
+    mkdir -p "$destination"
+    tar \
+        --exclude='*/__pycache__' \
+        --exclude='*/__pycache__/*' \
+        --exclude='*.pyc' \
+        --exclude='*.pyo' \
+        -C "$SKILLS_DIR" -cf - . |
+        tar -C "$destination" -xf -
+}
+
+echo "=== Third Brain V7.1 Skills Installer ==="
 echo ""
 
 # Detect agent harness
 HARNESS=""
 if [ "$TARGET_ARG" != "auto" ]; then
     HARNESS="$TARGET_ARG"
-elif [ -n "$CLAUDE_CODE" ] || [ -d "$HOME/.claude" ]; then
+elif [ -n "${CLAUDE_CODE:-}" ] || [ -d "$HOME/.claude" ]; then
     HARNESS="claude-code"
 elif command -v codex &>/dev/null; then
     HARNESS="codex"
@@ -49,11 +61,11 @@ case "$HARNESS" in
     all)
         echo "Installing all supported local targets..."
         mkdir -p "$HOME/.claude/skills" "$HOME/.agents/skills" "$HOME/.gemini/skills" ".cursor/rules" ".windsurf/skills" ".windsurf/rules"
-        cp -r "$SKILLS_DIR"/* "$HOME/.claude/skills/"
-        cp -r "$SKILLS_DIR"/* "$HOME/.agents/skills/"
-        cp -r "$SKILLS_DIR"/* "$HOME/.gemini/skills/"
+        copy_skills "$HOME/.claude/skills"
+        copy_skills "$HOME/.agents/skills"
+        copy_skills "$HOME/.gemini/skills"
         cp "$ADAPTERS_DIR/cursor/third-brain-skills.mdc" ".cursor/rules/third-brain-skills.mdc"
-        cp -r "$SKILLS_DIR"/* ".windsurf/skills/"
+        copy_skills ".windsurf/skills"
         cp "$ADAPTERS_DIR/windsurf/third-brain-skills.md" ".windsurf/rules/third-brain-skills.md"
         echo "Installed all supported targets"
         exit 0
@@ -72,11 +84,11 @@ echo "Installing to: $TARGET"
 if [ "$HARNESS" = "cursor" ]; then
     cp "$ADAPTERS_DIR/cursor/third-brain-skills.mdc" "$TARGET/third-brain-skills.mdc"
 elif [ "$HARNESS" = "windsurf" ]; then
-    cp -r "$SKILLS_DIR"/* "$TARGET/"
+    copy_skills "$TARGET"
     mkdir -p ".windsurf/rules"
     cp "$ADAPTERS_DIR/windsurf/third-brain-skills.md" ".windsurf/rules/third-brain-skills.md"
 else
-    cp -r "$SKILLS_DIR"/* "$TARGET/"
+    copy_skills "$TARGET"
 fi
 echo ""
 if [ "$HARNESS" = "cursor" ]; then

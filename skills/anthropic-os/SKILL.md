@@ -2,8 +2,8 @@
 name: anthropic-os
 description: Use when a personal or team operating system needs a bounded redesign using Four-C, closed-loop controls, 70/30 allocation, 3B creativity, experiments, and prediction-error learning.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "high-risk"
   assumes: "The operating system has a named owner, observable workflow, local metrics, and a review cadence."
   conflicts_with: "Copying extreme productivity claims, surveillance without governance, automatic policy evolution, or cadence before context and capability."
@@ -12,6 +12,10 @@ metadata:
 # Anthropic OS
 
 <skill_contract>
+  <input>One owned work system with its workflow, users, traces, permissions, metrics, constraints, and review horizon.</input>
+  <output>A supervised operating-system redesign with one bounded experiment, control gates, cadence, and rollback.</output>
+  <done>The selected practice has a baseline, hypothesis, owner, metric, guardrail, budget, stop rule, and review receipt.</done>
+  <non_goals>Extreme productivity claims, surveillance, automatic policy evolution, or cadence without supporting context and capability.</non_goals>
 
 Redesign one work system as a supervised learning loop. Plasticity means practices may change from evidence; competition means alternatives contend; constraint means attention, time, permissions, and review bandwidth shape the design. Load `references/operating-system-playbook.md` for diagnostics and artifacts.
 

@@ -2,8 +2,8 @@
 name: context-manager
 description: Use when a long-running agent task needs context budgeting, checkpointing, compaction, retrieval, or capability-based model routing.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "stateful"
   assumes: "Runtime context limits, cost policy, and durable storage are available or can be bounded explicitly."
   conflicts_with: "Hard-coded vendor pricing, silent context loss, or retaining low-value history at the expense of execution state."
@@ -12,6 +12,10 @@ metadata:
 # Context Manager
 
 <skill_contract>
+  <input>An active objective, runtime context limits, decision-critical state, evidence, budgets, and durable storage.</input>
+  <output>A bounded context manifest, checkpoint, compaction decision, and capability-routing receipt.</output>
+  <done>The next decision can be resumed without losing constraints, permissions, provenance, or failure history.</done>
+  <non_goals>Task orchestration, vendor-specific routing, hidden truncation, or retaining history that cannot change a decision.</non_goals>
 
 Treat context as RAM, durable storage as disk, and tools as retrieval. Pay only for information that changes the next decision or prevents an execution error.
 
@@ -44,6 +48,11 @@ Apply `KEEP / SUMMARIZE / DROP / RETRIEVE`:
 
 Checkpoint at phase boundaries or before compaction. Route work by capability requirements such as reasoning depth, tool use, latency, cost, multimodality, and context capacity; runtime policy selects the implementation. Keep stable prompt prefixes unchanged when caching is available.
 
+For Graph workflows, treat each node context as private RAM and each typed edge
+payload as a bounded transfer contract. Pass artifact locators, schemas,
+decisions, and verifier receipts; do not concatenate all branch histories into
+every successor. A join loads only the declared inputs needed for its decision.
+
 </execute>
 
 <evaluate>
@@ -73,6 +82,8 @@ Return `status`, `result` (budget plan or checkpoint), `evidence` (runtime telem
 
 - Runtime pricing changes mid-project: recompute from current policy; preserve earlier estimates as historical evidence.
 - A long log contains one decisive error: keep the error signature and locator, summarize the surrounding output, and retain retrieval access.
+- A Graph join receives three branch transcripts: retrieve the declared output
+  artifacts and receipts, not the full private context of every branch.
 
 ## Success Metrics
 

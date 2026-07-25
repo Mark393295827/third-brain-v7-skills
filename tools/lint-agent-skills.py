@@ -25,6 +25,7 @@ REQUIRED_SECTIONS = [
     "## Quality Gates",
 ]
 REQUIRED_TAGS = ["skill_contract", "intake", "unknowns_gate", "execute", "evaluate"]
+REQUIRED_CONTRACT_FIELDS = ["input", "output", "done", "non_goals"]
 PROFILES = {"one-shot", "stateful", "loop", "high-risk"}
 STATEFUL_PROFILES = {"stateful", "loop", "high-risk"}
 ERROR_CODES = {
@@ -84,8 +85,19 @@ def section_text(body: str, heading: str) -> str:
     return match.group("section") if match else ""
 
 
+def tag_block(body: str, tag: str) -> str | None:
+    opening = f"<{tag}>"
+    closing = f"</{tag}>"
+    if body.count(opening) != 1 or body.count(closing) != 1:
+        return None
+
+    start = body.index(opening) + len(opening)
+    end = body.index(closing)
+    return body[start:end] if start <= end else None
+
+
 def check_balanced_tag(body: str, tag: str) -> bool:
-    return body.count(f"<{tag}>") == 1 and body.count(f"</{tag}>") == 1
+    return tag_block(body, tag) is not None
 
 
 def check_skill(skill_dir: Path) -> list[Issue]:
@@ -138,6 +150,14 @@ def check_skill(skill_dir: Path) -> list[Issue]:
     for tag in REQUIRED_TAGS:
         if not check_balanced_tag(body, tag):
             issues.append(Issue(skill_file, f"requires one balanced <{tag}> block"))
+
+    skill_contract = tag_block(body, "skill_contract")
+    for field in REQUIRED_CONTRACT_FIELDS:
+        field_block = tag_block(skill_contract, field) if skill_contract is not None else None
+        if not check_balanced_tag(body, field) or field_block is None:
+            issues.append(Issue(skill_file, f"requires one balanced <{field}> block"))
+        elif not field_block.strip():
+            issues.append(Issue(skill_file, f"<{field}> block must not be empty"))
 
     if profile in STATEFUL_PROFILES and not check_balanced_tag(body, "state_contract"):
         issues.append(Issue(skill_file, f"{profile} profile requires <state_contract>"))

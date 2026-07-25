@@ -2,8 +2,8 @@
 name: behavior-design
 description: Use when a goal must be converted into a repeatable behavior, cue, SOP, review cadence, and identity-aligned reinforcement.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "stateful"
   assumes: "The actor, desired outcome, and operating context can be observed or probed."
   conflicts_with: "Coercive behavior design, vague motivation advice, or unmeasured habit claims."
@@ -12,6 +12,10 @@ metadata:
 # Behavior Design
 
 <skill_contract>
+  <input>Actor, desired outcome, current behavior, context, constraints, baseline evidence, and review horizon.</input>
+  <output>An agency-preserving HAS behavior system with cues, effort levels, SOP, measures, recovery, and review cadence.</output>
+  <done>The target behavior is observable, runnable on a low-motivation day, evidenced, and assigned one review owner.</done>
+  <non_goals>Coercion, unsupported identity claims, vague motivation advice, or optimizing lagging outcomes without behaviors.</non_goals>
 
 Convert an outcome into the smallest observable behavior system that can survive low-motivation days. Preserve agency; optimize the environment before blaming the actor.
 

@@ -2,8 +2,8 @@
 name: wiki-ingest
 description: Use when a PDF, URL, transcript, clipping, or raw note must become source-grounded, linked, governed knowledge in an Obsidian vault.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "high-risk"
   assumes: "The source is accessible and the vault root plus write boundaries can be resolved."
   conflicts_with: "Invented provenance, modified immutable sources, unsupported concept promotion, or success claims without post-ingest checks."
@@ -12,6 +12,10 @@ metadata:
 # Wiki Ingest
 
 <skill_contract>
+  <input>Accessible PDF, URL, transcript, clipping, or note plus vault root, topic, provenance, permissions, and lifecycle context.</input>
+  <output>Immutable source evidence, linked concept and entity updates, navigation and lifecycle changes, and a verified ingest receipt.</output>
+  <done>Touched files pass source, link, block-ref, frontmatter, lifecycle, understanding, and read-after-write checks.</done>
+  <non_goals>Fabricated provenance, source mutation, raw-summary dumping, unsupported rule promotion, or unverified completion.</non_goals>
 
 Use STOW: **Source -> Transform -> Organize -> Write-back**. The source is evidence, the concept page is current understanding, and the log is the receipt. Load `references/stow-contract.md` for schemas and lifecycle details.
 

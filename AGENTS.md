@@ -2,7 +2,7 @@
 
 This repository contains Agent Skills for the Codex CLI environment. Place skills in `~/.agents/skills/`.
 
-V7 treats Obsidian as durable disk and governance, while every skill uses a profile-aware execution contract. Do not turn wiki signals into rules until they pass the promotion gate: repeated source support or local verification, bounded macro action, preserved provenance/permissions, and a cheap objective check.
+V7 treats Obsidian as durable disk and governance, while every skill uses a profile-aware execution contract. V7.1 adds the 20th skill, `graph-engineering`, for bounded static dependency DAGs. Do not turn wiki signals into rules until they pass the promotion gate: repeated source support or local verification, bounded macro action, preserved provenance/permissions, and a cheap objective check.
 
 ## Skills
 
@@ -33,9 +33,10 @@ V7 treats Obsidian as durable disk and governance, while every skill uses a prof
 
 ### 🏗️ Engineering
 - **agentic-engineering** — Agent-as-process workflow refactoring with autonomy defaults, delegated-action boundaries, state checkpoints, write-back, and verification gates.
-- **loop-engineering** — Bounded Trigger -> Execute -> Verify -> State loop design with durable contracts, independent verification, hard budgets, stop/recovery rules, and topology selection.
-- **harness-engineering** — Agent runtime kernel design: permissions, tools as system calls, MCP/Skills/Hooks selection, provenance ledgers, delegated-action gates, observability, and recovery.
-- **agent-teams-command** — Multi-agent process orchestration with ownership, IPC, worktree isolation, async budget envelopes, integration, cleanup, and evidence gates.
+- **loop-engineering** — Temporal-depth control through bounded Trigger -> Execute -> Verify -> State loops, durable contracts, hard budgets, and stop/recovery rules.
+- **graph-engineering** — Dependency-width control for bounded static DAGs with explicit dependencies, independent branches, typed joins, and node-local recovery; dynamic and cyclic graphs are out of scope in V7.1.
+- **harness-engineering** — Runtime kernel design: scheduler, permissions, tools as system calls, MCP/Skills/Hooks selection, provenance ledgers, observability, and recovery.
+- **agent-teams-command** — Multi-agent process ownership, IPC, worktree isolation, async budget envelopes, integration, cleanup, and evidence gates.
 
 ### 💼 Strategy & Operations
 - **startup-evaluation** — Startup health diagnosis with entrepreneurship, VC 5T, PMF, runway, team, and next-test frameworks.
@@ -73,7 +74,11 @@ Promote wiki knowledge into a skill, SOP, schema rule, or automation only when:
 1. Start with `wiki-ingest` + `verify-before-claim`.
 2. Add `daily-okr` + `session-learn` after daily ingest and evidence checks are working.
 3. Add `cognitive-compile`, `behavior-design`, and `creativity-engine` when the wiki has enough material to synthesize.
-4. Add `knowledge-ops`, `harness-engineering`, `agentic-engineering`, and `agent-teams-command` only when scale, reliability, or multi-agent ownership requires them.
+4. Add `knowledge-ops` and `loop-engineering` when retrieval or repeated verified execution becomes a bottleneck.
+5. Add `graph-engineering` after `loop-engineering` only when explicit dependencies, parallel branches, typed joins, or node-local recovery provide more value than orchestration and review cost.
+6. Add `harness-engineering`, `agentic-engineering`, and `agent-teams-command` only when runtime controls, workflow autonomy, or multi-agent process ownership requires them.
+
+Routing boundary: Loop = temporal depth; Graph = dependency width; Agent Teams = process ownership, IPC, and integration; Harness = runtime scheduler, permissions, and observability.
 
 ## Karpathy LLM OS
 

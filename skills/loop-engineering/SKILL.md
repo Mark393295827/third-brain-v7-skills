@@ -2,8 +2,8 @@
 name: loop-engineering
 description: Use when a repeatable task must become a bounded Trigger -> Execute -> Verify -> State loop, scheduled automation, goal agent, or metric-driven research cycle.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "loop"
   assumes: "The task has inspectable state, a finite budget, and at least one verifier independent of the builder's opinion."
   conflicts_with: "Unbounded retries, self-certification, silent external mutation, or loops whose state cannot be recovered."
@@ -12,6 +12,10 @@ metadata:
 # Loop Engineering
 
 <skill_contract>
+  <input>A repeatable task with inspectable state, finite budgets, permissions, and an independent verifier.</input>
+  <output>A validated Trigger -> Execute -> Verify -> State contract plus resumable run receipts.</output>
+  <done>The declared metric or stop condition is supported by fresh validator and verifier evidence.</done>
+  <non_goals>Dependency-graph orchestration, unbounded autonomy, or self-certified completion.</non_goals>
 
 Build loops only when repeated execution creates evidence. Every loop needs admission, a validated contract, durable state, independent evaluation, bounded retries, stop/recovery rules, and a final receipt.
 
@@ -31,6 +35,11 @@ Select one mode:
 - **AutoResearch:** vary experiments against an objective metric in a sandbox.
 
 Admit only if work is repeatable, outputs are inspectable, a verifier exists, failures are recoverable, and autonomy is worth the orchestration/review cost. Otherwise use a one-shot workflow.
+
+Use `graph-engineering` instead when explicit data dependencies, independent
+branches, typed joins, or node-local recovery create measurable value. A Graph
+node may use this Loop contract for local repetition; Graph width does not
+replace finite Loop depth.
 
 </intake>
 
@@ -67,6 +76,9 @@ Validate it with `scripts/validate_loop_contract.py --strict`. Then iterate:
 7. **Stop/continue:** stop on success, cap, permission boundary, regression, repeated signature, or no useful work.
 
 Use `single-agent` by default, `maker-checker` for ambiguous/high-risk evaluation, and `manager-workers` only for genuinely independent work with an explicit integration gate.
+
+If a validated Graph owns the dependency topology, this skill owns only the
+bounded retry behavior inside its declared `loop` nodes.
 
 </execute>
 

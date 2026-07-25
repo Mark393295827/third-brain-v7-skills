@@ -2,8 +2,8 @@
 name: cognitive-compile
 description: Use when source material must be transformed into a compact, evidence-aware model for learning, decisions, or an Obsidian concept note.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "one-shot"
   assumes: "The source material or a source-grounded summary is available."
   conflicts_with: "Inventing missing claims, erasing provenance, or presenting hypotheses as facts."
@@ -12,6 +12,10 @@ metadata:
 # Cognitive Compile
 
 <skill_contract>
+  <input>Source-grounded material, original question, learning or decision goal, audience, and destination.</input>
+  <output>An eight-part evidence-aware mental model separating facts, mechanisms, conflicts, hypotheses, decisions, and action.</output>
+  <done>Each material claim retains provenance and uncertainty, and one bounded next action answers the original question.</done>
+  <non_goals>Inventing missing claims, erasing contradictions or provenance, or treating interpretation as source fact.</non_goals>
 
 Compile information into a decision-ready mental model. Compression must preserve provenance, uncertainty, contradiction, and the original question.
 

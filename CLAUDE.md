@@ -1,4 +1,4 @@
-# Third Brain V7 Skills — Claude Code
+# Third Brain V7.1 Skills — Claude Code
 
 For detailed installation, usage, and workflow scenarios, see **[GUIDE.md](GUIDE.md)**.
 
@@ -32,10 +32,11 @@ You have access to the following Agent Skills. Each skill is a markdown file in 
 - `token-cost-tracker` — command for estimate/log/report; it is not an Agent Skill.
 
 ### 🏗️ Engineering
-- **loop-engineering** — Bounded Goal/Loop/Automation/AutoResearch contracts with state, verification, retry, and recovery.
+- **loop-engineering** — Temporal-depth control through bounded Goal/Loop/Automation/AutoResearch contracts with state, verification, retry, and recovery.
+- **graph-engineering** — Dependency-width control through bounded static DAGs with explicit dependencies, independent branches, typed joins, and node-local recovery. V7.1 excludes dynamic and cyclic graphs.
 - **agentic-engineering** — Refactor skills and workflows as agent processes with autonomy defaults, delegated-action boundaries, state checkpoints, write-back, and verification gates.
-- **harness-engineering** — Agent runtime kernel: three-tier permissions, tools as system calls, provenance ledgers, delegated-action gates, observability, recovery, and closed-loop design.
-- **agent-teams-command** — Multi-agent process orchestration with ownership, IPC, async budget envelopes, integration, cleanup, and evidence gates.
+- **harness-engineering** — Agent runtime kernel: scheduler, permissions, tools as system calls, provenance ledgers, delegated-action gates, observability, recovery, and closed-loop design.
+- **agent-teams-command** — Multi-agent process ownership and orchestration with IPC, async budget envelopes, integration, cleanup, and evidence gates.
 
 ### 💼 Strategy & Operations
 - **startup-evaluation** — Startup health diagnosis with entrepreneurship, VC 5T, PMF, runway, team, and next-test frameworks.
@@ -71,8 +72,18 @@ For wiki-writing skills, resolve `SOURCES_DIR`, `CONCEPTS_DIR`, `ENTITIES_DIR`, 
 1. Week 1: `wiki-ingest` + `verify-before-claim`.
 2. Weeks 2-4: add `daily-okr` + `session-learn`.
 3. Month 2+: add `cognitive-compile`, `behavior-design`, and `creativity-engine`.
-4. Month 3+: add `knowledge-ops`, `harness-engineering`, and `agentic-engineering`.
-5. Multi-agent scale: add `agent-teams-command` and `project-flow-ops`.
+4. Month 3+: add `knowledge-ops`, `loop-engineering`, `harness-engineering`, and `agentic-engineering`.
+5. Dependency scale: add `graph-engineering` after `loop-engineering` only when explicit dependencies, parallel branches, typed joins, or node-local recovery exceed orchestration and review cost.
+6. Multi-agent scale: add `agent-teams-command` and `project-flow-ops`.
+
+## Engineering Routing Boundary
+
+- Loop Engineering controls temporal depth.
+- Graph Engineering controls dependency width.
+- Agent Teams Command controls process ownership, IPC, and integration.
+- Harness Engineering supplies the runtime scheduler, permissions, and observability.
+
+A graph node may contain a bounded Loop or Agent Team. V7.1 supports bounded static DAGs, not dynamic or cyclic graphs.
 
 ## Grounding Principles
 

@@ -105,6 +105,11 @@ Self-improvement:
 
 Design rule: strategic control is usually serial, while execution can be parallel. If the commander has not fixed intent, ownership, and verifier, adding agents only amplifies ambiguity.
 
+Graph boundary: use `graph-engineering` to declare nodes, typed dependency
+edges, joins, and node-local recovery. Use this command architecture only for
+nodes that require distinct worker processes, context isolation, ownership,
+IPC, integration, or cleanup. Do not create one teammate per graph node.
+
 Automata rule: local worker rules create global behavior. Every worker must know its state transition:
 
 ```text

@@ -24,7 +24,7 @@ Keep discovery fields at the top level and V7 governance fields under `metadata`
 name: skill-name
 description: State the owned transformation and complete "Use when" trigger.
 metadata:
-  version: "7.0.0"
+  version: "7.1.0"
   updated: "YYYY-MM-DD"
   profile: "one-shot | stateful | loop | high-risk"
   assumes: "Required operating condition."
@@ -38,6 +38,7 @@ metadata:
 
 Every `SKILL.md` must contain:
 
+- one non-empty `<input>`, `<output>`, `<done>`, and `<non_goals>` block inside `<skill_contract>`;
 - `## Usage Template`
 - `## Success Metrics`
 - `## Workflow`
@@ -108,4 +109,4 @@ Run:
 python tools\lint-agent-skills.py
 ```
 
-The V7 linter should validate frontmatter, required sections, line budgets, resource existence, executable-reference honesty, standard failure coverage, and conditional state/retry controls.
+The V7 linter validates frontmatter, the non-empty contract quartet, required sections, line budgets, resource existence, executable-reference honesty, standard failure coverage, and conditional state/retry controls.

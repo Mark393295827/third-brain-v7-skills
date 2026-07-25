@@ -1,10 +1,29 @@
 # Changelog
 
-All notable changes to Third Brain V6 Skills are documented here.
+All notable changes to Third Brain V7 Skills are documented here.
 
 This project follows a small-release rhythm: ship one focused release every 1-2 weeks when there are meaningful fixes, docs improvements, or skill updates.
 
 ## Unreleased
+
+Current V7.1 baseline: 20 Agent Skills.
+
+### Added
+- `graph-engineering` for bounded static DAG admission, typed node/edge
+  contracts, explicit joins, single-writer ownership, node-local recovery, and
+  strict validation. It complements rather than replaces `loop-engineering`.
+- A reproducible Loop-vs-Graph experiment with positive and negative admission
+  fixtures, provenance hashes, independent review, and explicit claim limits.
+- Non-empty `input`, `output`, `done`, and `non_goals` contracts across all
+  skills, enforced by the repository linter.
+
+### Fixed
+- Installer copies now exclude `__pycache__`, `.pyc`, and `.pyo` artifacts across every skill target.
+- Windows now has a native `install.ps1` path with the same targets and cache filtering as `install.sh`.
+- Governance and release documentation now use the same lint, test, diff, and strict Loop validation gates as CI.
+- Hook documentation now distinguishes non-shipped design examples from executable integrations.
+- Graph strict validation now includes failure routes in DAG checks and binds external effects to exact approval scopes, direct human-gate receipts, allowed write targets, and compensation.
+- Loop cap validation now rejects unbounded fallback language and parses compound budgets by their relevant units.
 
 ### Added
 - `ai-six-sigma-property-os` skill for designing an AI + Ontology + DMAIC Black Belt operating model for property work orders, dispatch, quotes, evidence, CTQ dashboards, root-cause loops, and MVP quality control.
@@ -18,7 +37,7 @@ This project follows a small-release rhythm: ship one focused release every 1-2 
 - Agent understanding framework wiki concept mapping Karpathy LLM OS ideas to Third Brain agent workflow, harness, and team design.
 - Agent Skills open-format standard document and linter for validating skill folder shape, metadata, trigger descriptions, and quality gate sections.
 - Agentic Engineering principles document translating spec-driven development, macro actions, security-aware integration, and AutoResearch boundaries into repo standards.
-- Skill-level `assumes`, `conflicts_with`, and `## Success Metrics` contracts across all 18 skills.
+- Skill-level `assumes`, `conflicts_with`, and `## Success Metrics` contracts across all 19 skills.
 - `system/config.md` as the default configurable vault path contract for wiki-writing skills.
 - README skill adoption ladder that makes `wiki-ingest` + `verify-before-claim` the recommended first stage.
 

@@ -2,8 +2,8 @@
 name: harness-engineering
 description: Use when an agent workflow needs production-like runtime controls for context, tools, permissions, observability, scheduling, evaluation, recovery, or maintenance.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "high-risk"
   assumes: "The workflow uses tools or delegated actions whose environment, permissions, and event trail can be controlled."
   conflicts_with: "Prompt-only safety, broad credentials, hidden tool effects, or autonomous routines without finite budgets and rollback."
@@ -12,6 +12,10 @@ metadata:
 # Harness Engineering
 
 <skill_contract>
+  <input>An agent workflow, runtime environment, tools, data sensitivity, effects, cadence, risk, and operator constraints.</input>
+  <output>An auditable runtime kernel with scoped permissions, scheduling, observability, recovery, and eval controls.</output>
+  <done>An end-to-end trace and failure-path tests prove bounded, replayable, recoverable delegated action.</done>
+  <non_goals>Business-task decomposition, prompt-only safety, broad credentials, or unbounded scheduled autonomy.</non_goals>
 
 Treat the harness as the kernel around an LLM OS: context is RAM, durable state is disk, tools are system calls, skills are programs, the scheduler is control, and evals are verifiers. Load `references/runtime-control-patterns.md` for matrices and schemas.
 
@@ -37,13 +41,20 @@ If state ownership, credential scope, external side effects, retention, or appro
 
 1. Pass Four-C: **Context** truth/retrieval, **Connections** scoped accounts/APIs, **Capabilities** versioned skills/scripts/evals, **Cadence** trigger/receipt/anomaly/stop.
 2. Map runtime: stored program, control unit, hot context, durable disk, event bus, I/O tools, verifier, and garbage collector.
-3. Choose the lowest-context primitive: deterministic script/hook, skill, connector, dynamic workflow, or agent team. Load capabilities lazily.
+3. Choose the lowest-context primitive: deterministic script/hook, skill,
+   static Graph, connector, dynamic workflow, or agent team. Load capabilities
+   lazily. Graph Engineering owns dependency semantics; the harness owns the
+   ready queue, leases, duplicate delivery, concurrency, and executor health.
 4. Define each tool as a narrow system call with purpose, explicit inputs, bounds, timeout, idempotency, failure path, evidence, and audit location.
 5. Enforce least privilege in the environment, not only prose. Escalate autonomy through observe -> co-drive -> scoped reversible action -> monitored routine -> audited low-risk autonomy.
 6. For delegated action require mandate, scope, limit, preview, receipt, and rollback. Human approval governs irreversible/shared/financial/published/credentialed actions.
 7. Add deterministic feedback (tests, lint, LSP, policy checks) outside context when possible; add independent evaluator/red team for high-risk semantic output.
 8. Persist an append-only session event log and checkpoint; define alerts, fallback, incident response, cleanup, permission review, and stale-context/rule review.
 9. For scheduled work define Trigger, Context, Steering, Receipt, budget, stop, recovery, and executor health. A schedule firing is not task success.
+10. For Graph execution, persist node/edge/join transitions before releasing
+    successors, make delivery idempotent, recover from the last verified
+    checkpoint, and test permission denial, worker loss, duplicate events, and
+    compensation without relying on in-memory scheduler state.
 
 </execute>
 
@@ -82,6 +93,8 @@ Return `status`, `result` (runtime architecture and controls), `evidence` (trace
 
 - A connector exposes broad account access for a narrow task: create a scoped proxy/allowlist or keep the workflow manual; instructions alone are insufficient.
 - The scheduler ran on time but the state store was stale: block mutation, mark the run failed, and recover from the last verified checkpoint.
+- A Graph worker completes twice after lease expiry: deduplicate by node/run
+  identity and release successors only from one verified transition.
 
 ## Success Metrics
 

@@ -1,4 +1,4 @@
-# Third Brain V7 Skills — Gemini CLI
+# Third Brain V7.1 Skills — Gemini CLI
 
 This repository contains Agent Skills for the Gemini CLI environment. Place skills in `~/.gemini/skills/`.
 
@@ -30,10 +30,11 @@ This repository contains Agent Skills for the Gemini CLI environment. Place skil
 - `token-cost-tracker` is a command under `commands/`, not an Agent Skill.
 
 ### 🏗️ Engineering
-- **loop-engineering** — Bounded Goal/Loop/Automation/AutoResearch contracts with state, verification, retry, and recovery.
+- **loop-engineering** — Temporal-depth control through bounded Goal/Loop/Automation/AutoResearch contracts with state, verification, retry, and recovery.
+- **graph-engineering** — Dependency-width control through bounded static DAGs with explicit dependencies, independent branches, typed joins, and node-local recovery. V7.1 excludes dynamic and cyclic graphs.
 - **agentic-engineering** — Agent-as-process workflow refactoring with autonomy defaults, delegated-action boundaries, state checkpoints, write-back, and verification gates.
-- **harness-engineering** — Agent runtime kernel design: permissions, tools as system calls, provenance ledgers, delegated-action gates, observability, and recovery.
-- **agent-teams-command** — Multi-agent process orchestration with ownership, IPC, async budget envelopes, integration, cleanup, and evidence gates.
+- **harness-engineering** — Agent runtime kernel design: scheduler, permissions, tools as system calls, provenance ledgers, delegated-action gates, observability, and recovery.
+- **agent-teams-command** — Multi-agent process ownership and orchestration with IPC, async budget envelopes, integration, cleanup, and evidence gates.
 
 ### 💼 Strategy & Operations
 - **startup-evaluation** — Startup health diagnosis with entrepreneurship, VC 5T, PMF, runway, team, and next-test frameworks.
@@ -62,7 +63,13 @@ For wiki-writing skills, resolve paths from `system/config.md` when available. D
 1. Start with `wiki-ingest` + `verify-before-claim`.
 2. Add `daily-okr` + `session-learn` after daily ingest and evidence checks are working.
 3. Add `cognitive-compile`, `behavior-design`, and `creativity-engine` when the wiki has enough material to synthesize.
-4. Add `knowledge-ops`, `harness-engineering`, `agentic-engineering`, and `agent-teams-command` only when scale, reliability, or multi-agent ownership requires them.
+4. Add `knowledge-ops` and `loop-engineering` when retrieval or repeated verified execution becomes a bottleneck.
+5. Add `graph-engineering` after `loop-engineering` only when explicit dependencies, parallel branches, typed joins, or node-local recovery exceed orchestration and review cost.
+6. Add `harness-engineering`, `agentic-engineering`, and `agent-teams-command` only when runtime controls, workflow autonomy, or multi-agent process ownership requires them.
+
+## Engineering Routing Boundary
+
+Loop = temporal depth. Graph = dependency width. Agent Teams = process ownership, IPC, and integration. Harness = runtime scheduler, permissions, and observability. V7.1 Graph Engineering supports bounded static DAGs only, not dynamic or cyclic graphs.
 
 ## Karpathy LLM OS
 

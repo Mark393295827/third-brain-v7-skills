@@ -2,8 +2,8 @@
 name: creativity-engine
 description: Use when a defined problem needs diverse ideas, cross-domain combinations, and cheap experiments instead of a single untested answer.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "one-shot"
   assumes: "A problem, target user, and at least one meaningful constraint can be stated."
   conflicts_with: "Unbounded brainstorming, novelty without utility, or treating generated ideas as validated opportunities."
@@ -12,6 +12,10 @@ metadata:
 # Creativity Engine
 
 <skill_contract>
+  <input>Defined problem, target user, desired change, constraints, prior attempts, and experiment budget.</input>
+  <output>Three non-equivalent options with scored mechanisms and falsifiable minimum experiments.</output>
+  <done>Each selected option has a hypothesis, smallest artifact, participant, threshold, budget, stop rule, and failure learning.</done>
+  <non_goals>Unbounded brainstorming, novelty without utility, polished prose before diversity, or presenting ideas as validated demand.</non_goals>
 
 Create option value by combining mechanisms, constraints, and analogies, then convert the strongest options into minimum experiments.
 

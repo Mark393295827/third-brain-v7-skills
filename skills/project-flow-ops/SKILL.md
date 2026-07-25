@@ -2,8 +2,8 @@
 name: project-flow-ops
 description: Use when projects or tasks need explicit state, WIP control, ownership, definitions of done, blocker handling, and verified closure.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "stateful"
   assumes: "Project state can be persisted and each active task can have one accountable owner."
   conflicts_with: "Hidden WIP, status by intuition, or marking work complete without a fresh verification receipt."
@@ -12,6 +12,10 @@ metadata:
 # Project Flow Ops
 
 <skill_contract>
+  <input>Project objective, tasks, owners, dependencies, budgets, artifacts, current states, and definitions of done.</input>
+  <output>A WIP-limited project state with ranked work, explicit blockers, bounded actions, and verified closure receipts.</output>
+  <done>Every active item has one owner and observable artifact, and completion is backed by its named fresh verification.</done>
+  <non_goals>Hidden WIP, duplicate ownership, status by intuition, backlog accumulation, or completion without evidence.</non_goals>
 
 Maintain a small, inspectable project state machine: `BACKLOG -> ACTIVE -> BLOCKED | COMPLETED`. Optimize flow and verified outcomes, not task volume.
 

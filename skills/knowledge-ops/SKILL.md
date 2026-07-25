@@ -2,8 +2,8 @@
 name: knowledge-ops
 description: Use when an Obsidian knowledge system needs classification, deduplication, retrieval, synchronization, debt queues, or governed Agent/Wiki promotion.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "stateful"
   assumes: "A durable Markdown knowledge base exists and its configured paths can be discovered or supplied."
   conflicts_with: "Treating vector search as canonical storage, silently merging provenance, or promoting one-off wiki signals into rules."
@@ -12,6 +12,10 @@ metadata:
 # Knowledge Operations
 
 <skill_contract>
+  <input>Vault root, operation, scope, canonical-store rules, permissions, destination, and execution budget.</input>
+  <output>Verified classification, retrieval, deduplication, synchronization, audit, or governed promotion changes with receipts.</output>
+  <done>Canonical Markdown remains authoritative, provenance and immutability are preserved, and representative checks pass.</done>
+  <non_goals>Using vectors as canonical storage, silent provenance merges, automatic semantic rewrites, or one-signal rule promotion.</non_goals>
 
 Operate the wiki as durable disk and governance layer. Markdown pages hold understanding and provenance; indexes, memory, vectors, and dashboards are replaceable access paths.
 

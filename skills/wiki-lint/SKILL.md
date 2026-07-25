@@ -2,8 +2,8 @@
 name: wiki-lint
 description: Use when an Obsidian wiki needs a reproducible health audit for structure, provenance, links, understanding, lifecycle, and promotion readiness.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "stateful"
   assumes: "The vault is readable and configured paths can be discovered or supplied."
   conflicts_with: "Mutating immutable source notes, silently deleting content, or reporting health without scan evidence."
@@ -12,6 +12,10 @@ metadata:
 # Wiki Lint
 
 <skill_contract>
+  <input>Vault root, path configuration, audit scope, exclusions, prior baseline, and explicit repair authorization if any.</input>
+  <output>A reproducible, severity-ranked wiki health report with file-level evidence, debt queues, and bounded repair proposals.</output>
+  <done>All twelve checks record scope and receipts, findings are reproducible, and report-only mode leaves content unchanged.</done>
+  <non_goals>Silent deletion, immutable-source mutation, unapproved repair, semantic rewrite, or health claims without scan evidence.</non_goals>
 
 Audit the wiki as a governed knowledge graph. Report prioritized, reproducible findings; make no content mutation unless separately authorized.
 

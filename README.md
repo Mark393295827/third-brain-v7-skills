@@ -1,12 +1,12 @@
-# Third Brain V7 Skills
+# Third Brain V7.1 Skills
 
 <p align="center">
   <img src="assets/third-brain-v5-system-architecture.png" alt="Third Brain V7 knowledge OS architecture: LLM, Skills, Obsidian, behavior design, creativity engine, governance, and compounding loops" width="600">
 </p>
 
-**Production-ready Agent Skills for Claude Code, Codex, Gemini, Cursor, and Windsurf.** Build a persistent knowledge operating system with verification-first workflows, Obsidian provenance, scheduled loops, context management, and multi-agent orchestration.
+**Verification-first Agent Skills for Claude Code, Codex, Gemini, Cursor, and Windsurf.** Build a persistent knowledge operating system with Obsidian provenance, scheduled loops, bounded static dependency graphs, context management, and multi-agent orchestration.
 
-Install 19 reusable agent skills for ingesting sources, compiling interlinked wikis, running daily knowledge loops, verifying claims before shipping, managing token costs, engineering bounded agent loops, and orchestrating multi-agent teams.
+Install 20 reusable agent skills for ingesting sources, compiling interlinked wikis, running daily knowledge loops, verifying claims before shipping, managing token costs, engineering bounded loops and static dependency graphs, and orchestrating multi-agent teams.
 
 **Use this if:**
 - Your AI agent keeps forgetting context between sessions
@@ -32,6 +32,8 @@ git clone https://github.com/Mark393295827/third-brain-v5-skills.git
 cd third-brain-v5-skills
 bash install.sh claude  # or: codex, gemini, cursor, windsurf, all
 ```
+
+Windows PowerShell uses `.\install.ps1 claude` with the same target names.
 
 ### 2. Try a Skill
 
@@ -83,6 +85,8 @@ The upgrade adds seven hard defaults:
 
 See [V7 release notes](docs/release-notes-v7.md) and the [Agent Skills standard](docs/agent-skills-standard.md).
 
+V7.1 adds `graph-engineering` as the 20th skill. It supports bounded static DAGs only; dynamic expansion and cyclic graphs remain out of scope.
+
 ---
 
 ## Core Skills (Start Here)
@@ -119,9 +123,11 @@ See [V7 release notes](docs/release-notes-v7.md) and the [Agent Skills standard]
 | Skill | What it does |
 |-------|-------------|
 | **[context-manager](skills/context-manager/SKILL.md)** | Derive budgets at runtime, checkpoint state, compact with KEEP/SUMMARIZE/DROP/RETRIEVE, and route by capability. |
-| **[loop-engineering](skills/loop-engineering/SKILL.md)** | Turn repeatable tasks into bounded agent loops with a durable contract, independent verifier, hard budgets, explicit stop/recovery rules, and conservative topology selection. |
+| **[loop-engineering](skills/loop-engineering/SKILL.md)** | Control temporal depth: turn repeatable work into a bounded Trigger -> Execute -> Verify -> State loop with durable state, finite budgets, and explicit stop/recovery rules. |
+| **[graph-engineering](skills/graph-engineering/SKILL.md)** | Control dependency width: validate bounded static DAGs with explicit dependencies, independent branches, typed joins, and node-local recovery. |
 | **[agentic-engineering](skills/agentic-engineering/SKILL.md)** | Design agent workflows as spec-driven macro actions with quality ceilings, verification gates, delegated-action boundaries, and state checkpoints. |
-| **[agent-teams-command](skills/agent-teams-command/SKILL.md)** | Admit and command multi-agent work with exclusive ownership, typed IPC, isolated writes, serial integration, evidence, and cleanup. |
+| **[harness-engineering](skills/harness-engineering/SKILL.md)** | Provide the runtime scheduler, permissions, leases, tools, provenance, and observability needed to execute agent workflows safely. |
+| **[agent-teams-command](skills/agent-teams-command/SKILL.md)** | Admit and command multi-agent processes with exclusive ownership, typed IPC, isolated writes, serial integration, evidence, and cleanup. |
 
 ---
 
@@ -157,14 +163,15 @@ See [V7 release notes](docs/release-notes-v7.md) and the [Agent Skills standard]
 
 - `context-manager` — Runtime budgets, checkpoint replay, compaction, retrieval, capability routing
 
-Utility command: `commands/token-cost-tracker.md` estimates, logs, and reports token usage; it is not one of the 19 Agent Skills.
+Utility command: `commands/token-cost-tracker.md` estimates, logs, and reports token usage; it is not one of the 20 Agent Skills.
 
 ### 🏗️ Engineering
 
-- `loop-engineering` — Bounded loop contracts, independent verification, finite budgets, stop/recovery rules, and topology selection
+- `loop-engineering` — Temporal depth through bounded loop contracts, independent verification, finite budgets, and stop/recovery rules
+- `graph-engineering` — Dependency width through bounded static DAGs, explicit branches, typed joins, and node-local recovery
 - `agentic-engineering` — Spec-driven macro actions, quality ceilings, verification gates, state checks
-- `harness-engineering` — Runtime infrastructure: permissions, system-call tools, delegated gates, provenance, observability
-- `agent-teams-command` — Multi-agent orchestration: ownership, IPC, async budgets, evidence gates
+- `harness-engineering` — Runtime scheduler, permissions, system-call tools, delegated gates, provenance, observability
+- `agent-teams-command` — Multi-agent process ownership, IPC, integration, async budgets, and evidence gates
 
 ### 💼 Strategy & Operations
 
@@ -190,7 +197,9 @@ External Sources ──→ wiki-ingest + knowledge-ops ──→ Knowledge Layer
                     session-learn (extract patterns)
                             ↓
                     verify-before-claim (quality gate)
-                            ↓
+                             ↓
+             Loop depth / Graph dependency width
+                             ↓
                 Multi-agent teams (agent-teams-command)
 ```
 
@@ -219,8 +228,10 @@ The system is a **closed loop**: ingest sources → process daily → extract le
 | **🔬 Research & Quality** | Verify before claiming, research with rigor | deep-research, verify-before-claim |
 | **🔄 Continuous Learning** | Extract patterns from every session | session-learn, project-flow-ops |
 | **📊 Context** | Manage hot context, durable checkpoints, and runtime budgets | context-manager |
-| **🏗️ Engineering** | Design bounded loops, harnesses, agent workflows, and multi-agent systems | loop-engineering, agentic-engineering, harness-engineering, agent-teams-command |
+| **🏗️ Engineering** | Design bounded loops, static dependency graphs, harnesses, agent workflows, and multi-agent systems | loop-engineering, graph-engineering, agentic-engineering, harness-engineering, agent-teams-command |
 | **💼 Strategy & Operations** | Evaluate startups, design AI quality systems | startup-evaluation, anthropic-os, ai-six-sigma-property-os |
+
+Engineering boundaries are deliberate: Loop Engineering controls temporal depth; Graph Engineering controls dependency width; Agent Teams Command controls process ownership, IPC, and integration; Harness Engineering supplies the runtime scheduler, permissions, and observability. A graph node may contain a Loop or Agent Team, but V7.1 does not support dynamic or cyclic graphs.
 
 ---
 
@@ -234,6 +245,7 @@ Start small. Add skills as you need them.
 | **Weeks 2-4** | + `daily-okr` + `session-learn` | Daily artifacts and verified learnings feed back to the wiki |
 | **Month 2+** | + `cognitive-compile` + `behavior-design` + `creativity-engine` | Wiki has 50+ pages or repeated decisions need synthesis |
 | **Month 3+** | + `knowledge-ops` + `loop-engineering` + `harness-engineering` + `agentic-engineering` | Retrieval, looping reliability, permissions, or delegated actions become bottlenecks |
+| **Dependency graph** | + `graph-engineering` after `loop-engineering` | Explicit dependencies, independent branches, typed joins, or node-local recovery create more value than orchestration and review cost |
 | **Multi-agent** | + `agent-teams-command` + `project-flow-ops` | Work splits into separate owners with clear integration gates |
 | **Strategy** | + `startup-evaluation` + `anthropic-os` + `deep-research` | Need startup health, market, operating-system decisions |
 | **Operations** | + `ai-six-sigma-property-os` | Need measurable service quality, dispatch, evidence loops |
@@ -246,31 +258,26 @@ Start small. Add skills as you need them.
 
 ```bash
 # Personal skills (available across all projects)
-cp -r skills/* ~/.claude/skills/
-
-# Project skills (shared with team)
-cp -r skills/* .claude/skills/
+bash install.sh claude
 ```
 
 ### For Cursor
 
 ```bash
-mkdir -p .cursor/rules && cp adapters/cursor/third-brain-skills.mdc .cursor/rules/
+bash install.sh cursor
 ```
 
 ### For Windsurf
 
 ```bash
-mkdir -p .windsurf/skills .windsurf/rules
-cp -r skills/* .windsurf/skills/
-cp adapters/windsurf/third-brain-skills.md .windsurf/rules/
+bash install.sh windsurf
 ```
 
 ### For Codex CLI / Gemini CLI
 
 ```bash
-cp -r skills/* ~/.agents/skills/  # Codex
-cp -r skills/* ~/.gemini/skills/  # Gemini
+bash install.sh codex
+bash install.sh gemini
 ```
 
 Full guide: **[GUIDE.md](GUIDE.md)**
@@ -326,7 +333,7 @@ system/           ← Config, log, schema, templates
 
 - **Not a chat wrapper.** Skills are executable prompts that agents follow; they're not productivity theater.
 - **Not a productivity tool with 100 metrics.** Daily OKR has seven causally linked KRs with evidence.
-- **Not an all-in-one framework.** Pick skills incrementally. You don't need all 19 to start.
+- **Not an all-in-one framework.** Pick skills incrementally. You don't need all 20 to start.
 - **Not prescriptive.** Adapt paths, frontmatter, and skill triggers to your workflow.
 
 ---

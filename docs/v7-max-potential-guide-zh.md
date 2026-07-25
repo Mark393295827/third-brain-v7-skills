@@ -1,6 +1,6 @@
-# Third Brain V7 最大潜力使用手册
+# Third Brain V7.1 最大潜力使用手册
 
-本手册适用于分支 `codex/v7-skill-contract-refactor`。目标不是让 19 个 skills 同时运行，而是把它们组合成一个可恢复、可验证、可持续改进的个人或团队操作系统。
+本手册适用于 Third Brain V7.1；合并发布后以 `main` 为稳定入口。V7 最初包含 19 个 skills；V7.1 以加法方式加入第 20 个 `graph-engineering`。目标不是让 20 个 skills 同时运行，而是把它们组合成一个可恢复、可验证、可持续改进的个人或团队操作系统。
 
 最小闭环：
 
@@ -31,17 +31,17 @@ V7 把每个 skill 从“长提示词”改造成执行契约。所有 skills �
 | `one-shot` | 3 | 一次转换即可完成，且有便宜检查 | 输入、输出格式、验收标准 |
 | `stateful` | 7 | 跨多轮、多文件或多天运行 | 状态路径、负责人、复盘时间 |
 | `loop` | 1 | 客观 verifier 能驱动有限纠错 | 最大迭代、时间/成本上限、停止与恢复 |
-| `high-risk` | 8 | 涉及信任、生产、权限、外部用户或不可逆动作 | 独立验证、人工批准、回滚路径 |
+| `high-risk` | 9 | 涉及信任、生产、权限、外部用户或不可逆动作 | 独立验证、人工批准、回滚路径 |
 
 不要把 profile 当质量等级。`one-shot` 不是低级模式，能够一次完成的任务不应承担 loop 或多代理成本。
 
-## 2. 安装并确认使用的是 V7 分支
+## 2. 安装并确认使用的是 V7.1
 
 ### 已有仓库
 
 ```powershell
 git fetch origin
-git switch codex/v7-skill-contract-refactor
+git switch main
 git pull --ff-only
 git status --short --branch
 ```
@@ -49,17 +49,14 @@ git status --short --branch
 ### 新克隆
 
 ```powershell
-git clone --branch codex/v7-skill-contract-refactor `
-  https://github.com/Mark393295827/third-brain-v5-skills.git
+git clone https://github.com/Mark393295827/third-brain-v5-skills.git
 cd third-brain-v5-skills
 ```
 
 ### 安装到 Codex
 
 ```powershell
-$target = Join-Path $HOME ".agents\skills"
-New-Item -ItemType Directory -Force -Path $target | Out-Null
-Copy-Item -Recurse -Force ".\skills\*" $target
+.\install.ps1 codex
 ```
 
 其他运行时的默认位置：
@@ -81,9 +78,11 @@ python tools\lint-agent-skills.py
 python -m unittest tools.test_lint_agent_skills -v
 python skills\loop-engineering\scripts\validate_loop_contract.py `
   skills\loop-engineering\references\ci-repair-loop-example.md --strict
+python skills\graph-engineering\scripts\validate_graph_contract.py `
+  skills\graph-engineering\references\diamond-graph-example.json --strict
 ```
 
-预期结果：19 个 skills lint 通过、测试通过、示例 loop contract 为 `PASS`。
+预期结果：20 个 skills lint 通过、测试通过、示例 loop contract 与静态 graph contract 均为 `PASS`。
 
 ## 3. 配置 Obsidian 为持久磁盘
 
@@ -195,9 +194,10 @@ next_action: "唯一或最优先的下一步"
 | 需求 | 主 skill | 何时升级 |
 |---|---|---|
 | 设计 model-native 工程工作流 | [agentic-engineering](../skills/agentic-engineering/SKILL.md) | 出现重复任务时升级为 loop |
-| 把重复任务变成有限闭环 | [loop-engineering](../skills/loop-engineering/SKILL.md) | 涉及工具/权限时增加 harness |
-| 设计工具、权限、日志、调度和恢复 | [harness-engineering](../skills/harness-engineering/SKILL.md) | 存在独立工作流时评估 team |
-| 指挥真正可并行的多个 worker | [agent-teams-command](../skills/agent-teams-command/SKILL.md) | 始终通过串行 integration gate |
+| 把重复任务变成有限闭环 | [loop-engineering](../skills/loop-engineering/SKILL.md) | 时间深度：重复执行、验证、停止和恢复 |
+| 把显式依赖建模为有限静态 DAG | [graph-engineering](../skills/graph-engineering/SKILL.md) | 依赖宽度：独立分支、typed join、节点级恢复的收益大于编排与 review 成本 |
+| 设计工具、权限、日志、运行时调度和可观测性 | [harness-engineering](../skills/harness-engineering/SKILL.md) | 需要 kernel 级控制时加入 |
+| 指挥真正可并行的多个 worker process | [agent-teams-command](../skills/agent-teams-command/SKILL.md) | 负责 owner、IPC 与串行 integration gate |
 | 长任务上下文、压缩和恢复 | [context-manager](../skills/context-manager/SKILL.md) | 在 phase boundary 写 checkpoint |
 
 ### 战略与运营
@@ -261,8 +261,11 @@ Input -> Cognition -> Wiki -> Feedback
 稳定机械转换？       -> 脚本或普通代码
 一次性复杂任务？     -> agentic-engineering
 重复且可客观验证？   -> loop-engineering
-涉及工具和外部权限？ -> harness-engineering
-至少两个独立工作流？ -> agent-teams-command
+显式依赖/独立分支/
+typed join/节点级恢复？ -> graph-engineering
+涉及运行时调度、
+工具和外部权限？       -> harness-engineering
+多个独立 process owner？ -> agent-teams-command
 ```
 
 Loop 启动前：
@@ -281,7 +284,25 @@ python skills\loop-engineering\scripts\validate_loop_contract.py `
 
 运行一次循环只改变一个假设。相同错误出现两次且没有新诊断时停止，而不是继续消耗预算。
 
-### 工作流 D：安全使用 Agent Teams
+### 工作流 D：用 Graph Engineering 管理依赖宽度
+
+只有下列信号能支持 Graph admission：
+
+- 节点之间存在真实、可声明的数据或控制依赖。
+- 至少有一组分支可以独立执行，并由明确的 typed join 汇合。
+- 失败可以只重放最小节点，而不必重跑整个工作流。
+- 并行、隔离或节点级恢复带来的价值大于图编排与 review 成本。
+
+V7.1 只支持 bounded static DAG：sequence、pipeline、diamond、maker-checker 和 bounded subgraph。重复动作放入 `loop` 节点；dynamic expansion 与 cyclic graph 必须拒绝或降级为 Loop/人工设计。
+
+```powershell
+python skills\graph-engineering\scripts\validate_graph_contract.py `
+  .agent-state\contracts\my-graph.json --strict
+```
+
+边界保持不变：Loop 管时间深度；Graph 管依赖宽度；Agent Teams 管 process owner、IPC 与 integration；Harness 管运行时 scheduler、permissions 与 observability。
+
+### 工作流 E：安全使用 Agent Teams
 
 只有满足下列任一条件才创建 team：
 
@@ -301,7 +322,7 @@ Cleanup：关闭 worker、清理 worktree、对齐任务和收据
 
 不要让两个 worker 同时拥有同一文件。共享 schema 由 commander 先发布，再让 worker 只读消费。
 
-### 工作流 E：Wiki 知识推动 Skill 演化
+### 工作流 F：Wiki 知识推动 Skill 演化
 
 ```text
 来源 1 + 来源 2 或 来源 1 + 本地验证
@@ -441,6 +462,7 @@ Cleanup：关闭 worker、清理 worktree、对齐任务和收据
 ### 第 4 周：工程化自主性
 
 - 先使用 `agentic-engineering`，再挑一个重复任务使用 `loop-engineering`。
+- 只有出现显式依赖、独立分支、typed join 或节点级恢复，且 admission value 大于编排与 review 成本时，才在 Loop 之后加入 `graph-engineering`。
 - 只有涉及工具、调度和外部动作时加入 `harness-engineering`。
 - 只有存在独立工作流和集成 owner 时加入 `agent-teams-command`。
 - 目标：完成一次有限、可恢复、有 verifier 的自动化闭环。
@@ -463,10 +485,11 @@ Cleanup：关闭 worker、清理 worktree、对齐任务和收据
 ## 14. 更新分支后的维护流程
 
 ```powershell
-git switch codex/v7-skill-contract-refactor
+git switch main
 git pull --ff-only
 python tools\lint-agent-skills.py
 python -m unittest tools.test_lint_agent_skills -v
+.\install.ps1 codex
 ```
 
 验证通过后再同步到运行时 skills 目录。若你在安装目录做过本地修改，先保存 diff；不要用复制操作静默覆盖未审查的规则。
@@ -499,8 +522,10 @@ Wiki 健康检查          -> wiki-lint
 
 Agent 工作流设计       -> agentic-engineering
 有限重复闭环           -> loop-engineering
-工具/权限/调度/恢复     -> harness-engineering
-真正独立的并行工作     -> agent-teams-command
+显式依赖/分支/join/
+节点级恢复             -> graph-engineering
+运行时调度/权限/可观测性 -> harness-engineering
+process owner/IPC/集成 -> agent-teams-command
 长任务上下文恢复       -> context-manager
 
 创业判断               -> startup-evaluation

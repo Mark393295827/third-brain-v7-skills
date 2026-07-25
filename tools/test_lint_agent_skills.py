@@ -14,6 +14,12 @@ ADAPTERS = [
     ROOT / "adapters" / "cursor" / "third-brain-skills.mdc",
     ROOT / "adapters" / "windsurf" / "third-brain-skills.md",
 ]
+CONTRACT_FIELDS = {
+    "input": "Required input or artifact.",
+    "output": "Durable result or concrete answer.",
+    "done": "Observable evidence that proves completion.",
+    "non_goals": "Adjacent work this skill must not absorb.",
+}
 
 
 def skill_text(
@@ -48,6 +54,10 @@ conflicts_with: "Fabricating unavailable evidence."
     body = f"""# Sample Skill
 
 <skill_contract>
+  <input>{CONTRACT_FIELDS["input"]}</input>
+  <output>{CONTRACT_FIELDS["output"]}</output>
+  <done>{CONTRACT_FIELDS["done"]}</done>
+  <non_goals>{CONTRACT_FIELDS["non_goals"]}</non_goals>
 
 ## Usage Template
 
@@ -157,6 +167,69 @@ class AgentSkillsLinterTest(unittest.TestCase):
             skill_text(metadata=False),
             "frontmatter missing metadata.assumes",
         )
+
+    def test_missing_input_contract_field_is_rejected(self) -> None:
+        field = f'  <input>{CONTRACT_FIELDS["input"]}</input>\n'
+        self.assert_lint_error(
+            skill_text().replace(field, ""),
+            "requires one balanced <input> block",
+        )
+
+    def test_unbalanced_input_contract_field_is_rejected(self) -> None:
+        self.assert_lint_error(
+            skill_text().replace("</input>", ""),
+            "requires one balanced <input> block",
+        )
+
+    def test_missing_output_contract_field_is_rejected(self) -> None:
+        field = f'  <output>{CONTRACT_FIELDS["output"]}</output>\n'
+        self.assert_lint_error(
+            skill_text().replace(field, ""),
+            "requires one balanced <output> block",
+        )
+
+    def test_unbalanced_output_contract_field_is_rejected(self) -> None:
+        self.assert_lint_error(
+            skill_text().replace("</output>", ""),
+            "requires one balanced <output> block",
+        )
+
+    def test_missing_done_contract_field_is_rejected(self) -> None:
+        field = f'  <done>{CONTRACT_FIELDS["done"]}</done>\n'
+        self.assert_lint_error(
+            skill_text().replace(field, ""),
+            "requires one balanced <done> block",
+        )
+
+    def test_unbalanced_done_contract_field_is_rejected(self) -> None:
+        self.assert_lint_error(
+            skill_text().replace("</done>", ""),
+            "requires one balanced <done> block",
+        )
+
+    def test_missing_non_goals_contract_field_is_rejected(self) -> None:
+        field = f'  <non_goals>{CONTRACT_FIELDS["non_goals"]}</non_goals>\n'
+        self.assert_lint_error(
+            skill_text().replace(field, ""),
+            "requires one balanced <non_goals> block",
+        )
+
+    def test_unbalanced_non_goals_contract_field_is_rejected(self) -> None:
+        self.assert_lint_error(
+            skill_text().replace("</non_goals>", ""),
+            "requires one balanced <non_goals> block",
+        )
+
+    def test_empty_contract_fields_are_rejected(self) -> None:
+        for field, value in CONTRACT_FIELDS.items():
+            with self.subTest(field=field):
+                self.assert_lint_error(
+                    skill_text().replace(
+                        f"<{field}>{value}</{field}>",
+                        f"<{field}>  </{field}>",
+                    ),
+                    f"<{field}> block must not be empty",
+                )
 
     def test_stateful_profile_requires_state_contract(self) -> None:
         self.assert_lint_error(

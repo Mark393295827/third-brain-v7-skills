@@ -2,8 +2,8 @@
 name: daily-okr
 description: Use when planning or closing a daily knowledge-compounding cycle across input, cognition, wiki, behavior, creativity, output, and feedback.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "stateful"
   assumes: "A daily note or equivalent state record is writable and the user can choose one priority."
   conflicts_with: "Invented completion, seven unrelated priorities, or activity counts without evidence."
@@ -12,6 +12,10 @@ metadata:
 # Daily OKR
 
 <skill_contract>
+  <input>Date, one priority objective, available time, active project, current inputs, and prior-day evidence.</input>
+  <output>A seven-KR daily cycle linking input, cognition, wiki, behavior, creativity, output, and feedback.</output>
+  <done>Each claimed KR has a durable receipt, and today's feedback changes one explicit next-day action or knowledge state.</done>
+  <non_goals>Seven unrelated priorities, invented completion, activity counting without evidence, or treating scheduled notes as execution.</non_goals>
 
 Run one daily objective through seven linked Key Results. The cycle compounds only when evidence from today changes tomorrow's behavior or knowledge state.
 

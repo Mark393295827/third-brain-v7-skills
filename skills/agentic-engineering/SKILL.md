@@ -2,8 +2,8 @@
 name: agentic-engineering
 description: Use when designing or refactoring a model-native engineering workflow with bounded autonomy, probes, custom evaluation, durable state, and verified write-back.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "high-risk"
   assumes: "The repository, objective, acceptance criteria, and execution permissions can be inspected."
   conflicts_with: "Agent complexity without adoption value, coding before probing material unknowns, or completion claims without fresh tests."
@@ -12,6 +12,10 @@ metadata:
 # Agentic Engineering
 
 <skill_contract>
+  <input>An engineering objective, inspectable repository or workflow, acceptance criteria, permissions, risk, and state location.</input>
+  <output>The smallest sufficient model-native process with bounded autonomy, evals, recovery, and verified write-back.</output>
+  <done>Fresh task and adoption evidence support the observable end state without crossing authority boundaries.</done>
+  <non_goals>Agent complexity for its own sake, premature multi-agent topology, or unverified knowledge promotion.</non_goals>
 
 An agent is a stateful engineering process, not a prompt. Its quality ceiling is the combination of objective, context, tools, taste/evaluation, permissions, recovery, and feedback latency.
 
@@ -40,12 +44,16 @@ Map unknowns into: known, probeable from tools/files, testable by prototype, and
 1. Write the macro action: `trigger -> objective -> inputs -> constraints -> artifact -> verifier -> state -> stop/recovery`.
 2. Define quality with domain-specific examples, anti-examples, guardrails, and cheap checks; generic “good quality” is invalid.
 3. Decompose into the fewest independently verifiable units with one owner each.
-4. Route by capability (reasoning, tool use, latency, context, modality, cost) and runtime policy; keep vendor/model names out of durable contracts.
-5. Establish harness controls: least privilege, tool schemas, timeouts, observability, checkpoints, idempotency, and rollback.
-6. Run a thin loop: understand -> plan -> smallest change -> targeted test -> inspect diff/state -> broader check.
-7. Use independent evaluation or adversarial review for consequential logic, interfaces, and claims.
-8. Remove temporary scaffolding, duplicate abstractions, and context that no longer changes decisions.
-9. Write back only reusable, verified deltas. Promotion into skills/SOPs requires repeated support or local verification plus a cheap objective check.
+4. Select the lowest sufficient topology: one-shot for one bounded action,
+   `loop-engineering` for temporal correction, `graph-engineering` for explicit
+   dependency width and joins, and `agent-teams-command` only when distinct
+   worker processes and integration ownership add value.
+5. Route by capability (reasoning, tool use, latency, context, modality, cost) and runtime policy; keep vendor/model names out of durable contracts.
+6. Establish harness controls: least privilege, tool schemas, timeouts, observability, checkpoints, idempotency, and rollback.
+7. Run a thin loop: understand -> plan -> smallest change -> targeted test -> inspect diff/state -> broader check.
+8. Use independent evaluation or adversarial review for consequential logic, interfaces, and claims.
+9. Remove temporary scaffolding, duplicate abstractions, and context that no longer changes decisions.
+10. Write back only reusable, verified deltas. Promotion into skills/SOPs requires repeated support or local verification plus a cheap objective check.
 
 Human approval is mandatory before production, publication, spending, destructive mutation, credentials, policy, or other delegated external action. Prepare rollback before crossing that boundary.
 
@@ -85,6 +93,8 @@ Return `status`, `result` (implemented/design outcome), `evidence` (tests, evals
 ## Edge Cases
 
 - The user requests multi-agent work for a one-file deterministic edit: use one bounded process and explain that coordination cost exceeds expected value.
+- A plan contains independent branches but no typed payloads or join verifier:
+  keep a serial Loop until those graph contracts are observable.
 - Tests pass but the user-facing workflow regresses: return `VERIFY_FAILED`; acceptance evidence outranks local unit success.
 
 ## Success Metrics

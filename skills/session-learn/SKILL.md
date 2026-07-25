@@ -2,8 +2,8 @@
 name: session-learn
 description: Use when a completed work session should yield durable concepts, corrections, decisions, reusable patterns, and a traceable next action.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "stateful"
   assumes: "The session transcript, artifacts, or execution receipts are available."
   conflicts_with: "Claiming automatic capture without a configured hook, storing raw noise as knowledge, or changing immutable sources."
@@ -12,6 +12,10 @@ metadata:
 # Session Learn
 
 <skill_contract>
+  <input>Completed session objective, actions, artifacts, verification receipts, errors, decisions, and destination paths.</input>
+  <output>Deduplicated durable deltas for concepts, entities, corrections, patterns, ideas, decisions, and gaps.</output>
+  <done>Each retained delta is formatted, linked, logged, provenance-preserving, and paired with a traceable next action when unresolved.</done>
+  <non_goals>Automatic-capture claims without a hook, raw transcript storage, conversational filler, or immutable-source edits.</non_goals>
 
 Close a session by extracting only reusable deltas. Invocation must be explicit or performed by a verified external hook; this skill never claims it ran automatically.
 

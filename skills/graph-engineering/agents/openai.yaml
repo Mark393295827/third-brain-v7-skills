@@ -1,0 +1,4 @@
+interface:
+  display_name: "Graph Engineering"
+  short_description: "Design bounded static dependency graphs with verified joins."
+  default_prompt: "Use $graph-engineering to turn this dependency-heavy workflow into a bounded static graph with typed edges, verified joins, and node-local recovery."

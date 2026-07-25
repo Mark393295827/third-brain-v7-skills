@@ -1,6 +1,6 @@
-# Third Brain V7 Skills — Installation & Usage Guide
+# Third Brain V7.1 Skills — Installation & Usage Guide
 
-> **19 profile-aware skills** for a persistent knowledge and agent execution system. Compatible with Claude Code, Codex CLI, Gemini CLI, Cursor, Windsurf, and other rule/context-based AI IDEs.
+> **20 profile-aware skills** for a persistent knowledge and agent execution system. Compatible with Claude Code, Codex CLI, Gemini CLI, Cursor, Windsurf, and other rule/context-based AI IDEs.
 
 ---
 
@@ -24,6 +24,7 @@
 - One supported AI coding tool: **Claude Code**, **Codex CLI**, **Gemini CLI**, **Cursor**, **Windsurf**, or another tool that can read project rules/context files
 - **Git** (`git --version`)
 - **Python 3.8+** (for linting, loop validation, token-cost utility, and optional vector adapters)
+- **Bash**, or **PowerShell 5.1+ on Windows**, for the installer
 - **Obsidian** (recommended for wiki knowledge base)
 
 ### One-Line Install
@@ -33,6 +34,12 @@
 git clone https://github.com/Mark393295827/third-brain-v5-skills.git
 cd third-brain-v5-skills
 bash install.sh
+```
+
+Windows PowerShell:
+
+```powershell
+.\install.ps1
 ```
 
 Explicit targets:
@@ -46,31 +53,31 @@ bash install.sh windsurf
 bash install.sh all
 ```
 
+Use the same targets with `.\install.ps1 <target>` on Windows.
+
 ### Install for Your Platform
 
 #### Claude Code (Recommended)
 
 ```bash
 # Personal skills (available across all projects)
-cp -r skills/* ~/.claude/skills/
+bash install.sh claude
 
 # Verify installation
 ls ~/.claude/skills/ | wc -l
-# Expected output: 19
+# Expected output: 20
 ```
 
 #### Codex CLI
 
 ```bash
-mkdir -p ~/.agents/skills
-cp -r skills/* ~/.agents/skills/
+bash install.sh codex
 ```
 
 #### Gemini CLI
 
 ```bash
-mkdir -p ~/.gemini/skills/
-cp -r skills/* ~/.gemini/skills/
+bash install.sh gemini
 ```
 
 #### Cursor
@@ -78,8 +85,7 @@ cp -r skills/* ~/.gemini/skills/
 Cursor support uses a project-rule adapter that routes requests to the `skills/*/SKILL.md` files kept in this repository.
 
 ```bash
-mkdir -p .cursor/rules
-cp adapters/cursor/third-brain-skills.mdc .cursor/rules/third-brain-skills.mdc
+bash install.sh cursor
 ```
 
 #### Windsurf / Cascade
@@ -87,9 +93,7 @@ cp adapters/cursor/third-brain-skills.mdc .cursor/rules/third-brain-skills.mdc
 Windsurf can use these as native workspace skills, with an optional routing rule.
 
 ```bash
-mkdir -p .windsurf/skills .windsurf/rules
-cp -r skills/* .windsurf/skills/
-cp adapters/windsurf/third-brain-skills.md .windsurf/rules/third-brain-skills.md
+bash install.sh windsurf
 ```
 
 For details, see [docs/compatibility.md](docs/compatibility.md).
@@ -105,13 +109,17 @@ cp commands/* ~/.claude/commands/
 
 ## 2. Platform Setup
 
-### 2.1 Agent Teams (Optional)
+### 2.1 Graph Engineering (Optional)
+
+Use `graph-engineering` for dependency width only when explicit dependencies, independently executable branches, typed joins, or node-local recovery justify more orchestration and review cost than a serial workflow. V7.1 accepts bounded static DAGs; it rejects dynamic expansion and cyclic graphs.
+
+### 2.2 Agent Teams (Optional)
 
 First inspect whether the installed runtime exposes isolated workers, task state, and integration controls. Product/version-specific flags belong in local runtime configuration, not durable skills. If workers are unavailable, use one agent plus an independent verifier.
 
 Use `agent-teams-command` only after its admission gate shows that independent workstreams justify coordination and review cost.
 
-### 2.2 Wiki Path Configuration
+### 2.3 Wiki Path Configuration
 
 Skills read the default vault contract from `system/config.md`. If your Obsidian vault already has a different structure, copy that file into the vault and edit the path values before running write-heavy skills.
 
@@ -221,10 +229,13 @@ claude "Create a team of 3 agents to research this topic."
 
 | Skill | What It Does | Trigger Phrase |
 |-------|-------------|----------------|
-| **loop-engineering** | Designs bounded Goal/Loop/Automation/AutoResearch contracts with state and recovery | "turn this into a verified loop" |
+| **loop-engineering** | Controls temporal depth with bounded Goal/Loop/Automation/AutoResearch contracts, durable state, and recovery | "turn this into a verified loop" |
+| **graph-engineering** | Controls dependency width with bounded static DAGs, explicit branches, typed joins, and node-local recovery | "model these dependencies as a verified graph" |
 | **agentic-engineering** | Refactors workflows into spec-driven macro actions with quality ceilings, delegated-action boundaries, autonomy defaults, write-back, and verification | "make this workflow more agentic" |
-| **harness-engineering** | Agent runtime kernel: permissions, tools as system calls, delegated-action gates, provenance ledgers, observability, recovery, adversarial review | "how do I make this agent safe?" |
-| **agent-teams-command** | Multi-agent macro action orchestration with ownership, IPC, async budget envelopes, integration, cleanup, evidence gates, and red-team review | "create an agent team to build X" |
+| **harness-engineering** | Runtime kernel: scheduler, permissions, tools as system calls, delegated-action gates, provenance ledgers, observability, and recovery | "how do I make this agent safe?" |
+| **agent-teams-command** | Multi-agent process ownership and orchestration with IPC, async budget envelopes, integration, cleanup, evidence gates, and red-team review | "create an agent team to build X" |
+
+Routing boundary: Loop = temporal depth; Graph = dependency width; Agent Teams = process ownership, IPC, and integration; Harness = runtime scheduler, permissions, and observability. Add Graph Engineering after Loop Engineering only when its admission value exceeds orchestration and review cost.
 
 ### 💼 Strategy & Operations
 
@@ -448,7 +459,7 @@ claude "Generate my weekly token report."
 
 | Issue | Likely Cause | Solution |
 |-------|-------------|----------|
-| Skill not found | Skills not copied to correct directory | Run `cp -r skills/* ~/.claude/skills/` |
+| Skill not found | Skills not installed to the correct directory | Run `bash install.sh` with the explicit harness target |
 | Agent Teams not working | Runtime lacks workers or team mode is disabled | Inspect current runtime capabilities/settings; use one process if unavailable |
 | Token cost too high | Capability route or context scope is oversized | Use runtime pricing plus context-manager budget and compaction rules |
 | Wiki links broken | Wiki structure not set up or config paths mismatch | Check `system/config.md`, then create the configured concept/entity folders. |
@@ -508,9 +519,10 @@ cat .token-log.csv | tail -5
     │ verify-before-claim   ← quality gate          │
     │ deep-research         ← synthesis             │
     │ project-flow-ops      ← execution             │
-    │ loop-engineering      ← bounded execution     │
+    │ loop-engineering      ← temporal depth        │
+    │ graph-engineering     ← dependency width      │
     │ context-manager       ← context optimization  │
-    │ harness-engineering   ← agent infrastructure  │
+    │ harness-engineering   ← runtime controls      │
     └───────────────────────────────────────────────┘
                      │
         ┌────────────┴────────────┐

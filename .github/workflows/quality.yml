@@ -1,0 +1,67 @@
+name: Repository quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.8"
+          - "3.13"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Lint Agent Skills
+        run: python tools/lint-agent-skills.py
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tools -p "test_*.py" -v
+
+      - name: Run Graph architecture experiment tests
+        run: python -m unittest discover -s experiments/graph-engineering/tests -p "test_*.py" -v
+
+      - name: Check diff whitespace
+        shell: bash
+        run: |
+          git diff --check
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"
+          elif git rev-parse HEAD^ >/dev/null 2>&1; then
+            git diff --check HEAD^ HEAD
+          fi
+
+      - name: Validate strict Loop example
+        run: >-
+          python skills/loop-engineering/scripts/validate_loop_contract.py
+          skills/loop-engineering/references/ci-repair-loop-example.md
+          --strict
+
+      - name: Validate strict Graph example
+        run: >-
+          python skills/graph-engineering/scripts/validate_graph_contract.py
+          skills/graph-engineering/references/diamond-graph-example.json
+          --strict

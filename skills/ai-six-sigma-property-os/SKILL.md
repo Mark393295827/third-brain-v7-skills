@@ -2,8 +2,8 @@
 name: ai-six-sigma-property-os
 description: Use when property-service operations need an AI plus ontology plus DMAIC design for work orders, dispatch, quotes, evidence, CTQ metrics, and control dashboards.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "high-risk"
   assumes: "A real or planned service workflow has identifiable customers, work orders, workers, quotes, evidence, and accountable operators."
   conflicts_with: "Automating undefined processes, hiding safety or pricing decisions, or expanding into a full ERP before the core quality loop works."
@@ -12,6 +12,10 @@ metadata:
 # AI Six Sigma Property OS
 
 <skill_contract>
+  <input>Named property-service workflow, actors, evidence, CTQs, approval boundaries, and MVP constraints.</input>
+  <output>A bounded ontology, DMAIC control plan, agent roles, gates, metrics, and rollback-ready MVP design.</output>
+  <done>Every proposed state transition and CTQ has an owner, evidence source, verifier, approval gate, and control receipt.</done>
+  <non_goals>Full ERP replacement, autonomous safety or pricing decisions, and automation of undefined processes.</non_goals>
 
 Ontology defines the operating world; bounded agents execute and audit; DMAIC improves rules from work-order evidence. Design the management system before software scope. Load `references/property-control-model.md` for the baseline ontology, CTQs, and state machine.
 

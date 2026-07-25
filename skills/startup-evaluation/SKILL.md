@@ -2,8 +2,8 @@
 name: startup-evaluation
 description: Use when a startup needs an evidence-weighted health check, investor lens, runway diagnosis, top constraint, or cheapest next validation test.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "one-shot"
   assumes: "The company stage, business type, and at least partial customer or operating evidence can be obtained."
   conflicts_with: "Treating pitch quality, market size, or founder conviction as proof of demand or investment merit."
@@ -12,6 +12,10 @@ metadata:
 # Startup Evaluation
 
 <skill_contract>
+  <input>Company, stage, evaluation decision, customer evidence, traction, economics, team, runway, terms, and risks.</input>
+  <output>An evidence-weighted health, venture-suitability, and financing assessment with one top constraint and cheapest test.</output>
+  <done>Every score and verdict traces to evidence, fatal risks remain visible, and the next test has owner, threshold, budget, and stop.</done>
+  <non_goals>Investment advice by narrative, averaging away fatal risk, or treating market size, conviction, or pitch quality as demand.</non_goals>
 
 Evaluate the company the evidence supports, not the story it tells. Distinguish business health, venture suitability, and financing readiness; they are different decisions.
 

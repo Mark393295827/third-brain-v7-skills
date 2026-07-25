@@ -2,8 +2,8 @@
 name: agent-teams-command
 description: Use when work has genuinely independent streams or distinct builder, evaluator, domain, and integration roles that require bounded multi-agent command.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "high-risk"
   assumes: "The runtime supports isolated workers or equivalent processes, durable shared state, and explicit integration ownership."
   conflicts_with: "Parallelism for its own sake, overlapping write ownership, chat-only coordination, or workers crossing permission boundaries."
@@ -12,8 +12,19 @@ metadata:
 # Agent Teams Command
 
 <skill_contract>
+  <input>A mission with independently ownable workstreams, interfaces, permissions, budgets, and an integration owner.</input>
+  <output>An isolated worker program, typed IPC ledger, serial integration, cleanup, and evidence receipts.</output>
+  <done>Integrated artifacts pass mission checks and ownership, review, rollback, and cleanup gates.</done>
+  <non_goals>Graph-schema design, parallelism without net value, overlapping writers, or worker self-certification.</non_goals>
 
-Strategic intent and final integration remain serial; owned execution may run in parallel. Use the Ender lens for commander understanding, Palantir for operational objects/actions, and von Neumann for executable, inspectable process architecture. Detailed patterns: `references/ender-palantir-command-patterns.md`; examples: `references/classic-campaigns.md`.
+Strategic intent and final integration remain serial; owned execution may run
+in parallel. `graph-engineering` may define dependency topology, but this skill
+owns worker processes, exclusive territories, typed IPC, integration, and
+cleanup. A Graph node is not automatically a teammate. Use the Ender lens for
+commander understanding, Palantir for operational objects/actions, and von
+Neumann for executable, inspectable process architecture. Detailed patterns:
+`references/ender-palantir-command-patterns.md`; examples:
+`references/classic-campaigns.md`.
 
 ## Usage Template
 
@@ -24,6 +35,10 @@ Provide: mission, non-goals, workstreams, dependencies, files/systems, acceptanc
 <intake>
 
 Admit a team only when at least two workstreams can proceed with low coordination, or distinct roles materially improve evaluation/safety. Calculate orchestration tax: setup, context duplication, IPC, merge conflict, review, and cleanup. If one process can finish within the same review budget, keep one process.
+
+If dependencies and joins are the only complexity, use `graph-engineering`
+without recruiting a team. Add workers only for nodes that need isolated
+context, distinct ownership, or independent judgment.
 
 </intake>
 
@@ -37,7 +52,7 @@ Resolve commander intent, object/state vocabulary, ownership, dependency directi
 
 1. Write a command program: objective, non-goals, finite actions, commander, checkpoint cadence, interrupt policy, state/artifact paths, IPC schema, allowed/denied tools, verifier, stop, recovery, and promotion boundary.
 2. Atomically decompose work by interface/territory. Each task has one owner, inputs, output artifact, dependencies, definition of done, verifier, budget, and blast radius.
-3. Select the smallest topology: maker-checker, manager-workers, or specialist pipeline. Route workers by required capabilities and runtime policy, never fixed model names.
+3. Select the smallest topology: maker-checker, manager-workers, or specialist pipeline. If a validated Graph exists, map only `agent` or `agent-team` nodes to workers; deterministic, Loop, subgraph, and human-gate nodes keep their own contracts. Route workers by required capabilities and runtime policy, never fixed model names.
 4. Isolate mutable work with separate worktrees/branches or disjoint files. Shared schemas/contracts are commander-owned until published.
 5. Use typed IPC: `{task_id, state, artifact, evidence, decision, unknowns, dependency, next_action}`. Messages change state; status chatter does not.
 6. Require workers to run `state + evidence -> next action -> verifier -> next state | stop | escalate` and checkpoint after each material action.
@@ -52,7 +67,10 @@ Hooks are optional executable infrastructure, not prose. Configure one only when
 
 <evaluate>
 
-Evaluate mission outcome, per-workstream evidence, interface compatibility, ownership compliance, integration diff, regression suite, reviewability, residual risk, and cleanup. Quiet green checks are insufficient if the commander cannot explain architecture delta and rollback.
+Evaluate mission outcome, per-workstream evidence, Graph edge/join compatibility
+when used, ownership compliance, integration diff, regression suite,
+reviewability, residual risk, and cleanup. Quiet green checks are insufficient
+if the commander cannot explain architecture delta and rollback.
 
 </evaluate>
 
@@ -84,6 +102,8 @@ Return `status`, `result` (mission and integrated artifacts), `evidence` (task/i
 ## Edge Cases
 
 - Two workers need the same schema file: commander publishes the contract first; serialize schema edits and let workers consume it read-only.
+- A Graph has six nodes but only two require agent judgment: recruit two
+  workers, not six; deterministic nodes remain scheduler-owned.
 - All workers report success but integration fails: mission status is `VERIFY_FAILED`; reject incompatible artifacts rather than averaging reports.
 
 ## Success Metrics

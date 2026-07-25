@@ -20,7 +20,7 @@ Do not hard-code model brands, prices, or context-window sizes. Select runtime c
 name: skill-name
 description: Perform the core transformation and name its output. Use when the user asks for the specific task, artifact, or workflow this skill owns.
 metadata:
-  version: "7.0.0"
+  version: "7.1.0"
   updated: "YYYY-MM-DD"
   profile: "one-shot"
   assumes: "State the minimum condition required to execute safely."

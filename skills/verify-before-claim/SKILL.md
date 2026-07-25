@@ -2,8 +2,8 @@
 name: verify-before-claim
 description: Use when an agent is about to claim completion, correctness, safety, publication, deployment, or any consequential external fact.
 metadata:
-  version: "7.0.0"
-  updated: "2026-07-11"
+  version: "7.1.0"
+  updated: "2026-07-25"
   profile: "high-risk"
   assumes: "At least one objective verification method or authoritative source can be identified."
   conflicts_with: "Inferring success from effort, stale evidence, partial checks, or self-authored assertions."
@@ -12,6 +12,10 @@ metadata:
 # Verify Before Claim
 
 <skill_contract>
+  <input>One falsifiable claim, its artifact or system, risk, expected result, permissions, and available checks.</input>
+  <output>A scoped claim decision with fresh evidence, residual risk, approval, and rollback status.</output>
+  <done>The cheapest direct check after the final material change supports the exact allowed wording.</done>
+  <non_goals>Producing the artifact, inferring success from effort, or widening a claim beyond checked evidence.</non_goals>
 
 No evidence, no claim. Match the check to the exact claim, use fresh evidence, and keep execution authority separate from approval authority for consequential actions.
 
@@ -41,6 +45,10 @@ If the artifact, expected behavior, or verification method is missing, return `N
 Run the selected check after the final material change. Examples: targeted test, lint, build, link check, read-after-write, diff inspection, source comparison, dashboard query, or deployment health check. Capture command/query, timestamp, scope, exit status, and key output.
 
 For material or consequential claims, obtain independent verification from a separate check, reviewer, or evidence source. Require human approval before irreversible publication, deployment, spending, deletion, credential use, or policy change. Confirm the rollback path before execution.
+
+For Graph claims, verify static contract integrity, every required node and join
+receipt, terminal acceptance, budgets, permission/compensation state, and
+checkpoint identity. Passing nodes do not prove the end-to-end graph.
 
 </execute>
 
@@ -78,6 +86,8 @@ Return `status`, `result` (claim decision and allowed wording), `evidence` (fres
 ## Edge Cases
 
 - Tests passed before a final edit: evidence is stale; rerun the relevant checks after the edit.
+- Every Graph node is green but the reduce join lacks one declared input:
+  withhold graph completion and return `VERIFY_FAILED`.
 - An authoritative page is unavailable: report `INSUFFICIENT_EVIDENCE`; do not substitute an uncited recollection for the external fact.
 
 ## Success Metrics
