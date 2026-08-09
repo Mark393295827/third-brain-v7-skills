@@ -8,6 +8,18 @@ This project follows a small-release rhythm: ship one focused release every 1-2 
 
 Current V7.1 baseline: 20 Agent Skills.
 
+## [7.2.0] - 2026-07-31
+
+### Added
+- **Obsidian Vault Multi-Domain Taxonomy Specification (V5.0 / V7.2)**:
+  - 13 Concept Domains (`ai-engineering`, `ai-economics`, `ai-science`, `behavioral-econ`, `business-strategy`, `entrepreneurship`, `general-concepts`, `geopolitics-energy`, `identity-culture`, `investing-macro`, `investing-quant`, `investing-vc`, `knowledge-systems`).
+  - 5 Entity Categories (`people`, `companies`, `funds-investors`, `products`, `orgs`).
+  - 6 Source Pools (`YYYY-MM/` chronological pools, `pre-2026/`, `books/` >100KB).
+  - 3 Output Categories (`gmail-digests/`, `evaluations/`, `compilations/`).
+  - 4 Map Tiers (`domain-mocs/`, `system-indexes/`, `project-maps/`, `canvases/`).
+  - Active/Historical Log Rotation protocol (`system/log.md` <100KB, `system/logs/log-archive-historical.md`).
+- Integrated updated path contracts across `system/config.md`, `AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `README.md`, and core skills.
+
 ### Added
 - `graph-engineering` for bounded static DAG admission, typed node/edge
   contracts, explicit joins, single-writer ownership, node-local recovery, and

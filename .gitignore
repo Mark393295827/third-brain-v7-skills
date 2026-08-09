@@ -3,6 +3,8 @@ __pycache__/
 *.pyc
 .vscode/
 .idea/
+.cursor/
+.windsurf/
 *.log
 outreach/awesome-lists/previews/
 .DS_Store

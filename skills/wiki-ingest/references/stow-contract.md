@@ -36,6 +36,23 @@ status: raw | ingested
 
 Use 3-7 insight blocks such as `^ki-short-name`. A hash is optional; an invented hash is forbidden.
 
+## Idempotent Source Transaction
+
+```yaml
+source_identity: "canonical-url-or-source-id"
+identity_query: "exact query used before staging"
+candidate_path: ""
+writer_lease_or_compare_and_set: ""
+canonical_path: ""
+reconciliation: "none | reused | repointed"
+log_idempotency_key: "run+operation+source_identity+target"
+```
+
+Run the exact identity query before staging, immediately before commit, and
+after commit. A concurrent winner is reused; only the losing staged candidate
+may be discarded. Published immutable evidence is never silently deleted.
+Append one logical log receipt per idempotency key.
+
 ## Source Risk Defaults
 
 | Source | Default caution |

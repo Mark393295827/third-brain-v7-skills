@@ -1,13 +1,25 @@
-# Third Brain V7.1 Skills — Gemini CLI
+# Third Brain V7.2 Skills — Gemini / Antigravity CLI
 
-This repository contains Agent Skills for the Gemini CLI environment. Place skills in `~/.gemini/skills/`.
+This repository contains Agent Skills for Gemini CLI & Antigravity CLI environments. Place skills in `~/.gemini/skills/` or `~/.agents/skills/`.
 
-## Skills
+## V7.2 Vault Taxonomy & Architecture
+
+V7.2 defines a multi-domain taxonomy for the Obsidian Vault (`C:\Users\高杰\Documents\Obsidian Vault`):
+- `wiki/concepts/`: 13 domain subdirectories (`ai-engineering`, `ai-economics`, `ai-science`, `behavioral-econ`, `business-strategy`, `entrepreneurship`, `general-concepts`, `geopolitics-energy`, `identity-culture`, `investing-macro`, `investing-quant`, `investing-vc`, `knowledge-systems`)
+- `wiki/entities/`: 5 category subdirectories (`people`, `companies`, `funds-investors`, `products`, `orgs`)
+- `sources/`: 6 chronological & book subdirectories (`2026-07`, `2026-06`, `2026-05`, `2026-04`, `pre-2026`, `books`)
+- `wiki/outputs/`: 3 output subdirectories (`gmail-digests`, `evaluations`, `compilations`)
+- `maps/`: 4 map tier subdirectories (`domain-mocs`, `system-indexes`, `project-maps`, `canvases`)
+- `system/`: Active log (`system/log.md`) + Historical log archive (`system/logs/log-archive-historical.md`)
+
+---
+
+## 20 Core Agent Skills
 
 ### 📥 Knowledge Pipeline
-- **wiki-ingest** — STOW pipeline with source-risk classification, macro-action scope, block refs, clipping archive, Karpathy understanding gate, governance notes, and post-ingest lint.
+- **wiki-ingest** — STOW pipeline with multi-domain concept placement, category entity placement, block refs, clipping lifecycle, Karpathy understanding gate, and post-ingest lint.
 - **knowledge-ops** — Multi-layer knowledge management with Markdown-first retrieval, optional vector storage, evidence hierarchy, deduplication, and knowledge debt queues.
-- **wiki-lint** — Wiki health check for P0/P1 graph health, source refs, frontmatter, links, provenance debt, clipping lifecycle, and understanding integrity.
+- **wiki-lint** — Wiki health check for graph health, link integrity, taxonomy compliance, provenance debt, clipping lifecycle, and understanding.
 
 ### 🔄 Daily Loop
 - **daily-okr** — 7 Key Results daily knowledge compound cycle.
@@ -15,61 +27,33 @@ This repository contains Agent Skills for the Gemini CLI environment. Place skil
 
 ### 🎨 Behavior & Creativity
 - **behavior-design** — Behavior change system with HAS framework.
-- **creativity-engine** — Combinatorial ideation + minimum experiments.
+- **creativity-engine** — Combinatorial ideation (Bending / Breaking / Blending) + minimum experiments.
 
 ### 🔬 Research & Quality
-- **deep-research** — STOW-compatible research harness with ChatGPT-style preflight, source/claim ledgers, activity trace, citations, privacy checks, and wiki-ingest handoff.
+- **deep-research** — STOW-compatible research harness with preflight, source/claim ledgers, activity trace, citations, and wiki-ingest handoff.
 - **verify-before-claim** — Verification-first quality gate.
 
-### 🔄 Learning
+### 🔄 Learning & Workflow
 - **session-learn** — Knowledge extraction with Closure Protocol.
-- **project-flow-ops** — Project triage and tracking.
+- **project-flow-ops** — Project triage, state tracking, and execution governance.
 
 ### 📊 Context & Cost
 - **context-manager** — Runtime-derived context budgets, checkpoints, compaction, retrieval, and capability routing.
 - `token-cost-tracker` is a command under `commands/`, not an Agent Skill.
 
-### 🏗️ Engineering
+### 🏗️ Engineering & Multi-Agent Architecture
 - **loop-engineering** — Temporal-depth control through bounded Goal/Loop/Automation/AutoResearch contracts with state, verification, retry, and recovery.
-- **graph-engineering** — Dependency-width control through bounded static DAGs with explicit dependencies, independent branches, typed joins, and node-local recovery. V7.1 excludes dynamic and cyclic graphs.
+- **graph-engineering** — Dependency-width control through bounded static DAGs with explicit dependencies, independent branches, typed joins, and node-local recovery.
 - **agentic-engineering** — Agent-as-process workflow refactoring with autonomy defaults, delegated-action boundaries, state checkpoints, write-back, and verification gates.
-- **harness-engineering** — Agent runtime kernel design: scheduler, permissions, tools as system calls, provenance ledgers, delegated-action gates, observability, and recovery.
-- **agent-teams-command** — Multi-agent process ownership and orchestration with IPC, async budget envelopes, integration, cleanup, and evidence gates.
+- **harness-engineering** — Agent runtime kernel design: scheduler, permissions, tools as system calls, provenance ledgers, observability, and recovery.
+- **agent-teams-command** — Multi-agent process ownership and orchestration with IPC, parallel subagents, async budget envelopes, integration, cleanup, and evidence gates.
 
 ### 💼 Strategy & Operations
 - **startup-evaluation** — Startup health diagnosis with entrepreneurship, VC 5T, PMF, runway, team, and next-test frameworks.
-- **anthropic-os** — Self-evolving work method engine.
+- **anthropic-os** — Self-evolving work method engine with 3B creativity algorithms.
 - **ai-six-sigma-property-os** — AI + Ontology + DMAIC Black Belt operating model for property work orders, dispatch, quotes, evidence, CTQ dashboards, and MVP quality control.
 
-## Compatibility
-
-All skills follow the [Agent Skills](https://agentskills.io) open format. Skills are model-agnostic markdown files compatible with Gemini CLI.
-
-## Skill Contract
-
-When selecting a skill, read its frontmatter before executing:
-
-- `assumes` — required operating assumptions.
-- `conflicts_with` — boundaries that must not be silently overridden.
-- `metadata.profile` — `one-shot`, `stateful`, `loop`, or `high-risk` controls.
-- `## Failure Protocol` and `## Output Contract` — standard stop status and receipt.
-- `## Success Metrics` — the minimum observable result for one successful run.
-- `## Quality Gates` — checks that must pass before claiming completion.
-
-For wiki-writing skills, resolve paths from `system/config.md` when available. Defaults include `SOURCES_DIR=sources/`, `CONCEPTS_DIR=wiki/concepts/`, `ENTITIES_DIR=wiki/entities/`, and `LOG_FILE=system/log.md`.
-
-## Adoption Ladder
-
-1. Start with `wiki-ingest` + `verify-before-claim`.
-2. Add `daily-okr` + `session-learn` after daily ingest and evidence checks are working.
-3. Add `cognitive-compile`, `behavior-design`, and `creativity-engine` when the wiki has enough material to synthesize.
-4. Add `knowledge-ops` and `loop-engineering` when retrieval or repeated verified execution becomes a bottleneck.
-5. Add `graph-engineering` after `loop-engineering` only when explicit dependencies, parallel branches, typed joins, or node-local recovery exceed orchestration and review cost.
-6. Add `harness-engineering`, `agentic-engineering`, and `agent-teams-command` only when runtime controls, workflow autonomy, or multi-agent process ownership requires them.
-
-## Engineering Routing Boundary
-
-Loop = temporal depth. Graph = dependency width. Agent Teams = process ownership, IPC, and integration. Harness = runtime scheduler, permissions, and observability. V7.1 Graph Engineering supports bounded static DAGs only, not dynamic or cyclic graphs.
+---
 
 ## Karpathy LLM OS
 

@@ -1,4 +1,4 @@
-# Third Brain V7.1 Skills
+# Third Brain V7.2 / V5.0 Skills
 
 <p align="center">
   <img src="assets/third-brain-v5-system-architecture.png" alt="Third Brain V7 knowledge OS architecture: LLM, Skills, Obsidian, behavior design, creativity engine, governance, and compounding loops" width="600">

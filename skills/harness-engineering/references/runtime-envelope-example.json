@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "workflow_id": "dependency-review",
+  "contract_version": "1.0.0",
+  "plan": {
+    "source_path": "runtime-envelope-plan.md",
+    "source_sha256": "08db417549f8cdec07bfc5a199c740afeae97b6d58aebf9dabf07dac132f08a8",
+    "compiler": "reviewed-plan-compiler-v1"
+  },
+  "runtime": {
+    "tool_execution_owner": "host",
+    "allowed_tools": [
+      "repository.read",
+      "repository.test",
+      "github.pull-request.create"
+    ],
+    "filesystem": {
+      "read": [
+        "."
+      ],
+      "write": [
+        ".agent-state/staged/dependency-review"
+      ]
+    },
+    "network_allowlist": [
+      "api.github.com"
+    ],
+    "secrets": {
+      "visible_to_model": false,
+      "handles": [
+        "github_app_installation"
+      ]
+    },
+    "output_policy": {
+      "allowed_types": [
+        "pull_request",
+        "no_op"
+      ],
+      "max_external_outputs": 1,
+      "no_op_condition": "No eligible dependency change remains after the declared repository query and policy checks."
+    }
+  },
+  "termination_policy": {
+    "complete": [
+      "completed"
+    ],
+    "tool_request": [
+      "tool_request"
+    ],
+    "checkpoint": [
+      "budget_truncated"
+    ],
+    "escalate": [
+      "refusal",
+      "error",
+      "unknown"
+    ]
+  },
+  "effects": {
+    "stage_writes": true,
+    "approval_required_for": [
+      "external",
+      "published",
+      "credentialed"
+    ],
+    "post_write_verifier": "Run targeted tests and git diff --check before publishing.",
+    "rollback": "Discard the staged worktree and preserve the run receipt."
+  },
+  "budgets": {
+    "wall_time_seconds": 900,
+    "tool_calls": 30,
+    "external_outputs": 1
+  },
+  "audit": {
+    "event_log": ".agent-state/runtime/events.jsonl",
+    "state_path": ".agent-state/runtime/state.json",
+    "receipt_path": ".agent-state/runtime/receipt.json"
+  }
+}

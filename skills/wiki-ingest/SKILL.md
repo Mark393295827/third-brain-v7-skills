@@ -2,8 +2,8 @@
 name: wiki-ingest
 description: Use when a PDF, URL, transcript, clipping, or raw note must become source-grounded, linked, governed knowledge in an Obsidian vault.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "7.2.1"
+  updated: "2026-08-09"
   profile: "high-risk"
   assumes: "The source is accessible and the vault root plus write boundaries can be resolved."
   conflicts_with: "Invented provenance, modified immutable sources, unsupported concept promotion, or success claims without post-ingest checks."
@@ -31,7 +31,9 @@ Provide: source path/URL/note, vault root, intended topic, permissions, and whet
 2. Resolve configured directories; record defaults only when no config exists.
 3. Classify input as external fact, human experience, internal state, or environment signal.
 4. Assign source risk based on primary/secondary/mediated/self-reported status and freshness.
-5. Search for canonical source, concepts, and entities before creating files.
+5. Derive a source identity from canonical URL or source id, then hash/title/date
+   fallbacks. Search canonical sources, concepts, and entities before creating
+   files; record the identity query in the run ledger.
 
 </intake>
 
@@ -43,14 +45,20 @@ If the source cannot be read, the vault is ambiguous, or provenance cannot be di
 
 <execute>
 
-1. **Source:** create or identify one immutable source note; preserve raw content and archive locators. Extract 3-7 key insights with stable block references.
+1. **Source:** create or identify one immutable source note; preserve raw content and archive locators. Extract 3-7 key insights with stable block references. For concurrent ingest, stage the candidate, recheck the source identity immediately before commit, and promote only one canonical path.
 2. **Transform:** separate direct claims, interpretations, contradictions, unknowns, and fast-changing facts. Mark single-source and self-reported claims.
 3. **Organize:** update existing entity/concept pages when possible. New concepts require a thesis, mechanism, boundary, counterpoint, source locator, and at least two meaningful links.
 4. **Understand:** answer what changed, what causes what, what this source may prove, what could make it wrong, and what reusable action follows. Raw summaries fail this gate.
 5. **Navigate:** update the relevant index/map and clipping lifecycle. Machine-owned snapshot blocks remain untouched.
 6. **Convert:** queue behavior, creativity, SOP, or skill candidates; apply the promotion gate before changing governed rules.
-7. **Write-back:** append evolution timeline and ingest log entries; never rewrite historical provenance.
-8. **Verify:** run targeted link, source-ref, frontmatter, block-ref, empty-file, and navigation checks over touched files.
+7. **Write-back:** append evolution timeline and ingest log entries; never
+   rewrite historical provenance. Give every machine log entry an idempotency
+   key derived from run/batch, operation, canonical source identity, and target;
+   a retry must not append the same logical receipt twice.
+8. **Verify:** run targeted link, source-ref, frontmatter, block-ref, empty-file,
+   navigation, and post-write exact-identity checks over touched files. If a
+   concurrent source appears, keep one canonical note, repoint derived links,
+   and record reconciliation before claiming completion.
 
 For material promotion or source ambiguity, require independent review and human approval. Prepare a rollback as a file-level diff; rollback may remove derived writes but must not erase original source evidence or logs.
 
@@ -70,7 +78,7 @@ Read touched files after write. Confirm the source exists, locators resolve, con
 
 <state_contract>
 
-Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus source identity/risk, vault fingerprint, resolved paths, touched-file ledger, created block refs, contradictions, candidates, approval, clipping transition, and verification receipts. Source and log history are append-only.
+Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus source identity/risk, idempotency key, writer lease or compare-and-set evidence, vault fingerprint, resolved paths, touched-file ledger, created block refs, contradictions, reconciliation decisions, candidates, approval, clipping transition owner, and verification receipts. Source and log history are append-only.
 
 </state_contract>
 
@@ -90,11 +98,17 @@ Return `status`, `result` (created/updated/queued files and understanding delta)
 ## Edge Cases
 
 - A clipping duplicates an existing source: link/archive it and add only new provenance or block locators; do not create a parallel canonical source.
+- Two workers discover no exact-URL match and race to create a source: the
+  commit-time identity check selects one canonical note; remove only the
+  uncommitted/staged duplicate, repoint derived links, and log reconciliation.
+- A retry sees its write-back idempotency key in the log: verify the existing
+  receipt and return reused/no-op instead of appending another entry.
 - A mediated summary contains a precise changing number: preserve the summary, flag the number, and queue primary/current verification before promotion.
 
 ## Success Metrics
 
 - Every derived claim traces to an immutable source locator.
+- Concurrent retries converge to one canonical source and one logical receipt.
 - Concepts add mechanism and boundary, not only summary.
 - Touched files pass targeted lint and appear in navigation or an explicit queue.
 
@@ -102,6 +116,7 @@ Return `status`, `result` (created/updated/queued files and understanding delta)
 
 - [ ] Vault, source, and permissions were verified before write.
 - [ ] No provenance field or source content was invented.
+- [ ] Source identity was checked before and after write; log append was idempotent.
 - [ ] Understanding and promotion gates were applied.
 - [ ] Independent/approval/rollback controls match the change risk.
 - [ ] Post-ingest receipt matches actual filesystem state.

@@ -52,3 +52,26 @@ Interpretation: `80-100 healthy`, `65-79 promising`, `50-64 fragile`, `0-49 rede
 | Burn | Tied to next milestone | Mixed | Vanity spend |
 
 Capital should reduce the top uncertainty or cross a named milestone.
+
+## AI-Native Value-Capture Ledger
+
+Do not collapse adoption and economics into one metric.
+
+| Layer | Evidence | Failure signal |
+|---|---|---|
+| Usage | Active workflows, token/API volume, frequency | Subsidized or experimental use only |
+| Productivity | Time, quality, throughput, error reduction | Faster output with more rework/review |
+| Customer ROI | Retention, expansion, cost saved, revenue enabled | Value remains consumer surplus |
+| Vendor profit | Gross margin, service labor, inference cost, FCF | Growth consumes margin and cash |
+
+Also separate:
+
+- **Spending engine:** CapEx, inference, integration, human service, energy,
+  deployment, and support.
+- **Earning engine:** pricing power, retention, expansion, gross margin, and
+  free cash flow.
+- **Institutional-learning ownership:** who retains workflow exceptions,
+  context, permission maps, and feedback when models or vendors change.
+
+Use current company evidence for all figures. The ledger is a decomposition
+tool, not a claim that one stack layer must capture the profit pool.

@@ -2,8 +2,8 @@
 name: knowledge-ops
 description: Use when an Obsidian knowledge system needs classification, deduplication, retrieval, synchronization, debt queues, or governed Agent/Wiki promotion.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "7.2.1"
+  updated: "2026-08-09"
   profile: "stateful"
   assumes: "A durable Markdown knowledge base exists and its configured paths can be discovered or supplied."
   conflicts_with: "Treating vector search as canonical storage, silently merging provenance, or promoting one-off wiki signals into rules."
@@ -40,13 +40,24 @@ If canonical ownership, vault identity, or merge authority is ambiguous, return 
 <execute>
 
 1. **Classify:** assign each item to execution state, quick memory, durable wiki, optional retrieval index, or governance state.
-2. **Search first:** exact path/title, wikilinks, and lexical search before semantic retrieval.
-3. **Deduplicate:** compare source identity, hash when available, claims, and provenance; merge compiled notes only with traceable reasons.
+2. **Search first:** exact path/title, wikilinks, canonical URL/source id, and lexical search before semantic retrieval.
+3. **Deduplicate:** compare source identity, normalized URL, hash when available,
+   claims, and provenance; merge compiled notes only with traceable reasons.
+   Under concurrent writers, stage the candidate, acquire or verify one source
+   identity key, and recheck immediately before and after promotion.
 4. **Store:** write to the canonical Markdown layer, update indexes/maps, preserve immutable sources, and queue unresolved debt.
 5. **Retrieve:** return paths and match reasons; load only the top evidence-bearing pages within context budget.
 6. **Sync:** update optional indexes from canonical files and record indexed, skipped, removed, or failed items.
-7. **Verify:** read after write, check links/source refs, and run representative retrieval queries.
+7. **Verify:** read after write, check links/source refs, rerun exact-identity
+   search, and run representative retrieval queries. If a race produced two
+   candidates, keep one canonical source, repoint derived locators, and emit a
+   reconciliation receipt without rewriting prior evidence.
 8. **Promote:** require two durable supports or one strong source plus local verification, a bounded execution contract, preserved approvals/provenance, and a cheap objective check.
+
+Use idempotency keys for machine append operations: derive the key from
+operation, canonical source identity, target, and run/batch id; append only when
+the key is absent. Repeated schedules and retries must converge to the same
+canonical files and one logical receipt.
 
 Automate deterministic counts and index refreshes only. Semantic rewrites, contradiction resolution, and rule promotion remain supervised.
 
@@ -60,7 +71,7 @@ Compare pre/post counts, inspect merge samples, replay retrieval queries, and ve
 
 <state_contract>
 
-Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus canonical paths, operation scope, file ledger, merge decisions, debt queues, index receipts, retrieval tests, and promotion candidates. Keep source and merge history append-only.
+Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus canonical paths, operation scope, source identity/idempotency keys, writer lease or compare-and-set evidence, file ledger, merge/reconciliation decisions, debt queues, index receipts, retrieval tests, and promotion candidates. Keep source and merge history append-only.
 
 </state_contract>
 
@@ -79,6 +90,9 @@ Return `status`, `result` (organized/retrieved/synced items and decisions), `evi
 ## Edge Cases
 
 - Two notes share a title but cite different sources and mechanisms: keep both until semantic review establishes a safe merge.
+- Two workers pass the same exact-URL preflight and stage separate source notes:
+  recheck identity at commit, choose one canonical path, repoint derived links,
+  and record the race; do not leave two canonical sources.
 - Vector retrieval misses an exact concept: verify the Markdown path and index state; do not conclude the knowledge is absent.
 
 ## Success Metrics
@@ -92,6 +106,7 @@ Return `status`, `result` (organized/retrieved/synced items and decisions), `evi
 - [ ] Canonical store and immutable boundaries are explicit.
 - [ ] Exact/lexical retrieval precedes optional semantic retrieval.
 - [ ] Merge and sync decisions have receipts.
+- [ ] Concurrent writes converge by source identity and append idempotency key.
 - [ ] No semantic rule is promoted without the promotion gate.
 
 </skill_contract>

@@ -22,6 +22,21 @@ An index may be deleted and rebuilt. A source or decision ledger may not.
 4. Same mechanism, different wording: propose a concept merge for review.
 5. Contradictory claims: link both and open a contradiction item.
 
+## Concurrent Source Identity Transaction
+
+1. Derive `source_identity` from canonical URL or source id; fall back to a
+   verified content hash plus title/date only when needed.
+2. Search before extraction and record the query result.
+3. Stage derived writes without publishing a second canonical source.
+4. Recheck identity at commit with a writer lease, lock, or compare-and-set.
+5. If another writer won, reuse its canonical path, repoint derived locators,
+   and emit a reconciliation receipt.
+6. Recheck after commit. One identity must resolve to one canonical source.
+
+For append-only machine logs, derive an idempotency key from operation,
+canonical source identity, target, and run/batch id. If the key exists, verify
+and reuse the receipt instead of appending it again.
+
 ## Retrieval Order
 
 1. Exact path, stable id, title, or wikilink.
@@ -38,6 +53,8 @@ Return match reason, path, and evidence quality. Similarity score alone is not r
 candidate_id: ""
 target: skill | sop | schema | automation
 supporting_pages: []
+source_locators: []
+evidence_level: single-source | multi-source | local-verified
 local_verification: ""
 trigger: ""
 owner: ""

@@ -2,8 +2,8 @@
 name: context-manager
 description: Use when a long-running agent task needs context budgeting, checkpointing, compaction, retrieval, or capability-based model routing.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "7.2.1"
+  updated: "2026-08-09"
   profile: "stateful"
   assumes: "Runtime context limits, cost policy, and durable storage are available or can be bounded explicitly."
   conflicts_with: "Hard-coded vendor pricing, silent context loss, or retaining low-value history at the expense of execution state."
@@ -48,6 +48,13 @@ Apply `KEEP / SUMMARIZE / DROP / RETRIEVE`:
 
 Checkpoint at phase boundaries or before compaction. Route work by capability requirements such as reasoning depth, tool use, latency, cost, multimodality, and context capacity; runtime policy selects the implementation. Keep stable prompt prefixes unchanged when caching is available.
 
+Maintain one versioned shared-intent surface for objective, acceptance criteria,
+decisions, and non-code constraints. Give each worker a private context manifest
+containing only its required slice. Return summary, artifact locator/hash,
+decision, unknowns, and verifier receipt; do not treat chat replay as durable
+coordination. An independent critic receives the claim and raw artifact, not the
+builder's desired conclusion.
+
 For Graph workflows, treat each node context as private RAM and each typed edge
 payload as a bounded transfer contract. Pass artifact locators, schemas,
 decisions, and verifier receipts; do not concatenate all branch histories into
@@ -63,7 +70,7 @@ Simulate the next action using only the checkpoint. It must recover objective, c
 
 <state_contract>
 
-Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus phase, decisions, permissions, active resources, completed work, rejected approaches, retrieval pointers, and budget telemetry. Version checkpoints; never replace the only recoverable state.
+Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus phase, shared-intent hash, worker context manifests, decisions, permissions, normalized termination reason, active resources, completed work, rejected approaches, artifact/retrieval pointers, and budget telemetry. Version checkpoints; never replace the only recoverable state.
 
 </state_contract>
 
@@ -84,6 +91,8 @@ Return `status`, `result` (budget plan or checkpoint), `evidence` (runtime telem
 - A long log contains one decisive error: keep the error signature and locator, summarize the surrounding output, and retain retrieval access.
 - A Graph join receives three branch transcripts: retrieve the declared output
   artifacts and receipts, not the full private context of every branch.
+- A subagent summary omits a non-code constraint: reject the handoff, reload the
+  versioned shared-intent slice, and regenerate the summary before integration.
 
 ## Success Metrics
 
@@ -94,6 +103,7 @@ Return `status`, `result` (budget plan or checkpoint), `evidence` (runtime telem
 ## Quality Gates
 
 - [ ] Objective, constraints, permissions, evidence, and next action survive replay.
+- [ ] Shared intent and private worker contexts remain separated with bounded summary IPC.
 - [ ] Dropped content is duplicated, stale, or reconstructible.
 - [ ] Budget estimates cite current runtime data or explicit conservative assumptions.
 - [ ] Checkpoints are versioned and recoverable.

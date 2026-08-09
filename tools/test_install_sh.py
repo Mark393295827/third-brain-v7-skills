@@ -71,6 +71,7 @@ class InstallScriptTest(unittest.TestCase):
             text=True,
             capture_output=True,
             check=False,
+            errors="replace",
         )
 
     def assert_filtered_skill(self, target: Path) -> None:
@@ -83,17 +84,20 @@ class InstallScriptTest(unittest.TestCase):
 
     def test_codex_install_filters_python_cache_artifacts(self) -> None:
         result = self.run_installer("codex")
-        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        msg = (result.stdout or "") + (result.stderr or "")
+        self.assertEqual(result.returncode, 0, msg)
         self.assert_filtered_skill(self.home / ".agents" / "skills")
 
     def test_auto_install_handles_unset_claude_code(self) -> None:
         result = self.run_installer("auto")
-        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        msg = (result.stdout or "") + (result.stderr or "")
+        self.assertEqual(result.returncode, 0, msg)
         self.assert_filtered_skill(self.home / ".claude" / "skills")
 
     def test_all_preserves_targets_and_filters_python_cache_artifacts(self) -> None:
         result = self.run_installer("all")
-        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        msg = (result.stdout or "") + (result.stderr or "")
+        self.assertEqual(result.returncode, 0, msg)
         for target in (
             self.home / ".claude" / "skills",
             self.home / ".agents" / "skills",

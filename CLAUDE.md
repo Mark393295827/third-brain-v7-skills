@@ -1,100 +1,74 @@
-# Third Brain V7.1 Skills — Claude Code
+# Third Brain V7.2 Skills — Claude Code
 
 For detailed installation, usage, and workflow scenarios, see **[GUIDE.md](GUIDE.md)**.
 
-You have access to the following Agent Skills. Each skill is a markdown file in `~/.claude/skills/` that defines a specific capability.
+You have access to the 20 Agent Skills defined in `~/.claude/skills/` or `~/.agents/skills/`.
 
-## Skill Categories
+## V7.2 Multi-Domain Taxonomy Specification
+
+V7.2 defines a multi-domain taxonomy for the active Obsidian vault (`C:\Users\高杰\Documents\Obsidian Vault`):
+
+1. **`wiki/concepts/` (13 Domain Subdirectories):**
+   `ai-engineering`, `ai-economics`, `ai-science`, `behavioral-econ`, `business-strategy`, `entrepreneurship`, `general-concepts`, `geopolitics-energy`, `identity-culture`, `investing-macro`, `investing-quant`, `investing-vc`, `knowledge-systems`.
+
+2. **`wiki/entities/` (5 Category Subdirectories):**
+   `people`, `companies`, `funds-investors`, `products`, `orgs`.
+
+3. **`sources/` (6 Pool Subdirectories):**
+   `YYYY-MM/` (e.g. `2026-07/`), `pre-2026/`, `books/` (>100KB).
+
+4. **`wiki/outputs/` (3 Category Subdirectories):**
+   `gmail-digests/`, `evaluations/`, `compilations/`.
+
+5. **`maps/` (4 Map Tier Subdirectories):**
+   `domain-mocs/`, `system-indexes/`, `project-maps/`, `canvases/` (plus `Home.md` & `中央索引.md`).
+
+6. **`system/` (Log Rotation Contract):**
+   Active log at `system/log.md` (keep <100KB); archive historical entries to `system/logs/log-archive-historical.md`.
+
+---
+
+## 20 Core Skills Overview
 
 ### 📥 Knowledge Pipeline
-- **wiki-ingest** — Ingest sources into an interlinked wiki with source-risk classification, macro-action scope, block refs, clipping archive, Karpathy understanding gate, governance notes, and post-ingest lint. STOW pipeline: Source → Think → Organize → Write.
+- **wiki-ingest** — STOW pipeline with 13-domain concept placement, 5-category entity placement, block refs, Karpathy understanding gate, governance notes, and post-ingest lint.
 - **knowledge-ops** — Multi-layer knowledge management with Markdown-first retrieval, optional ChromaDB vector support, evidence hierarchy, deduplication, and knowledge debt queues.
-- **wiki-lint** — Health-check the wiki across P0/P1 graph health, source refs, frontmatter, links, provenance debt, clipping lifecycle, understanding integrity, and drift.
+- **wiki-lint** — Health-check the wiki across graph health, link integrity, taxonomy compliance, provenance debt, clipping lifecycle, understanding integrity, and drift.
 
 ### 🔄 Daily Loop
-- **daily-okr** — 7 Key Results daily cycle: Input → Cognition → Wiki → Behavior → Creativity → Output → Feedback, each with evidence.
-- **cognitive-compile** — 8-section deep learning compile: Question → Facts → Concepts → Patterns → Conflicts → Hypotheses → Decision → Action.
+- **daily-okr** — 7 Key Results daily cycle (Input → Cognition → Wiki → Behavior → Creativity → Output → Feedback).
+- **cognitive-compile** — 8-section deep learning compile (Question → Facts → Concepts → Patterns → Conflicts → Hypotheses → Decision → Action).
 
 ### 🎨 Behavior & Creativity
-- **behavior-design** — Behavior change system: goals → habits → triggers → SOPs → review. Includes HAS (Human Agency Scale).
-- **creativity-engine** — Combinatorial ideation with Lego Building Blocks method. Cross-domain analogies + minimum experiments.
+- **behavior-design** — Behavior change system with HAS framework.
+- **creativity-engine** — Combinatorial ideation (Bending / Breaking / Blending) + minimum experiments.
 
 ### 🔬 Research & Quality
-- **deep-research** — STOW-compatible research harness with ChatGPT-style preflight, source/claim ledgers, activity trace, citations, privacy checks, and wiki-ingest handoff.
-- **verify-before-claim** — No completion claims without fresh, scope-matched verification evidence.
+- **deep-research** — STOW-compatible research harness with preflight, source/claim ledgers, activity trace, citations, and wiki-ingest handoff.
+- **verify-before-claim** — Empirical verification gate before completion claims.
 
-### 🔄 Learning
-- **session-learn** — Extract 7 knowledge signal types from sessions. Closure Protocol for feedback loops.
-- **project-flow-ops** — Triage, plan, track, review across projects.
+### 🔄 Learning & Workflow
+- **session-learn** — Extract knowledge signal types from sessions with Closure Protocol.
+- **project-flow-ops** — Triage, plan, track, and review across projects.
 
 ### 📊 Context & Cost
 - **context-manager** — Runtime-derived budgets, checkpoints, compaction, retrieval, and capability routing.
-- `token-cost-tracker` — command for estimate/log/report; it is not an Agent Skill.
+- `token-cost-tracker` — command for estimate/log/report.
 
-### 🏗️ Engineering
+### 🏗️ Engineering & Multi-Agent Architecture
 - **loop-engineering** — Temporal-depth control through bounded Goal/Loop/Automation/AutoResearch contracts with state, verification, retry, and recovery.
-- **graph-engineering** — Dependency-width control through bounded static DAGs with explicit dependencies, independent branches, typed joins, and node-local recovery. V7.1 excludes dynamic and cyclic graphs.
-- **agentic-engineering** — Refactor skills and workflows as agent processes with autonomy defaults, delegated-action boundaries, state checkpoints, write-back, and verification gates.
-- **harness-engineering** — Agent runtime kernel: scheduler, permissions, tools as system calls, provenance ledgers, delegated-action gates, observability, recovery, and closed-loop design.
-- **agent-teams-command** — Multi-agent process ownership and orchestration with IPC, async budget envelopes, integration, cleanup, and evidence gates.
+- **graph-engineering** — Dependency-width control through bounded static DAGs with explicit dependencies, independent branches, typed joins, and node-local recovery.
+- **agentic-engineering** — Refactor skills and workflows as agent processes with autonomy defaults, state checkpoints, write-back, and verification gates.
+- **harness-engineering** — Agent runtime kernel: scheduler, permissions, tools as system calls, provenance ledgers, observability, and recovery.
+- **agent-teams-command** — Multi-agent process ownership, parallel subagent orchestration, IPC, async budget envelopes, integration, cleanup, and evidence gates.
 
 ### 💼 Strategy & Operations
 - **startup-evaluation** — Startup health diagnosis with entrepreneurship, VC 5T, PMF, runway, team, and next-test frameworks.
-- **anthropic-os** — Cognitive Symbiont Engine. Livewired + 3B creativity algorithms (Bending/Breaking/Blending). Predictive coding, time-arrow diagnostics.
+- **anthropic-os** — Self-evolving work method engine with 3B creativity algorithms.
 - **ai-six-sigma-property-os** — AI + Ontology + DMAIC Black Belt operating model for property work orders, dispatch, quotes, evidence, CTQ dashboards, and MVP quality control.
 
-## Usage
+---
 
-Invoke any skill naturally:
-- "Ingest this article into my wiki"
-- "Run a cognitive compile on X"
-- "Create an agent team to build Y"
-- "Launch Anthropic OS for my team" — includes 3B creativity algorithms
-- "Design my Property Agent OS with AI Six Sigma"
-- "Apply 3B to our growth strategy" — Bending/Breaking/Blending
-- "Estimate token cost for this task"
+## Karpathy LLM OS
 
-## Skill Contract
-
-Before executing a selected skill, read the skill frontmatter and enforce:
-
-- `assumes`: required operating assumptions for safe use.
-- `conflicts_with`: workflows or assumptions that must not be silently overridden.
-- `metadata.profile`: `one-shot`, `stateful`, `loop`, or `high-risk` control depth.
-- `## Failure Protocol` and `## Output Contract`: standard stop status and receipt.
-- `## Success Metrics`: minimum measurable result for one successful run.
-- `## Quality Gates`: checks required before completion claims.
-
-For wiki-writing skills, resolve `SOURCES_DIR`, `CONCEPTS_DIR`, `ENTITIES_DIR`, `OUTPUTS_DIR`, and `LOG_FILE` from `system/config.md` when available. If no config exists, use the default STOW layout.
-
-## Recommended Adoption Ladder
-
-1. Week 1: `wiki-ingest` + `verify-before-claim`.
-2. Weeks 2-4: add `daily-okr` + `session-learn`.
-3. Month 2+: add `cognitive-compile`, `behavior-design`, and `creativity-engine`.
-4. Month 3+: add `knowledge-ops`, `loop-engineering`, `harness-engineering`, and `agentic-engineering`.
-5. Dependency scale: add `graph-engineering` after `loop-engineering` only when explicit dependencies, parallel branches, typed joins, or node-local recovery exceed orchestration and review cost.
-6. Multi-agent scale: add `agent-teams-command` and `project-flow-ops`.
-
-## Engineering Routing Boundary
-
-- Loop Engineering controls temporal depth.
-- Graph Engineering controls dependency width.
-- Agent Teams Command controls process ownership, IPC, and integration.
-- Harness Engineering supplies the runtime scheduler, permissions, and observability.
-
-A graph node may contain a bounded Loop or Agent Team. V7.1 supports bounded static DAGs, not dynamic or cyclic graphs.
-
-## Grounding Principles
-
-### Karpathy LLM OS
 LLM=CPU · Context=RAM · Storage=Disk · Tools=System Calls · Skills=Programs · Harness=Kernel · Agent Teams=Processes
-
-### 3B Creativity Algorithms
-- **Bending**: Mutate existing success patterns into new contexts
-- **Breaking**: Eliminate worst-performing patterns; break path dependency
-- **Blending**: Fuse elements from different domains for novel patterns
-
-### Agent Teams
-
-When the runtime exposes isolated workers, use `agent-teams-command` for admission, ownership, IPC, integration, evidence, and cleanup. Do not bind the durable skill to a product version or model name.

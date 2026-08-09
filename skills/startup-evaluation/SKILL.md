@@ -2,8 +2,8 @@
 name: startup-evaluation
 description: Use when a startup needs an evidence-weighted health check, investor lens, runway diagnosis, top constraint, or cheapest next validation test.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "7.2.1"
+  updated: "2026-08-09"
   profile: "one-shot"
   assumes: "The company stage, business type, and at least partial customer or operating evidence can be obtained."
   conflicts_with: "Treating pitch quality, market size, or founder conviction as proof of demand or investment merit."
@@ -42,10 +42,14 @@ Separate facts, assumptions, self-reported claims, and missing evidence. If the 
 1. Rank demand evidence from belief and interviews through behavior, payment, retention, expansion, and referral.
 2. Score eight dimensions using stage-adjusted weights: pain/beachhead, market/timing, value step-change, PMF/traction, business model/economics, team/governance, capital/runway, and moat/risk.
 3. For investor work, cross-check 5T: Team, Target Market, Tech/Product, Traction, Terms.
-4. For AI-native or hard-tech cases, test what remains defensible as components cheapen and identify physical, regulatory, deployment, or supply-chain bottlenecks.
-5. Diagnose runway and whether spend buys evidence for the next milestone.
-6. Name the single constraint most likely to invalidate or unlock the company.
-7. Specify the cheapest test, threshold, owner, budget, and stop condition.
+4. For AI-native or hard-tech cases, test what remains defensible as components cheapen and identify physical, regulatory, deployment, or supply-chain bottlenecks. For AI value capture, separate **usage**, **productivity**, **customer ROI**, and **vendor profit**; do not infer durable economics from token volume or revenue growth alone.
+5. Separate the spending engine (CapEx, inference, integration, service labor,
+   energy, and deployment cost) from the earning engine (retention, expansion,
+   pricing power, gross margin, and free cash flow). Test who owns institutional
+   learning: workflow exceptions, context, permissions, and feedback write-back.
+6. Diagnose runway and whether spend buys evidence for the next milestone.
+7. Name the single constraint most likely to invalidate or unlock the company.
+8. Specify the cheapest test, threshold, owner, budget, and stop condition.
 
 Do not average away fatal risk. A healthy cash-flow business may still be a poor venture investment; a large market cannot rescue absent demand evidence.
 
@@ -53,7 +57,7 @@ Do not average away fatal risk. A healthy cash-flow business may still be a poor
 
 <evaluate>
 
-Trace every score and verdict to the evidence ledger. Stress-test the conclusion against churn, paid acquisition dependence, founder conflict, financing timing, and platform dependency. Calibrate confidence to the weakest decision-critical claim.
+Trace every score and verdict to the evidence ledger. Stress-test the conclusion against churn, paid acquisition dependence, founder conflict, financing timing, platform dependency, falling model prices, rising inference/service cost, and customer ROI that fails to become vendor margin. Calibrate confidence to the weakest decision-critical claim.
 
 </evaluate>
 
@@ -72,11 +76,15 @@ Return `status`, `result` (verdict, scorecard, top constraint, fatal risks, and 
 
 - Pre-revenue company has no retention data: do not assign traction maturity; score the available behavioral test and make payment/usage the next gate.
 - Bootstrapped company has strong cash flow but a small market: rate business health separately from venture-scale suitability.
+- AI usage grows while gross margin and customer retention fall: record adoption
+  without calling it value capture; test pricing, service labor, and inference
+  economics separately.
 
 ## Success Metrics
 
 - Stage, type, decision lens, and evidence maturity are explicit.
 - Verdict confidence follows observed behavior rather than narrative polish.
+- AI-native verdicts distinguish adoption, customer value, and supplier profit.
 - One top constraint and one cheap falsifiable test govern the recommendation.
 
 ## Quality Gates
@@ -84,6 +92,7 @@ Return `status`, `result` (verdict, scorecard, top constraint, fatal risks, and 
 - [ ] Facts, assumptions, self-reports, and missing evidence are separated.
 - [ ] Score weights fit stage and business type.
 - [ ] Fatal risks are not hidden by averages.
+- [ ] AI cases separate spending, usage, productivity, customer ROI, and vendor profit.
 - [ ] Runway, milestone, test threshold, owner, and stop condition are explicit.
 
 </skill_contract>

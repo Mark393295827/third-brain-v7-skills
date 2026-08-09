@@ -2,8 +2,8 @@
 name: verify-before-claim
 description: Use when an agent is about to claim completion, correctness, safety, publication, deployment, or any consequential external fact.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "7.2.1"
+  updated: "2026-08-09"
   profile: "high-risk"
   assumes: "At least one objective verification method or authoritative source can be identified."
   conflicts_with: "Inferring success from effort, stale evidence, partial checks, or self-authored assertions."
@@ -43,6 +43,12 @@ If the artifact, expected behavior, or verification method is missing, return `N
 <execute>
 
 Run the selected check after the final material change. Examples: targeted test, lint, build, link check, read-after-write, diff inspection, source comparison, dashboard query, or deployment health check. Capture command/query, timestamp, scope, exit status, and key output.
+
+Treat runtime termination as control evidence, not task evidence. A normalized
+`complete` signal still needs the acceptance check; a tool request needs a host
+execution receipt; truncation needs a checkpoint; refusal/error/unknown cannot
+support completion. A claimed `NO_OP` needs a fresh eligibility query, an
+output-count check, and proof that no prohibited side effect occurred.
 
 For material or consequential claims, obtain independent verification from a separate check, reviewer, or evidence source. Require human approval before irreversible publication, deployment, spending, deletion, credential use, or policy change. Confirm the rollback path before execution.
 
@@ -86,6 +92,10 @@ Return `status`, `result` (claim decision and allowed wording), `evidence` (fres
 ## Edge Cases
 
 - Tests passed before a final edit: evidence is stale; rerun the relevant checks after the edit.
+- A scheduled agent reports success but its normalized termination was
+  truncation: withhold completion and verify from the checkpoint.
+- A maintenance agent emits nothing: call it a verified `NO_OP` only when the
+  eligibility and side-effect checks both pass.
 - Every Graph node is green but the reduce join lacks one declared input:
   withhold graph completion and return `VERIFY_FAILED`.
 - An authoritative page is unavailable: report `INSUFFICIENT_EVIDENCE`; do not substitute an uncited recollection for the external fact.
@@ -100,6 +110,7 @@ Return `status`, `result` (claim decision and allowed wording), `evidence` (fres
 
 - [ ] Claim, expected result, and check scope match.
 - [ ] Evidence was produced after the last material change.
+- [ ] Termination and no-op claims have direct host/runtime receipts.
 - [ ] Partial checks lead to partial wording.
 - [ ] Approval and rollback controls match risk.
 

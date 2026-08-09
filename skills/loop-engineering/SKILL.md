@@ -2,8 +2,8 @@
 name: loop-engineering
 description: Use when a repeatable task must become a bounded Trigger -> Execute -> Verify -> State loop, scheduled automation, goal agent, or metric-driven research cycle.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "7.2.1"
+  updated: "2026-08-09"
   profile: "loop"
   assumes: "The task has inspectable state, a finite budget, and at least one verifier independent of the builder's opinion."
   conflicts_with: "Unbounded retries, self-certification, silent external mutation, or loops whose state cannot be recovered."
@@ -75,6 +75,17 @@ Validate it with `scripts/validate_loop_contract.py --strict`. Then iterate:
 6. **State:** append diagnosis, action, evidence, delta, budget, and next decision atomically.
 7. **Stop/continue:** stop on success, cap, permission boundary, regression, repeated signature, or no useful work.
 
+Normalize the model/runtime termination signal after every action. `complete`
+still requires the declared verifier; `tool_request` returns proposed arguments
+to the host permission gate; `checkpoint/truncation` persists state before any
+continuation; refusal, error, or unknown escalates. Never infer completion from
+fluent prose or from the word "stop" alone.
+
+For maintenance and queue loops, declare an allowed `NO_OP` outcome and its
+eligibility query. A quiet iteration is successful only when the query proves
+there was no eligible work, output count is within policy, and no side effect
+occurred.
+
 Use `single-agent` by default, `maker-checker` for ambiguous/high-risk evaluation, and `manager-workers` only for genuinely independent work with an explicit integration gate.
 
 If a validated Graph owns the dependency topology, this skill owns only the
@@ -96,7 +107,7 @@ The verifier must test the declared result rather than reward activity. Check ev
 
 <state_contract>
 
-Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus contract version, trigger receipt, hypothesis, action, artifact/diff, metric/guardrail delta, permissions, work clock, and recovery point. Append iterations; write current state atomically.
+Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus contract version, trigger receipt, hypothesis, action, normalized termination reason, artifact/diff, metric/guardrail delta, permissions, output count, no-op receipt, work clock, and recovery point. Append iterations; write current state atomically.
 
 </state_contract>
 
@@ -115,6 +126,10 @@ Return `status`, `result` (metric/end-state decision), `evidence` (validator and
 ## Edge Cases
 
 - A scheduled job fired but produced no run receipt: status is triggered, not completed; inspect executor state.
+- The model ends because its context or token budget is exhausted: checkpoint
+  and return `BUDGET_STOP` or resume from state; do not label truncation success.
+- A queue poll returns zero items: accept `NO_OP` only after the declared query
+  and side-effect check pass.
 - The metric improves while a safety guardrail regresses: rollback and return `VERIFY_FAILED`; never optimize the headline metric alone.
 
 ## Success Metrics
@@ -127,6 +142,7 @@ Return `status`, `result` (metric/end-state decision), `evidence` (validator and
 
 - [ ] Trigger, owner, topology, budgets, stop, recovery, and write-back are explicit.
 - [ ] Builder opinion is not the only verifier.
+- [ ] Termination classes and any legal no-op have host-owned routing and evidence.
 - [ ] State replay recovers the next decision losslessly.
 - [ ] External mutation requires approval and rollback.
 

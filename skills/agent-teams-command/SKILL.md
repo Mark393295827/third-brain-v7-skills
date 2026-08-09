@@ -2,8 +2,8 @@
 name: agent-teams-command
 description: Use when work has genuinely independent streams or distinct builder, evaluator, domain, and integration roles that require bounded multi-agent command.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "7.2.1"
+  updated: "2026-08-09"
   profile: "high-risk"
   assumes: "The runtime supports isolated workers or equivalent processes, durable shared state, and explicit integration ownership."
   conflicts_with: "Parallelism for its own sake, overlapping write ownership, chat-only coordination, or workers crossing permission boundaries."
@@ -50,16 +50,23 @@ Resolve commander intent, object/state vocabulary, ownership, dependency directi
 
 <execute>
 
-1. Write a command program: objective, non-goals, finite actions, commander, checkpoint cadence, interrupt policy, state/artifact paths, IPC schema, allowed/denied tools, verifier, stop, recovery, and promotion boundary.
+1. Write a command program: objective, non-goals, finite actions, commander, checkpoint cadence, interrupt policy, state/artifact paths, IPC schema, allowed/denied tools, verifier, stop, recovery, and promotion boundary. Publish one versioned shared intent surface for decisions and non-code constraints; the commander owns changes to it.
 2. Atomically decompose work by interface/territory. Each task has one owner, inputs, output artifact, dependencies, definition of done, verifier, budget, and blast radius.
 3. Select the smallest topology: maker-checker, manager-workers, or specialist pipeline. If a validated Graph exists, map only `agent` or `agent-team` nodes to workers; deterministic, Loop, subgraph, and human-gate nodes keep their own contracts. Route workers by required capabilities and runtime policy, never fixed model names.
 4. Isolate mutable work with separate worktrees/branches or disjoint files. Shared schemas/contracts are commander-owned until published.
-5. Use typed IPC: `{task_id, state, artifact, evidence, decision, unknowns, dependency, next_action}`. Messages change state; status chatter does not.
-6. Require workers to run `state + evidence -> next action -> verifier -> next state | stop | escalate` and checkpoint after each material action.
-7. Monitor attention and review budgets, repeated failures, idle dependencies, ownership violations, and architecture drift. Rebalance or serialize when coordination cost rises.
-8. Integrate one verified workstream at a time in dependency order. The integration owner runs broader regression/eval checks and records accepted/rejected artifacts.
-9. Run an independent reviewer/red team for consequential behavior. Human approval precedes production, publication, spending, destructive/shared-state actions, credentials, and policy changes; prepare rollback first.
-10. Close workers, remove temporary worktrees/state, reconcile tasks, preserve receipts, and extract only promotion-gated reusable patterns.
+5. Use typed IPC: `{task_id, state, context_manifest, artifact, artifact_hash, evidence, decision, unknowns, dependency, termination_reason, next_action}`. Messages change state; status chatter does not.
+6. Give each worker the least context and tools required for its territory.
+   Return bounded summaries, artifact locators, decisions, and verifier receipts;
+   do not merge private branch transcripts into the command context.
+7. Require workers to run `state + evidence -> next action -> verifier -> next state | stop | escalate` and checkpoint after each material action. Host runtime, not worker prose, interprets termination and dispatches tools.
+8. Monitor attention and review budgets, repeated failures, idle dependencies, ownership violations, and architecture drift. Rebalance or serialize when coordination cost rises.
+9. Integrate one verified workstream at a time in dependency order. The integration owner runs broader regression/eval checks and records accepted/rejected artifacts.
+10. Run an independent reviewer/red team for consequential behavior. Give the
+    reviewer acceptance criteria and raw artifacts without the builder's
+    intended conclusion. Human approval precedes production, publication,
+    spending, destructive/shared-state actions, credentials, and policy
+    changes; prepare rollback first.
+11. Close workers, remove temporary worktrees/state, reconcile tasks, preserve receipts, and extract only promotion-gated reusable patterns.
 
 Hooks are optional executable infrastructure, not prose. Configure one only when its referenced program exists, has tests, and emits a verified receipt; never copy illustrative hook commands as if installed.
 
@@ -82,7 +89,7 @@ if the commander cannot explain architecture delta and rollback.
 
 <state_contract>
 
-Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus mission/contract version, command board, task graph, ownership map, worker/worktree registry, IPC events, attention budget, approvals, integration ledger, rollback points, and cleanup receipt.
+Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus mission/contract version, shared-intent hash, command board, task graph, ownership map, worker/worktree registry, per-worker context/tool manifests, IPC events, termination reasons, attention budget, approvals, integration ledger, rollback points, and cleanup receipt.
 
 </state_contract>
 
@@ -104,6 +111,9 @@ Return `status`, `result` (mission and integrated artifacts), `evidence` (task/i
 - Two workers need the same schema file: commander publishes the contract first; serialize schema edits and let workers consume it read-only.
 - A Graph has six nodes but only two require agent judgment: recruit two
   workers, not six; deterministic nodes remain scheduler-owned.
+- A critic receives the builder's full rationale and simply agrees: rerun with
+  the acceptance criteria, artifact, and evidence only; independence requires
+  context separation, not a different role label.
 - All workers report success but integration fails: mission status is `VERIFY_FAILED`; reject incompatible artifacts rather than averaging reports.
 
 ## Success Metrics
@@ -116,6 +126,7 @@ Return `status`, `result` (mission and integrated artifacts), `evidence` (task/i
 
 - [ ] Team admission and orchestration-tax calculation justify multi-agent use.
 - [ ] Every task has one owner, artifact, verifier, budget, and stop condition.
+- [ ] Shared intent is versioned; worker context/tool slices and summary IPC are minimal and auditable.
 - [ ] Independent review, approval, and rollback match risk.
 - [ ] Integration and cleanup receipts match actual repository/runtime state.
 - [ ] Capability routing contains no durable model binding.
