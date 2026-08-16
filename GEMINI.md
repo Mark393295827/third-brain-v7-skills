@@ -1,18 +1,13 @@
-# Third Brain V7.2 Skills — Gemini / Antigravity CLI
+# Third Brain V8.0 Skills — Gemini / Antigravity CLI
 
 This repository contains Agent Skills for Gemini CLI & Antigravity CLI environments. Place skills in `~/.gemini/skills/` or `~/.agents/skills/`.
 
-## V7.2 Vault Taxonomy & Architecture
-
-V7.2 defines a multi-domain taxonomy for the Obsidian Vault (`C:\Users\高杰\Documents\Obsidian Vault`):
-- `wiki/concepts/`: 13 domain subdirectories (`ai-engineering`, `ai-economics`, `ai-science`, `behavioral-econ`, `business-strategy`, `entrepreneurship`, `general-concepts`, `geopolitics-energy`, `identity-culture`, `investing-macro`, `investing-quant`, `investing-vc`, `knowledge-systems`)
-- `wiki/entities/`: 5 category subdirectories (`people`, `companies`, `funds-investors`, `products`, `orgs`)
-- `sources/`: 6 chronological & book subdirectories (`2026-07`, `2026-06`, `2026-05`, `2026-04`, `pre-2026`, `books`)
-- `wiki/outputs/`: 3 output subdirectories (`gmail-digests`, `evaluations`, `compilations`)
-- `maps/`: 4 map tier subdirectories (`domain-mocs`, `system-indexes`, `project-maps`, `canvases`)
-- `system/`: Active log (`system/log.md`) + Historical log archive (`system/logs/log-archive-historical.md`)
-
----
+V8.0 updates the Obsidian Vault to full OCD Gold-Standard standards, adding an explicit **5-Stage Worker Assembly Pipeline** (`workflows/worker-flows.md` and `tools/worker_flow_engine.py`):
+1. **Worker 1 (Ingest)**: Immutable source creation (`sources/YYYY-MM/`) + SHA-256 + block anchors `^...`.
+2. **Worker 2 (Cognitive)**: Gold-Standard concept cards with Mermaid, paradigm matrices, and evidence bounds.
+3. **Worker 3 (GraphWeaver)**: MOC navigation, Home.md / Central Index updates, and Canvas mapping.
+4. **Worker 4 (Governance)**: YAML validation, link & block ref verification, KPI updates, and test suites.
+5. **Worker 5 (Deliverable)**: Actionable outputs (`wiki/outputs/`), strategic memos, and daily OKR loop completion.
 
 ## 20 Core Agent Skills
 

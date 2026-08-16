@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "third-brain://contracts/notes/source-v8.1",
+  "title": "Third Brain V8.1 Source Frontmatter",
+  "type": "object",
+  "required": [
+    "title",
+    "type",
+    "contract_version",
+    "source_id",
+    "source_title",
+    "source_date",
+    "source_type",
+    "input_class",
+    "knowledge_stage",
+    "evidence_level",
+    "trust_level",
+    "hash",
+    "status",
+    "captured_at",
+    "observed_at",
+    "valid_as_of",
+    "freshness_tier",
+    "freshness_status",
+    "run_id"
+  ],
+  "properties": {
+    "title": {"type": "string", "minLength": 1},
+    "type": {"const": "source"},
+    "contract_version": {"const": "8.1.0"},
+    "source_id": {"type": "string", "pattern": "^src-[a-z0-9-]+$"},
+    "source_title": {"type": "string", "minLength": 1},
+    "source_author": {"type": "string"},
+    "source_date": {"type": "string", "minLength": 1},
+    "source_type": {
+      "enum": ["article", "book", "video-transcript", "pdf", "clipping", "mediated", "local-synthesis"]
+    },
+    "source_url": {"type": "string"},
+    "source_identity": {"type": "string", "minLength": 1},
+    "prior_snapshots": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "input_class": {
+      "enum": ["external-fact", "human-experience", "internal-state", "environment-signal"]
+    },
+    "knowledge_stage": {"const": "captured"},
+    "evidence_level": {"enum": ["single-source", "multi-source", "curated-map"]},
+    "trust_level": {"enum": ["unverified", "expert-source", "primary-source"]},
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "status": {"enum": ["raw", "ingested"]},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "valid_as_of": {"type": "string", "format": "date"},
+    "freshness_tier": {"const": "snapshot"},
+    "freshness_status": {"const": "snapshot"},
+    "run_id": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "third-brain-temporal-knowledge-v8.1",
+  "contract_version": "8.1.0",
+  "default_tier": "dynamic",
+  "tiers": {
+    "snapshot": {
+      "review_days": null,
+      "can_be_current": false,
+      "description": "Immutable evidence about what was observed or stated at valid_as_of."
+    },
+    "stable": {
+      "review_days": 365,
+      "can_be_current": true,
+      "description": "Foundational or historical knowledge with a slow change rate."
+    },
+    "slow": {
+      "review_days": 180,
+      "can_be_current": true,
+      "description": "Organization, product, or policy context that changes gradually."
+    },
+    "dynamic": {
+      "review_days": 30,
+      "can_be_current": true,
+      "description": "Active software, company, market, or research state."
+    },
+    "volatile": {
+      "review_days": 7,
+      "can_be_current": true,
+      "description": "Leadership, laws, prices, schedules, benchmarks, or fast-moving model claims."
+    },
+    "realtime": {
+      "review_days": 1,
+      "can_be_current": true,
+      "description": "Operational status, live availability, counts, or event state."
+    }
+  },
+  "status_values": [
+    "current",
+    "due",
+    "stale",
+    "snapshot",
+    "unknown"
+  ],
+  "promotion_rules": {
+    "block_current_wording_when_stale": true,
+    "require_valid_as_of": true,
+    "require_last_verified_for_current": true,
+    "append_evolution_on_refresh": true,
+    "preserve_historical_sources": true
+  },
+  "queue": {
+    "path": "system/queues/freshness-review.jsonl",
+    "dedupe_key": "note_path+next_review+contract_version"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "bundle_id": "third-brain-v8.1-system-bundle",
+  "contract_version": "8.1.0",
+  "entries": [
+    {"source": "contracts/system-bundle.json", "target": "system/contracts/v8.1/system-bundle.json"},
+    {"source": "contracts/vault-contract.json", "target": "system/contracts/v8.1/vault-contract.json"},
+    {"source": "contracts/freshness-policy.json", "target": "system/contracts/v8.1/freshness-policy.json"},
+    {"source": "contracts/automation-loop-contract.md", "target": "system/contracts/v8.1/automation-loop-contract.md"},
+    {"source": "contracts/runtime/obsidian-pipeline-plan.md", "target": "system/contracts/v8.1/runtime/obsidian-pipeline-plan.md"},
+    {"source": "contracts/runtime/obsidian-pipeline-envelope.json", "target": "system/contracts/v8.1/runtime/obsidian-pipeline-envelope.json"},
+    {"source": "contracts/ipc/worker-receipt.schema.json", "target": "system/contracts/v8.1/ipc/worker-receipt.schema.json"},
+    {"source": "contracts/notes/source.schema.json", "target": "system/contracts/v8.1/notes/source.schema.json"},
+    {"source": "contracts/notes/concept.schema.json", "target": "system/contracts/v8.1/notes/concept.schema.json"},
+    {"source": "contracts/notes/entity.schema.json", "target": "system/contracts/v8.1/notes/entity.schema.json"},
+    {"source": "contracts/notes/output.schema.json", "target": "system/contracts/v8.1/notes/output.schema.json"},
+    {"source": "contracts/notes/map.schema.json", "target": "system/contracts/v8.1/notes/map.schema.json"},
+    {"source": "contracts/notes/system.schema.json", "target": "system/contracts/v8.1/notes/system.schema.json"},
+    {"source": "system/templates/template-source-v8.1.md", "target": "system/templates/template-source-v8.1.md"},
+    {"source": "system/templates/template-concept-gold-standard-v8.1.md", "target": "system/templates/template-concept-gold-standard-v8.1.md"},
+    {"source": "system/scripts/run-worker-flow-v8.1.ps1", "target": "system/scripts/run-worker-flow-v8.1.ps1"},
+    {"source": "docs/obsidian-v8.1-operator-guide.md", "target": "system/docs/v8.1/obsidian-v8.1-operator-guide.md"},
+    {"source": "docs/live-vault-v8.1-baseline-2026-08-16.md", "target": "system/docs/v8.1/live-vault-v8.1-baseline-2026-08-16.md"},
+    {"source": "docs/v8.1-current-model-obsidian-blueprint.md", "target": "system/docs/v8.1/current-model-obsidian-blueprint.md"},
+    {"source": "docs/v8.1-canary-safety-repair-2026-08-16.md", "target": "system/docs/v8.1/v8.1-canary-safety-repair-2026-08-16.md"}
+  ]
+}

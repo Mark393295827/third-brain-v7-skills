@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "third-brain-vault-v8.1",
+  "contract_version": "8.1.0",
+  "minimum_runtime_version": "8.1.0",
+  "path_contract": {
+    "clippings": "Clippings",
+    "clippings_archive": "Clippings/Archive",
+    "sources": "sources",
+    "concepts": "wiki/concepts",
+    "entities": "wiki/entities",
+    "outputs": "wiki/outputs",
+    "sops": "wiki/sops",
+    "maps": "maps",
+    "system": "system",
+    "runs": "system/runs",
+    "queues": "system/queues"
+  },
+  "taxonomy": {
+    "concept_domains": [
+      "ai-engineering",
+      "ai-economics",
+      "ai-science",
+      "behavioral-econ",
+      "business-strategy",
+      "entrepreneurship",
+      "general-concepts",
+      "geopolitics-energy",
+      "identity-culture",
+      "investing-macro",
+      "investing-quant",
+      "investing-vc",
+      "knowledge-systems"
+    ],
+    "entity_categories": [
+      "people",
+      "companies",
+      "funds-investors",
+      "products",
+      "orgs"
+    ],
+    "map_tiers": [
+      "domain-mocs",
+      "system-indexes",
+      "project-maps",
+      "canvases"
+    ]
+  },
+  "schemas": {
+    "source": "contracts/notes/source.schema.json",
+    "concept": "contracts/notes/concept.schema.json",
+    "entity": "contracts/notes/entity.schema.json",
+    "output": "contracts/notes/output.schema.json",
+    "map": "contracts/notes/map.schema.json",
+    "system": "contracts/notes/system.schema.json",
+    "worker_receipt": "contracts/ipc/worker-receipt.schema.json"
+  },
+  "templates": {
+    "source": {
+      "id": "source-v8.1",
+      "version": "8.1.0",
+      "path": "system/templates/template-source-v8.1.md",
+      "sha256": "ba6bf15d0f7f84519064e93a9d572f1f09a50665cb0a8e7abd9b30d4b69a8901"
+    },
+    "concept": {
+      "id": "concept-gold-standard",
+      "version": "8.1.0",
+      "path": "system/templates/template-concept-gold-standard-v8.1.md",
+      "sha256": "a5a9aa16cfc0dfc075c7b00ebe9bce0701bbd309f1641319f008b5e0a91214ad"
+    }
+  },
+  "freshness_policy": "contracts/freshness-policy.json",
+  "write_policy": {
+    "stage_before_commit": true,
+    "source_body_immutable": true,
+    "append_only_receipts": true,
+    "single_integration_owner": true,
+    "shared_target_compare_and_set": true,
+    "archive_after_post_commit_verification": true,
+    "semantic_merges_require_review": true,
+    "live_vault_requires_explicit_approval": true
+  },
+  "quality_policy": {
+    "touched_set_max_new_p0": 0,
+    "touched_set_max_new_p1": 0,
+    "whole_vault_regression_allowed": false,
+    "unresolved_template_tokens_allowed": false,
+    "fabricated_unknowns_allowed": false,
+    "generic_placeholder_success_allowed": false
+  }
+}

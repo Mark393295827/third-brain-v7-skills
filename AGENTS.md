@@ -1,8 +1,13 @@
-# Third Brain V7.2 Skills — Codex / Antigravity CLI
+# Third Brain V8.0 Skills — Codex / Antigravity CLI
 
 This repository contains Agent Skills for Codex CLI & Antigravity CLI environments. Place skills in `~/.agents/skills/` or `~/.gemini/skills/`.
 
-V7.2 updates the Obsidian Vault Taxonomy to a multi-domain architecture (13 concept domains, 5 entity categories, 6 source pools, 3 output types, and 4 maps tiers). Every skill uses a profile-aware execution contract and resolves target paths via `system/config.md`.
+V8.0 updates the Obsidian Vault to full OCD Gold-Standard standards, adding an explicit **5-Stage Worker Assembly Pipeline** (`workflows/worker-flows.md` and `tools/worker_flow_engine.py`):
+1. **Worker 1 (Ingest)**: Immutable source creation (`sources/YYYY-MM/`) + SHA-256 + block anchors `^...`.
+2. **Worker 2 (Cognitive)**: Gold-Standard concept cards with Mermaid, paradigm matrices, and evidence bounds.
+3. **Worker 3 (GraphWeaver)**: MOC navigation, Home.md / Central Index updates, and Canvas mapping.
+4. **Worker 4 (Governance)**: YAML validation, link & block ref verification, KPI updates, and test suites.
+5. **Worker 5 (Deliverable)**: Actionable outputs (`wiki/outputs/`), strategic memos, and daily OKR loop completion.
 
 ## Skills Summary (20 Skills)
 

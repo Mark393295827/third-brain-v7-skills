@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "workflow_id": "third-brain-obsidian-v8.1",
+  "contract_version": "8.1.0",
+  "plan": {
+    "source_path": "obsidian-pipeline-plan.md",
+    "source_sha256": "78723e05936c544b9aaed5c69aa7bbb2cb482eb332464c36aef015ba0ea142bc",
+    "compiler": "third-brain-runtime-envelope-v1"
+  },
+  "runtime": {
+    "tool_execution_owner": "host",
+    "allowed_tools": [
+      "vault.scan_queue",
+      "vault.read",
+      "vault.stage",
+      "vault.validate",
+      "vault.commit",
+      "vault.archive",
+      "vault.freshness_scan"
+    ],
+    "filesystem": {
+      "read": [
+        "."
+      ],
+      "write": [
+        "system/runs",
+        "system/queues",
+        "sources",
+        "wiki/concepts",
+        "wiki/entities",
+        "maps/domain-mocs",
+        "Clippings/Archive"
+      ]
+    },
+    "network_allowlist": [],
+    "secrets": {
+      "visible_to_model": false,
+      "handles": []
+    },
+    "output_policy": {
+      "allowed_types": [
+        "source",
+        "concept",
+        "entity",
+        "graph_delta",
+        "governance_receipt",
+        "no_op"
+      ],
+      "max_external_outputs": 0,
+      "no_op_condition": "A fresh queue and freshness eligibility query returns zero unprocessed items, output count is zero, and the side-effect verifier observes no content or archive mutation."
+    }
+  },
+  "termination_policy": {
+    "complete": [
+      "verified_complete",
+      "verified_no_op"
+    ],
+    "tool_request": [
+      "validated_tool_request"
+    ],
+    "checkpoint": [
+      "budget_checkpoint",
+      "context_checkpoint"
+    ],
+    "escalate": [
+      "needs_input",
+      "insufficient_evidence",
+      "blocked_permission",
+      "blocked_dependency",
+      "verify_failed",
+      "no_progress",
+      "error",
+      "unknown"
+    ]
+  },
+  "effects": {
+    "stage_writes": true,
+    "approval_required_for": [
+      "live_vault_commit",
+      "external",
+      "published",
+      "credentialed",
+      "destructive"
+    ],
+    "post_write_verifier": "Read final files, compare source and artifact hashes, resolve touched source/block links, validate frontmatter and freshness, compare graph preimages, and confirm archive state against the commit manifest.",
+    "rollback": "Restore derived targets from the run rollback manifest, leave immutable source evidence and append-only receipts intact, and keep or restore the clipping until a verified commit exists."
+  },
+  "budgets": {
+    "wall_time_seconds": 1800,
+    "tool_calls": 100,
+    "external_outputs": 0
+  },
+  "audit": {
+    "event_log": "system/runs/events.jsonl",
+    "state_path": "system/runs/current-state.json",
+    "receipt_path": "system/runs/latest-receipt.json"
+  }
+}

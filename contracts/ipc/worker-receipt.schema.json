@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "third-brain://contracts/ipc/worker-receipt-v8.1",
+  "title": "Third Brain V8.1 Typed Worker Receipt",
+  "type": "object",
+  "required": [
+    "task_id",
+    "run_id",
+    "state",
+    "context_manifest",
+    "artifact",
+    "artifact_hash",
+    "evidence",
+    "decision",
+    "unknowns",
+    "dependency",
+    "termination_reason",
+    "next_action"
+  ],
+  "properties": {
+    "task_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "state": {
+      "enum": [
+        "DISCOVERED",
+        "CLAIMED",
+        "STAGED",
+        "AUTHORED",
+        "GRAPH_PLANNED",
+        "VERIFIED",
+        "COMMITTED",
+        "ARCHIVED",
+        "NO_OP",
+        "NEEDS_INPUT",
+        "INSUFFICIENT_EVIDENCE",
+        "BLOCKED_DEPENDENCY",
+        "BLOCKED_PERMISSION",
+        "VERIFY_FAILED",
+        "NO_PROGRESS",
+        "BUDGET_STOP"
+      ]
+    },
+    "context_manifest": {"type": "object"},
+    "artifact": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "expected_preimage_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "artifact_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "evidence": {"type": "array", "items": {"type": "object"}},
+    "decision": {"type": "object"},
+    "unknowns": {"type": "array", "items": {"type": "string"}},
+    "dependency": {"type": "array", "items": {"type": "string"}},
+    "termination_reason": {"type": ["string", "null"]},
+    "next_action": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}
+

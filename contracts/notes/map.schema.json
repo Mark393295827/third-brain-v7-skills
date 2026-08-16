@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "third-brain://contracts/notes/map-v8.1",
+  "title": "Third Brain V8.1 Map Frontmatter",
+  "type": "object",
+  "required": ["title", "type", "contract_version", "map_tier", "status", "updated"],
+  "properties": {
+    "title": {"type": "string", "minLength": 1},
+    "type": {"enum": ["map", "moc"]},
+    "contract_version": {"const": "8.1.0"},
+    "map_tier": {"enum": ["domain-moc", "system-index", "project-map", "canvas"]},
+    "status": {"enum": ["active", "stale", "archived"]},
+    "updated": {"type": "string", "format": "date"},
+    "generated_from_receipts": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
+

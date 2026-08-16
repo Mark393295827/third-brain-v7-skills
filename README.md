@@ -53,6 +53,8 @@ Full guide: **[GUIDE.md](GUIDE.md)**
 
 中文进阶手册：**[V7 最大潜力使用手册](docs/v7-max-potential-guide-zh.md)**
 
+🔥 **[OCD V8.0 多智能体 Worker 流水线手册](docs/worker-flows-guide-zh.md)** & **[Worker Flows 规范](workflows/worker-flows.md)**：5 阶段流水线（Ingest $\rightarrow$ Cognitive $\rightarrow$ GraphWeaver $\rightarrow$ Governance $\rightarrow$ Deliverable）驱动高确定性产出。
+
 ---
 
 ## The Problem

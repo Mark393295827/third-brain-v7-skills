@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "third-brain://contracts/notes/system-v8.1",
+  "title": "Third Brain V8.1 Governed System Note Frontmatter",
+  "type": "object",
+  "required": ["title", "type", "contract_version", "status", "updated", "evidence_level"],
+  "properties": {
+    "title": {"type": "string", "minLength": 1},
+    "type": {"enum": ["system", "system-dashboard", "system-report", "system-index"]},
+    "contract_version": {"const": "8.1.0"},
+    "status": {"enum": ["active", "stale", "archived"]},
+    "updated": {"type": "string", "format": "date"},
+    "evidence_level": {"enum": ["local-scan", "verified-run", "curated-map"]},
+    "snapshot_key": {"type": "string"},
+    "generated_from_receipts": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
+
