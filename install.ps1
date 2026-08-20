@@ -9,7 +9,9 @@ param(
         "gemini",
         "cursor",
         "windsurf",
-        "all"
+        "all",
+        "bundle",
+        "agentic-os"
     )]
     [string]$Target = "auto"
 )
@@ -21,6 +23,8 @@ $RepoRoot = $PSScriptRoot
 $SkillsDir = Join-Path $RepoRoot "skills"
 $AdaptersDir = Join-Path $RepoRoot "adapters"
 $ConfigFile = Join-Path $RepoRoot "system\config.md"
+$InstallHelper = Join-Path $RepoRoot "tools\install_skills.py"
+$PackageHelper = Join-Path $RepoRoot "tools\package_agentic_os.py"
 $InstallHome = if ($env:THIRD_BRAIN_HOME) {
     [System.IO.Path]::GetFullPath($env:THIRD_BRAIN_HOME)
 }
@@ -39,25 +43,13 @@ function Copy-Skills {
         [string]$Destination
     )
 
-    New-Item -ItemType Directory -Force -Path $Destination | Out-Null
-    foreach ($skill in Get-ChildItem -LiteralPath $SkillsDir -Directory -Force) {
-        $skillDestination = Join-Path $Destination $skill.Name
-        New-Item -ItemType Directory -Force -Path $skillDestination | Out-Null
-
-        foreach (
-            $file in Get-ChildItem -LiteralPath $skill.FullName -File -Recurse -Force |
-                Where-Object {
-                    $_.Extension -notin ".pyc", ".pyo" -and
-                    $_.FullName -notmatch "(?i)(^|[\\/])__pycache__([\\/]|$)"
-                }
-        ) {
-            $relative = $file.FullName.Substring($skill.FullName.Length)
-            $relative = $relative.TrimStart([char[]]@("\", "/"))
-            $targetFile = Join-Path $skillDestination $relative
-            $targetParent = Split-Path -Parent $targetFile
-            New-Item -ItemType Directory -Force -Path $targetParent | Out-Null
-            Copy-Item -LiteralPath $file.FullName -Destination $targetFile -Force
-        }
+    $Python = Get-Command python -ErrorAction SilentlyContinue
+    if (-not $Python) {
+        throw "Python 3 is required for manifest-driven installation."
+    }
+    & $Python.Source $InstallHelper --source $SkillsDir --destination $Destination
+    if ($LASTEXITCODE -ne 0) {
+        throw "Skill installation or hash verification failed for $Destination"
     }
 }
 
@@ -76,11 +68,11 @@ function Copy-Adapter {
 
 $Harness = $Target
 if ($Harness -eq "auto") {
-    if ($env:CLAUDE_CODE -or (Test-Path -LiteralPath (Join-Path $InstallHome ".claude"))) {
-        $Harness = "claude-code"
-    }
-    elseif (Get-Command codex -ErrorAction SilentlyContinue) {
+    if ((Get-Command codex -ErrorAction SilentlyContinue) -or (Test-Path -LiteralPath (Join-Path $InstallHome ".agents"))) {
         $Harness = "codex"
+    }
+    elseif ($env:CLAUDE_CODE -or (Test-Path -LiteralPath (Join-Path $InstallHome ".claude"))) {
+        $Harness = "claude-code"
     }
     elseif (Get-Command gemini -ErrorAction SilentlyContinue) {
         $Harness = "gemini"
@@ -90,9 +82,25 @@ if ($Harness -eq "auto") {
     }
 }
 
-Write-Host "=== Third Brain V7.1 Skills Installer ==="
+Write-Host "=== Third Brain V8.1 Skills Installer ==="
 
 switch ($Harness) {
+    { $_ -in "bundle", "agentic-os" } {
+        if (-not (Test-Path -LiteralPath $PackageHelper -PathType Leaf)) {
+            throw "Agentic OS package helper is missing: $PackageHelper"
+        }
+        $BundleDir = if ($env:THIRD_BRAIN_BUNDLE_DIR) { [System.IO.Path]::GetFullPath($env:THIRD_BRAIN_BUNDLE_DIR) } else { Join-Path $InstallHome ".third-brain\bundles" }
+        New-Item -ItemType Directory -Force -Path $BundleDir | Out-Null
+        $Output = Join-Path $BundleDir "third-brain-agentic-os-v8.1.zip"
+        $Python = Get-Command python -ErrorAction SilentlyContinue
+        if (-not $Python) { throw "Python 3 is required for Agentic OS bundle packaging." }
+        & $Python.Source $PackageHelper --output $Output
+        if ($LASTEXITCODE -ne 0) { throw "Agentic OS bundle packaging failed." }
+        & $Python.Source $PackageHelper --verify $Output
+        if ($LASTEXITCODE -ne 0) { throw "Agentic OS bundle verification failed." }
+        Write-Host "[OK] Created Codex Agentic OS bundle: $Output"
+        return
+    }
     { $_ -in "claude", "claude-code" } {
         $Destination = if ($env:CLAUDE_SKILLS_DIR) {
             $env:CLAUDE_SKILLS_DIR

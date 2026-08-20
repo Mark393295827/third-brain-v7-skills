@@ -9,6 +9,7 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from .contracts import ContractBundle
 from .frontmatter import first_heading, parse_markdown
 from .state import RunStore
+from .template_render import render_host_template
 from .utils import atomic_write_text, resolve_within, sha256_bytes, slugify
 
 
@@ -106,17 +107,6 @@ def _evidence_chunks(document_text: str) -> list[str]:
         seen.add(fingerprint)
         deduped.append(candidate)
     return deduped[:7]
-
-
-def _render_template(template: str, values: dict[str, str]) -> str:
-    required = set(re.findall(r"\{\{([^{}]+)\}\}", template))
-    missing = sorted(required - set(values))
-    if missing:
-        raise ValueError(f"unresolved source template fields: {', '.join(missing)}")
-    rendered = template
-    for key, value in values.items():
-        rendered = rendered.replace("{{" + key + "}}", value)
-    return rendered
 
 
 def find_source_history(vault_root: Path, candidate: SourceCandidate) -> tuple[Path | None, tuple[Path, ...]]:
@@ -225,7 +215,7 @@ def stage_source(
         encoding="utf-8"
     )
     captured_at = now.replace(microsecond=0).isoformat().replace("+00:00", "Z")
-    rendered = _render_template(
+    rendered = render_host_template(
         template,
         {
             "source_title": metadata["title"],
@@ -235,9 +225,7 @@ def stage_source(
             "source_type": source_type,
             "source_url": metadata["source_url"],
             "source_identity": identity,
-            "prior_snapshots": "["
-            + ", ".join(f'"{path.relative_to(vault_root).as_posix()}"' for path in prior_snapshots)
-            + "]",
+            "prior_snapshots": [path.relative_to(vault_root).as_posix() for path in prior_snapshots],
             "input_class": input_class,
             "evidence_level": evidence_level,
             "trust_level": trust_level,
@@ -251,6 +239,7 @@ def stage_source(
             "evidence_blocks": evidence_blocks,
             "raw_content": raw_text,
         },
+        contracts.placeholder_registry["templates"]["source"],
     )
     staged = resolve_within(store.run_dir / "staging", canonical_relative)
     atomic_write_text(staged, rendered)

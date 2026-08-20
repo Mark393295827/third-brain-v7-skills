@@ -2,8 +2,8 @@
 name: agentic-engineering
 description: Use when designing or refactoring a model-native engineering workflow with bounded autonomy, probes, custom evaluation, durable state, and verified write-back.
 metadata:
-  version: "7.2.1"
-  updated: "2026-08-09"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "high-risk"
   assumes: "The repository, objective, acceptance criteria, and execution permissions can be inspected."
   conflicts_with: "Agent complexity without adoption value, coding before probing material unknowns, or completion claims without fresh tests."

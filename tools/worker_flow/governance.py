@@ -54,15 +54,14 @@ CONCEPT_REQUIRED = {
     "source_ids",
     "run_id",
 }
-CONCEPT_SECTIONS = (
-    "## 证据范围 (Evidence Scope)",
-    "## 核心机制 (Core Mechanisms)",
-    "## 概念机制图 (Concept Mechanism)",
-    "## 范式对比矩阵 (Paradigm Matrix)",
-    "## 关键数据与实证 (Key Data)",
-    "## 应用与工程含义 (Implications & SOP)",
-    "## 关联 (Connections)",
-    "## 演化时间线 (Evolution Timeline)",
+CONCEPT_SECTION_GROUPS = (
+    ("## 证据范围 (Evidence Scope)",),
+    ("## 核心机制与认知拓扑 (Core Mechanisms & Viking Mindmap)", "## 核心机制 (Core Mechanisms)"),
+    ("## 范式对比矩阵 (Paradigm Matrix)",),
+    ("## 关键数据与实证 (Key Data)",),
+    ("## 落地与实践指南 (SOP)", "## 应用与工程含义 (Implications & SOP)"),
+    ("## 概念网络连接 (Connections)", "## 关联 (Connections)"),
+    ("## 演化时间线 (Evolution Timeline)",),
 )
 ANCHOR_RE = re.compile(r"(?m)(?:^|\s)\^([A-Za-z0-9][A-Za-z0-9_-]{0,127})\s*$")
 WIKILINK_RE = re.compile(r"\[\[([^\]|#]+)(?:#\^([^\]|]+))?(?:\|[^\]]+)?\]\]")
@@ -167,14 +166,23 @@ def validate_concept(
     source_ids = frontmatter.get("source_ids") if isinstance(frontmatter.get("source_ids"), list) else []
     if source_id not in source_ids:
         findings.append(Finding("concept.source-id", "P0", f"source_ids does not contain {source_id}", path_label))
-    for section in CONCEPT_SECTIONS:
-        if section not in concept_text:
-            findings.append(Finding("concept.section.missing", "P1", f"missing section: {section}", path_label))
+    for alternatives in CONCEPT_SECTION_GROUPS:
+        if not any(section in concept_text for section in alternatives):
+            findings.append(
+                Finding(
+                    "concept.section.missing",
+                    "P1",
+                    f"missing section: {' or '.join(alternatives)}",
+                    path_label,
+                )
+            )
     if "```mermaid" not in concept_text:
         findings.append(Finding("concept.mermaid.missing", "P1", "missing Mermaid mechanism diagram", path_label))
     if PLACEHOLDER_RE.search(concept_text) or "Pending Manual Review" in concept_text:
         findings.append(Finding("concept.placeholder", "P0", "unresolved placeholder or pending-review success marker", path_label))
-    if "Evidence boundary:" not in concept_text or "Falsifier / counterpoint:" not in concept_text:
+    has_boundary = bool(re.search(r"Evidence boundary|证据边界", concept_text, re.IGNORECASE))
+    has_falsifier = bool(re.search(r"Falsifier|counterpoint|反证条件", concept_text, re.IGNORECASE))
+    if not has_boundary or not has_falsifier:
         findings.append(Finding("concept.understanding", "P1", "missing evidence boundary or falsifier", path_label))
 
     source_target = source_relative_path[:-3] if source_relative_path.endswith(".md") else source_relative_path
@@ -182,16 +190,16 @@ def validate_concept(
     source_links = 0
     resolved_source_anchors: set[str] = set()
     unique_targets: set[str] = set()
-    exact_targets: set[str] = set()
-    target_stem_counts: dict[str, int] = {}
+    exact_targets: dict[str, Path] = {}
+    target_stem_paths: dict[str, list[Path]] = {}
     if vault_root is not None:
         for candidate in vault_root.rglob("*.md"):
             try:
                 relative = candidate.relative_to(vault_root).as_posix()
             except ValueError:
                 continue
-            exact_targets.add(relative[:-3])
-            target_stem_counts[candidate.stem] = target_stem_counts.get(candidate.stem, 0) + 1
+            exact_targets[relative[:-3]] = candidate
+            target_stem_paths.setdefault(candidate.stem, []).append(candidate)
     for target, anchor in WIKILINK_RE.findall(concept_text):
         normalized_target = target.replace("\\", "/").strip()
         unique_targets.add(normalized_target)
@@ -205,8 +213,25 @@ def validate_concept(
                 resolved_source_anchors.add(anchor)
         elif vault_root is not None:
             without_extension = normalized_target[:-3] if normalized_target.endswith(".md") else normalized_target
-            stem_count = target_stem_counts.get(Path(without_extension).name, 0)
-            if without_extension in exact_targets or without_extension == path_label.removesuffix(".md"):
+            stem_paths = target_stem_paths.get(Path(without_extension).name, [])
+            stem_count = len(stem_paths)
+            if without_extension == path_label.removesuffix(".md"):
+                continue
+            resolved_target = exact_targets.get(without_extension)
+            if resolved_target is None and stem_count == 1:
+                resolved_target = stem_paths[0]
+            if resolved_target is not None:
+                if anchor:
+                    linked_text = resolved_target.read_text(encoding="utf-8", errors="replace")
+                    if anchor not in set(ANCHOR_RE.findall(linked_text)):
+                        findings.append(
+                            Finding(
+                                "concept.anchor.broken",
+                                "P0",
+                                f"linked-note anchor does not resolve: {normalized_target}#^{anchor}",
+                                path_label,
+                            )
+                        )
                 continue
             if stem_count > 1:
                 findings.append(

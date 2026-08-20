@@ -11,6 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INSTALLER = ROOT / "install.sh"
+INSTALL_HELPER = ROOT / "tools" / "install_skills.py"
 
 
 class InstallScriptTest(unittest.TestCase):
@@ -24,6 +25,9 @@ class InstallScriptTest(unittest.TestCase):
         (self.home / ".claude").mkdir()
 
         shutil.copy2(INSTALLER, self.fixture_root / "install.sh")
+        fixture_tools = self.fixture_root / "tools"
+        fixture_tools.mkdir()
+        shutil.copy2(INSTALL_HELPER, fixture_tools / "install_skills.py")
         skill = self.fixture_root / "skills" / "sample-skill"
         (skill / "scripts" / "__pycache__").mkdir(parents=True)
         (skill / "SKILL.md").write_text(
@@ -81,6 +85,7 @@ class InstallScriptTest(unittest.TestCase):
         self.assertFalse(any(skill.rglob("__pycache__")))
         self.assertEqual(list(skill.rglob("*.pyc")), [])
         self.assertEqual(list(skill.rglob("*.pyo")), [])
+        self.assertTrue((target / ".third-brain-v8.1-manifest.json").is_file())
 
     def test_codex_install_filters_python_cache_artifacts(self) -> None:
         result = self.run_installer("codex")
@@ -92,7 +97,7 @@ class InstallScriptTest(unittest.TestCase):
         result = self.run_installer("auto")
         msg = (result.stdout or "") + (result.stderr or "")
         self.assertEqual(result.returncode, 0, msg)
-        self.assert_filtered_skill(self.home / ".claude" / "skills")
+        self.assert_filtered_skill(self.home / ".agents" / "skills")
 
     def test_all_preserves_targets_and_filters_python_cache_artifacts(self) -> None:
         result = self.run_installer("all")

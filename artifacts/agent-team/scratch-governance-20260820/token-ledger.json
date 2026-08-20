@@ -1,0 +1,18 @@
+{
+  "mission_id": "scratch-governance-20260820",
+  "status": "COMPLETE",
+  "runtime_agent_limit": 4,
+  "etc_budget_total": 10000,
+  "target_tclr": 2.5,
+  "circuit_breaker_ratio": 1.5,
+  "max_attempts_per_task": 2,
+  "actual_etc": null,
+  "actual_etc_note": "Host agent token telemetry is unavailable; task and retry envelopes were enforced, so no TCLR value is claimed.",
+  "allocations": [
+    {"task_id": "T01", "owner": "sol-planner", "model_class": "sol", "etc_budget": 2500},
+    {"task_id": "T02", "owner": "inventory-evaluator", "model_class": "economical", "etc_budget": 1500},
+    {"task_id": "T03", "owner": "scratch-executor", "model_class": "economical", "etc_budget": 2500},
+    {"task_id": "T04", "owner": "inventory-evaluator", "model_class": "economical", "etc_budget": 1500},
+    {"task_id": "T05", "owner": "/root", "model_class": "commander", "etc_budget": 2000}
+  ]
+}

@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from .frontmatter import parse_markdown
-from .governance import CONCEPT_REQUIRED, CONCEPT_SECTIONS, SOURCE_REQUIRED
+from .governance import CONCEPT_REQUIRED, CONCEPT_SECTION_GROUPS, SOURCE_REQUIRED
 from .utils import iso_z, normalized_text_sha256, sha256_file
 
 
@@ -130,7 +130,11 @@ def build_inventory(
 
             if layer == "wiki" and relative.startswith("wiki/concepts/"):
                 missing_fields = sorted(field for field in CONCEPT_REQUIRED if field not in document.frontmatter)
-                missing_sections = [section for section in CONCEPT_SECTIONS if section not in text]
+                missing_sections = [
+                    " or ".join(alternatives)
+                    for alternatives in CONCEPT_SECTION_GROUPS
+                    if not any(section in text for section in alternatives)
+                ]
                 source_links = SOURCE_LINK_RE.findall(text)
                 anchored = [f"{target}#^{anchor}" for target, anchor in source_links if anchor]
                 if anchored and not missing_sections:

@@ -2,8 +2,8 @@
 name: creativity-engine
 description: Use when a defined problem needs diverse ideas, cross-domain combinations, and cheap experiments instead of a single untested answer.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "one-shot"
   assumes: "A problem, target user, and at least one meaningful constraint can be stated."
   conflicts_with: "Unbounded brainstorming, novelty without utility, or treating generated ideas as validated opportunities."

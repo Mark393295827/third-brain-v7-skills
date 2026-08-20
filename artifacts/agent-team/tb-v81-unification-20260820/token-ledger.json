@@ -1,0 +1,21 @@
+{
+  "mission_id": "tb-v81-unification-20260820",
+  "status": "APPROVED",
+  "etc_formula": "0.1*T_cache + 1.0*T_uncached_input + 3.0*T_output",
+  "total_etc_ceiling": 72000,
+  "target_tclr": 2.5,
+  "max_attempts_per_failure_signature": 2,
+  "runtime_note": "The host does not expose exact per-agent token telemetry; budgets are enforced through bounded prompts, outputs, attempts, and role admission.",
+  "roles": [
+    {"role": "commander-integration-owner", "budget_etc": 10000, "owner": "/root"},
+    {"role": "repository-architecture-auditor", "budget_etc": 7000, "owner": "wave-1"},
+    {"role": "contract-schema-auditor", "budget_etc": 7000, "owner": "wave-1"},
+    {"role": "runtime-engineer", "budget_etc": 9000, "owner": "wave-1"},
+    {"role": "skill-auditor", "budget_etc": 9000, "owner": "wave-2"},
+    {"role": "vault-governance-auditor", "budget_etc": 8000, "owner": "wave-2"},
+    {"role": "docs-installer-adapter-auditor", "budget_etc": 6000, "owner": "wave-2"},
+    {"role": "test-ci-engineer", "budget_etc": 7000, "owner": "wave-3"},
+    {"role": "adversarial-critic", "budget_etc": 5000, "owner": "wave-3"},
+    {"role": "release-gatekeeper", "budget_etc": 4000, "owner": "wave-3"}
+  ]
+}

@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1350" viewBox="0 0 2400 1350" role="img" aria-labelledby="title desc">
+  <title id="title">第三大脑 V8.1 实际运行架构</title>
+  <desc id="desc">基于当前仓库、Codex 安装状态、事务型 Worker Runtime 与现场 Obsidian Vault 审计结果绘制的 as-is 架构图。图区分已实现路径、宿主辅助能力、可选或仅契约化能力，以及现场漂移和知识债务。</desc>
+  <metadata>
+    Snapshot date: 2026-08-20 Asia/Shanghai.
+    Machine authority: contracts/vault-contract.json and contracts/system-bundle.json.
+    Canonical runtime: python -m tools.worker_flow.cli.
+    The SVG is the deterministic source; the PNG is a rendered derivative.
+  </metadata>
+  <defs>
+    <linearGradient id="pageBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbfdff"/>
+      <stop offset="1" stop-color="#eef4f8"/>
+    </linearGradient>
+    <linearGradient id="titleBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0b4f86"/>
+      <stop offset="0.52" stop-color="#27568e"/>
+      <stop offset="1" stop-color="#674891"/>
+    </linearGradient>
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#17324d" flood-opacity="0.13"/>
+    </filter>
+    <filter id="softShadow" x="-12%" y="-12%" width="124%" height="135%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#17324d" flood-opacity="0.10"/>
+    </filter>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1767a6"/>
+    </marker>
+    <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#187d80"/>
+    </marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6750a4"/>
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c87918"/>
+    </marker>
+    <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c8b98"/>
+    </marker>
+    <style>
+      text { font-family: "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", Arial, sans-serif; fill: #17324d; }
+      .title { font-size: 42px; font-weight: 800; letter-spacing: 1px; }
+      .subtitle { font-size: 22px; font-weight: 650; fill: #34566f; }
+      .strap { font-size: 16px; fill: #5d7487; }
+      .section { font-size: 20px; font-weight: 800; fill: #ffffff; }
+      .cardTitle { font-size: 19px; font-weight: 800; }
+      .body { font-size: 15px; }
+      .bodyBold { font-size: 15px; font-weight: 750; }
+      .small { font-size: 13px; fill: #536d81; }
+      .tiny { font-size: 11.5px; fill: #667d90; }
+      .metric { font-size: 25px; font-weight: 850; }
+      .white { fill: #ffffff; }
+      .blue { fill: #1767a6; }
+      .navy { fill: #0f4f88; }
+      .teal { fill: #187d80; }
+      .purple { fill: #6750a4; }
+      .green { fill: #2e7d50; }
+      .amber { fill: #c87918; }
+      .red { fill: #b33e45; }
+      .gray { fill: #6d7e8d; }
+      .panel { fill: #ffffff; stroke: #92aabc; stroke-width: 1.5; }
+      .implemented { fill: #ffffff; stroke: #1767a6; stroke-width: 1.7; }
+      .host { fill: #f4f1fb; stroke: #7c68ad; stroke-width: 1.6; stroke-dasharray: 8 6; }
+      .optional { fill: #fff8ea; stroke: #c87918; stroke-width: 1.6; stroke-dasharray: 8 6; }
+      .contracted { fill: #f4f6f7; stroke: #8a98a4; stroke-width: 1.5; stroke-dasharray: 4 5; }
+      .danger { fill: #fff1f2; stroke: #bd5960; stroke-width: 1.4; }
+    </style>
+  </defs>
+
+  <rect width="2400" height="1350" fill="url(#pageBg)"/>
+  <rect x="0" y="0" width="2400" height="12" fill="url(#titleBar)"/>
+
+  <!-- Header -->
+  <text x="1200" y="58" text-anchor="middle" class="title">第三大脑 V8.1 实际运行架构（As-Is）</text>
+  <text x="1200" y="94" text-anchor="middle" class="subtitle">Codex Host Plane × Repository Control Plane × Transactional Runtime × Live Obsidian Vault</text>
+  <text x="1200" y="121" text-anchor="middle" class="strap">实线＝已实现并测试 · 虚线＝宿主辅助或可选 · 灰色＝仅契约化/未物化 · 红色＝漂移、债务或缺少运行证据</text>
+
+  <!-- Current truth snapshot -->
+  <g id="truth-snapshot">
+    <rect x="30" y="142" width="2340" height="183" rx="16" class="panel"/>
+    <rect x="30" y="142" width="2340" height="38" rx="14" fill="#0f4f88"/>
+    <rect x="30" y="166" width="2340" height="14" fill="#0f4f88"/>
+    <text x="50" y="169" class="section">一、当前事实快照 / Current Truth Snapshot · 2026-08-20</text>
+
+    <g filter="url(#softShadow)">
+      <rect x="54" y="195" width="548" height="108" rx="12" fill="#f3f0fb" stroke="#a89acf"/>
+      <circle cx="88" cy="229" r="20" fill="#6750a4"/>
+      <text x="88" y="236" text-anchor="middle" class="white" font-size="18" font-weight="800">H</text>
+      <text x="120" y="224" class="cardTitle purple">Codex Host Plane</text>
+      <text x="120" y="249" class="body">21 个技能已安装；<tspan class="green" font-weight="800">21/21 与仓库一致</tspan></text>
+      <text x="78" y="276" class="small">0 个漂移；Codex .agents manifest 已验证</text>
+    </g>
+
+    <g filter="url(#softShadow)">
+      <rect x="622" y="195" width="548" height="108" rx="12" fill="#eef5fb" stroke="#8db0ca"/>
+      <circle cx="656" cy="229" r="20" fill="#1767a6"/>
+      <text x="656" y="236" text-anchor="middle" class="white" font-size="18" font-weight="800">R</text>
+      <text x="688" y="224" class="cardTitle blue">Repository Control Plane</text>
+      <text x="688" y="249" class="body">21 个技能源 + V8.1 合同 / Schema / Template</text>
+      <text x="646" y="276" class="small">验证基线：21 lint · 97 tools · 65 canonical · 22 graph</text>
+    </g>
+
+    <g filter="url(#softShadow)">
+      <rect x="1190" y="195" width="548" height="108" rx="12" fill="#edf8f5" stroke="#79b0a5"/>
+      <circle cx="1224" cy="229" r="20" fill="#187d80"/>
+      <text x="1224" y="236" text-anchor="middle" class="white" font-size="18" font-weight="800">W</text>
+      <text x="1256" y="224" class="cardTitle teal">Transactional Worker Runtime</text>
+      <text x="1256" y="249" class="body">W1–W4 已实现；显式审批 + 串行 CAS 提交</text>
+      <text x="1214" y="276" class="small">W5 为评审式支持；MCP / Agent Teams 未自动接入 CLI</text>
+    </g>
+
+    <g filter="url(#softShadow)">
+      <rect x="1758" y="195" width="588" height="108" rx="12" fill="#fff8ea" stroke="#ddb66f"/>
+      <circle cx="1792" cy="229" r="20" fill="#c87918"/>
+      <text x="1792" y="236" text-anchor="middle" class="white" font-size="18" font-weight="800">V</text>
+      <text x="1824" y="224" class="cardTitle amber">Live Obsidian Vault</text>
+      <text x="1824" y="249" class="body"><tspan class="green" font-weight="800">System bundle 40/40 aligned</tspan></text>
+      <text x="1782" y="276" class="small">5 bundles · ingest ARCHIVED · 2 retrofit COMMITTED</text>
+    </g>
+  </g>
+
+  <!-- Operational architecture -->
+  <g id="operational-architecture">
+    <rect x="30" y="344" width="2340" height="663" rx="16" class="panel"/>
+    <rect x="30" y="344" width="2340" height="40" rx="14" fill="#0f4f88"/>
+    <rect x="30" y="370" width="2340" height="14" fill="#0f4f88"/>
+    <text x="50" y="372" class="section">二、实际控制与数据路径 / Actual Control &amp; Data Path</text>
+
+    <!-- Host and repository planes -->
+    <rect x="52" y="399" width="1442" height="148" rx="13" fill="#faf8fd" stroke="#806eae" stroke-width="1.5" stroke-dasharray="8 6"/>
+    <text x="72" y="424" class="cardTitle purple">CODEX HOST PLANE <tspan class="small">— 辅助认知与编排，不属于 canonical CLI 内核</tspan></text>
+
+    <rect x="72" y="440" width="310" height="86" rx="10" fill="#ffffff" stroke="#b0a3d1"/>
+    <text x="227" y="465" text-anchor="middle" class="bodyBold purple">Human Intent + Approval</text>
+    <text x="227" y="490" text-anchor="middle" class="small">目标 · 范围 · 风险边界 · 最终裁决</text>
+    <text x="227" y="512" text-anchor="middle" class="tiny">授权决定能否进入真实 Vault</text>
+
+    <rect x="397" y="440" width="310" height="86" rx="10" fill="#ffffff" stroke="#b0a3d1"/>
+    <text x="552" y="465" text-anchor="middle" class="bodyBold purple">Model + Context</text>
+    <text x="552" y="490" text-anchor="middle" class="small">理解 · 推理 · 语义写作 · 审阅</text>
+    <text x="552" y="512" text-anchor="middle" class="tiny">上下文/Token 预算尚未由 runtime 强制</text>
+
+    <rect x="722" y="440" width="355" height="86" rx="10" fill="#ffffff" stroke="#b0a3d1"/>
+    <text x="899" y="465" text-anchor="middle" class="bodyBold purple">Installed Skills</text>
+    <text x="899" y="490" text-anchor="middle" class="small">程序化操作策略 · 失败协议 · 输出合同</text>
+    <rect x="823" y="501" width="152" height="18" rx="9" fill="#e3f1e7"/>
+    <text x="899" y="514" text-anchor="middle" class="tiny green">21 aligned / 0 drift</text>
+
+    <rect x="1092" y="440" width="380" height="86" rx="10" fill="#ffffff" stroke="#b0a3d1"/>
+    <text x="1282" y="465" text-anchor="middle" class="bodyBold purple">MCP / Apps + Agent Teams / DAG</text>
+    <text x="1282" y="490" text-anchor="middle" class="small">外部获取、并行研究、批判与辅助执行</text>
+    <text x="1282" y="512" text-anchor="middle" class="tiny">host-assisted · not auto-wired into worker CLI</text>
+
+    <rect x="1514" y="399" width="834" height="148" rx="13" fill="#f2f7fb" stroke="#4d82aa" stroke-width="1.5"/>
+    <text x="1534" y="424" class="cardTitle blue">REPOSITORY CONTROL PLANE <tspan class="small">— 机器权威与可复现验证</tspan></text>
+    <rect x="1534" y="440" width="380" height="86" rx="10" fill="#ffffff" stroke="#86abc5"/>
+    <text x="1724" y="465" text-anchor="middle" class="bodyBold blue">Source of Truth</text>
+    <text x="1724" y="490" text-anchor="middle" class="small">21 skills · contracts · schemas · templates</text>
+    <text x="1724" y="512" text-anchor="middle" class="tiny">vault-contract.json + system-bundle.json</text>
+    <rect x="1929" y="440" width="399" height="86" rx="10" fill="#ffffff" stroke="#86abc5"/>
+    <text x="2128" y="465" text-anchor="middle" class="bodyBold blue">Deterministic Runtime &amp; Tests</text>
+    <text x="2128" y="490" text-anchor="middle" class="small">tools/worker_flow · transactional writes · receipts</text>
+    <text x="2128" y="512" text-anchor="middle" class="tiny">strict envelope: 7 tools · max external outputs 0</text>
+
+    <!-- Host handoff -->
+    <path d="M773 548 L773 568 L455 568 L455 593" fill="none" stroke="#6750a4" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arrowPurple)"/>
+    <text x="610" y="562" text-anchor="middle" class="tiny purple">scoped handoff / preprocessing</text>
+    <path d="M1931 548 L1931 566 L1060 566 L1060 593" fill="none" stroke="#1767a6" stroke-width="3" marker-end="url(#arrowBlue)"/>
+    <text x="1515" y="560" text-anchor="middle" class="tiny blue">python -m tools.worker_flow.cli --vault … --repo …</text>
+
+    <!-- Runtime chain -->
+    <g filter="url(#softShadow)">
+      <rect x="52" y="594" width="265" height="252" rx="13" fill="#f5f8fa" stroke="#8197a8"/>
+      <rect x="52" y="594" width="265" height="38" rx="12" fill="#687f91"/>
+      <rect x="52" y="620" width="265" height="12" fill="#687f91"/>
+      <text x="184" y="620" text-anchor="middle" class="white" font-size="17" font-weight="800">INPUT BOUNDARY</text>
+      <text x="75" y="660" class="bodyBold">原生可接收</text>
+      <text x="75" y="684" class="small">• Clippings/*.md</text>
+      <text x="75" y="706" class="small">• repository Markdown (--input)</text>
+      <line x1="75" y1="720" x2="292" y2="720" stroke="#c9d3da"/>
+      <text x="75" y="744" class="bodyBold gray">需 Host 预处理</text>
+      <text x="75" y="768" class="small">PDF / Audio / Video / Web</text>
+      <text x="75" y="790" class="tiny">当前 CLI 无原生解析器</text>
+      <rect x="75" y="806" width="217" height="24" rx="8" fill="#eef1f3"/>
+      <text x="184" y="823" text-anchor="middle" class="tiny gray">输入不是已验证事实</text>
+    </g>
+
+    <line x1="319" y1="718" x2="343" y2="718" stroke="#1767a6" stroke-width="4" marker-end="url(#arrowBlue)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="350" y="594" width="240" height="252" rx="13" class="implemented"/>
+      <rect x="350" y="594" width="240" height="42" rx="12" fill="#1767a6"/>
+      <rect x="350" y="624" width="240" height="12" fill="#1767a6"/>
+      <text x="470" y="621" text-anchor="middle" class="white" font-size="18" font-weight="800">W1 · INGEST</text>
+      <text x="370" y="663" class="bodyBold blue">Immutable Source</text>
+      <text x="370" y="692" class="small">UTF-8 bytes + SHA-256</text>
+      <text x="370" y="716" class="small">provenance + block anchors</text>
+      <text x="370" y="740" class="small">stage before commit</text>
+      <rect x="370" y="766" width="200" height="35" rx="8" fill="#e8f2f9"/>
+      <text x="470" y="789" text-anchor="middle" class="bodyBold blue">sources/YYYY-MM/</text>
+      <text x="470" y="826" text-anchor="middle" class="tiny">完整来源正文不可变</text>
+    </g>
+
+    <line x1="592" y1="718" x2="616" y2="718" stroke="#6750a4" stroke-width="4" marker-end="url(#arrowPurple)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="623" y="594" width="240" height="252" rx="13" fill="#f4f1fb" stroke="#7560a8" stroke-width="1.7"/>
+      <rect x="623" y="594" width="240" height="42" rx="12" fill="#6750a4"/>
+      <rect x="623" y="624" width="240" height="12" fill="#6750a4"/>
+      <text x="743" y="621" text-anchor="middle" class="white" font-size="18" font-weight="800">W2 · COGNITIVE</text>
+      <text x="643" y="663" class="bodyBold purple">Concept Scaffold</text>
+      <text x="643" y="692" class="small">host tokens 自动填充</text>
+      <text x="643" y="716" class="small">semantic.* 必须人工/模型解决</text>
+      <text x="643" y="740" class="small">Mermaid · matrix · evidence bound</text>
+      <rect x="643" y="766" width="200" height="35" rx="8" fill="#e9e3f7"/>
+      <text x="743" y="789" text-anchor="middle" class="bodyBold purple">wiki/concepts/13 domains</text>
+      <text x="743" y="826" text-anchor="middle" class="tiny">runtime 不自动生成语义结论</text>
+    </g>
+
+    <line x1="865" y1="718" x2="889" y2="718" stroke="#187d80" stroke-width="4" marker-end="url(#arrowTeal)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="896" y="594" width="240" height="252" rx="13" fill="#edf8f5" stroke="#187d80" stroke-width="1.7"/>
+      <rect x="896" y="594" width="240" height="42" rx="12" fill="#187d80"/>
+      <rect x="896" y="624" width="240" height="12" fill="#187d80"/>
+      <text x="1016" y="621" text-anchor="middle" class="white" font-size="18" font-weight="800">W3 · GRAPHWEAVER</text>
+      <text x="916" y="663" class="bodyBold teal">Programmatic Map Delta</text>
+      <text x="916" y="692" class="small">typed graph plan</text>
+      <text x="916" y="716" class="small">render Markdown map target</text>
+      <text x="916" y="740" class="small">preimage-aware staging</text>
+      <rect x="916" y="766" width="200" height="35" rx="8" fill="#dff1ec"/>
+      <text x="1016" y="789" text-anchor="middle" class="bodyBold teal">maps/ 4 tiers</text>
+      <text x="1016" y="826" text-anchor="middle" class="tiny">Canvas 为契约层级，不自动绘制</text>
+    </g>
+
+    <line x1="1138" y1="718" x2="1162" y2="718" stroke="#2e7d50" stroke-width="4" marker-end="url(#arrowTeal)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="1169" y="594" width="240" height="252" rx="13" fill="#f0f8f1" stroke="#2e7d50" stroke-width="1.7"/>
+      <rect x="1169" y="594" width="240" height="42" rx="12" fill="#2e7d50"/>
+      <rect x="1169" y="624" width="240" height="12" fill="#2e7d50"/>
+      <text x="1289" y="621" text-anchor="middle" class="white" font-size="18" font-weight="800">W4 · GOVERNANCE</text>
+      <text x="1189" y="663" class="bodyBold green">Read-only Submit Gate</text>
+      <text x="1189" y="692" class="small">YAML + schema + placeholder</text>
+      <text x="1189" y="716" class="small">links + all source anchors</text>
+      <text x="1189" y="740" class="small">freshness + debt regression</text>
+      <rect x="1189" y="766" width="200" height="35" rx="8" fill="#e0f0e4"/>
+      <text x="1289" y="789" text-anchor="middle" class="bodyBold green">VERIFIED / fail closed</text>
+      <text x="1289" y="826" text-anchor="middle" class="tiny">submit 不写 canonical Vault</text>
+    </g>
+
+    <line x1="1411" y1="718" x2="1435" y2="718" stroke="#c87918" stroke-width="4" marker-end="url(#arrowAmber)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="1442" y="594" width="270" height="252" rx="13" fill="#fff8ea" stroke="#c87918" stroke-width="2"/>
+      <rect x="1442" y="594" width="270" height="42" rx="12" fill="#c87918"/>
+      <rect x="1442" y="624" width="270" height="12" fill="#c87918"/>
+      <text x="1577" y="621" text-anchor="middle" class="white" font-size="18" font-weight="800">INTEGRATION OWNER</text>
+      <text x="1462" y="663" class="bodyBold amber">Separate Serial Commit</text>
+      <text x="1462" y="692" class="small">--approve-commit required</text>
+      <text x="1462" y="716" class="small">single owner + path locks</text>
+      <text x="1462" y="740" class="small">compare-and-set preimages</text>
+      <text x="1462" y="764" class="small">post-write verification + receipts</text>
+      <rect x="1462" y="783" width="230" height="31" rx="8" fill="#fbe9c9"/>
+      <text x="1577" y="804" text-anchor="middle" class="bodyBold amber">COMMITTED</text>
+      <text x="1577" y="833" text-anchor="middle" class="tiny">rollback = internal transaction recovery</text>
+    </g>
+
+    <line x1="1714" y1="718" x2="1738" y2="718" stroke="#1767a6" stroke-width="4" marker-end="url(#arrowBlue)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="1745" y="594" width="603" height="252" rx="13" fill="#eef5fb" stroke="#1767a6" stroke-width="2"/>
+      <rect x="1745" y="594" width="603" height="42" rx="12" fill="#0f4f88"/>
+      <rect x="1745" y="624" width="603" height="12" fill="#0f4f88"/>
+      <text x="2046" y="621" text-anchor="middle" class="white" font-size="18" font-weight="800">LIVE OBSIDIAN VAULT · CANONICAL STORAGE</text>
+      <rect x="1765" y="653" width="172" height="78" rx="9" fill="#ffffff" stroke="#7ea6c3"/>
+      <text x="1851" y="678" text-anchor="middle" class="bodyBold blue">sources/</text>
+      <text x="1851" y="701" text-anchor="middle" class="small">1,373 Markdown</text>
+      <text x="1851" y="719" text-anchor="middle" class="tiny">118 V8.1 · 1,255 legacy</text>
+      <rect x="1948" y="653" width="184" height="78" rx="9" fill="#ffffff" stroke="#7ea6c3"/>
+      <text x="2040" y="678" text-anchor="middle" class="bodyBold blue">wiki/concepts/</text>
+      <text x="2040" y="701" text-anchor="middle" class="small">13/13 domains present</text>
+      <text x="2040" y="719" text-anchor="middle" class="tiny">authoring target</text>
+      <rect x="2143" y="653" width="185" height="78" rx="9" fill="#ffffff" stroke="#7ea6c3"/>
+      <text x="2235" y="678" text-anchor="middle" class="bodyBold blue">maps/</text>
+      <text x="2235" y="701" text-anchor="middle" class="small">4/4 tier dirs present</text>
+      <text x="2235" y="719" text-anchor="middle" class="tiny">32 Markdown</text>
+
+      <rect x="1765" y="744" width="172" height="76" rx="9" class="contracted"/>
+      <text x="1851" y="768" text-anchor="middle" class="bodyBold gray">wiki/entities/</text>
+      <text x="1851" y="791" text-anchor="middle" class="small">validate-only today</text>
+      <text x="1851" y="809" text-anchor="middle" class="tiny red">4/5 dirs · orgs missing</text>
+      <rect x="1948" y="744" width="184" height="76" rx="9" class="optional"/>
+      <text x="2040" y="768" text-anchor="middle" class="bodyBold amber">wiki/outputs/</text>
+      <text x="2040" y="791" text-anchor="middle" class="small">reviewed W5 support</text>
+      <text x="2040" y="809" text-anchor="middle" class="tiny">no automatic CLI renderer</text>
+      <rect x="2143" y="744" width="185" height="76" rx="9" class="contracted"/>
+      <text x="2235" y="768" text-anchor="middle" class="bodyBold gray">system/queues/</text>
+      <text x="2235" y="791" text-anchor="middle" class="small">contracted path</text>
+      <text x="2235" y="809" text-anchor="middle" class="tiny red">not materialized</text>
+    </g>
+
+    <!-- Optional W5 branch and state machine -->
+    <path d="M2040 847 L2040 871 L1815 871" fill="none" stroke="#c87918" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arrowAmber)"/>
+    <rect x="1438" y="858" width="370" height="54" rx="11" class="optional"/>
+    <text x="1623" y="880" text-anchor="middle" class="bodyBold amber">W5 · DELIVERABLE（可选、提交后、需评审）</text>
+    <text x="1623" y="900" text-anchor="middle" class="tiny">memos / evaluations / compilations · 不属于 W1–W4 canonical path</text>
+
+    <rect x="52" y="870" width="1348" height="116" rx="12" fill="#f7fafc" stroke="#91a8b9"/>
+    <text x="72" y="894" class="bodyBold navy">CANONICAL STATE MACHINE</text>
+    <g class="small" text-anchor="middle">
+      <rect x="72" y="910" width="130" height="31" rx="15" fill="#e7eef3"/><text x="137" y="931">DISCOVERED</text>
+      <line x1="204" y1="926" x2="230" y2="926" stroke="#1767a6" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+      <rect x="237" y="910" width="112" height="31" rx="15" fill="#e8f2f9"/><text x="293" y="931">CLAIMED</text>
+      <line x1="351" y1="926" x2="377" y2="926" stroke="#1767a6" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+      <rect x="384" y="910" width="112" height="31" rx="15" fill="#e8f2f9"/><text x="440" y="931">STAGED</text>
+      <line x1="498" y1="926" x2="524" y2="926" stroke="#6750a4" stroke-width="2.5" marker-end="url(#arrowPurple)"/>
+      <rect x="531" y="910" width="122" height="31" rx="15" fill="#ece7f8"/><text x="592" y="931">AUTHORED</text>
+      <line x1="655" y1="926" x2="681" y2="926" stroke="#2e7d50" stroke-width="2.5" marker-end="url(#arrowTeal)"/>
+      <rect x="688" y="910" width="120" height="31" rx="15" fill="#e3f1e7"/><text x="748" y="931">VERIFIED</text>
+      <line x1="810" y1="926" x2="836" y2="926" stroke="#c87918" stroke-width="2.5" marker-end="url(#arrowAmber)"/>
+      <rect x="843" y="910" width="130" height="31" rx="15" fill="#fbe9c9"/><text x="908" y="931">COMMITTED</text>
+      <line x1="975" y1="926" x2="1001" y2="926" stroke="#7c8b98" stroke-width="2.5" marker-end="url(#arrowGray)"/>
+      <rect x="1008" y="910" width="140" height="31" rx="15" fill="#eef1f3" stroke="#8a98a4" stroke-dasharray="4 4"/><text x="1078" y="931">ARCHIVED*</text>
+    </g>
+    <text x="1180" y="930" class="tiny gray">* clipping ingest only</text>
+    <text x="72" y="968" class="small"><tspan class="red" font-weight="800">Fail-closed branches:</tspan> NO_OP · NEEDS_INPUT · INSUFFICIENT_EVIDENCE · VERIFY_FAILED · BLOCKED_DEPENDENCY · BLOCKED_PERMISSION · NO_PROGRESS · BUDGET_STOP</text>
+  </g>
+
+  <!-- Evidence and debt -->
+  <g id="evidence-debt">
+    <rect x="30" y="1026" width="2340" height="294" rx="16" class="panel"/>
+    <rect x="30" y="1026" width="2340" height="39" rx="14" fill="#0f4f88"/>
+    <rect x="30" y="1052" width="2340" height="13" fill="#0f4f88"/>
+    <text x="50" y="1054" class="section">三、现场成熟度、证据与下一道门 / Live Maturity, Evidence &amp; Next Gate</text>
+
+    <rect x="54" y="1084" width="1080" height="211" rx="13" fill="#fff8f8" stroke="#ca7479"/>
+    <text x="76" y="1113" class="cardTitle red">LEGACY CORPUS DEBT — 不是 W1–W4 成熟度的替代证据</text>
+    <rect x="76" y="1132" width="240" height="74" rx="10" fill="#ffffff" stroke="#d7a1a5"/>
+    <text x="196" y="1165" text-anchor="middle" class="metric red">1,371</text>
+    <text x="196" y="1191" text-anchor="middle" class="small">source provenance debt</text>
+    <rect x="330" y="1132" width="240" height="74" rx="10" fill="#ffffff" stroke="#d7a1a5"/>
+    <text x="450" y="1165" text-anchor="middle" class="metric red">607</text>
+    <text x="450" y="1191" text-anchor="middle" class="small">invalid source hashes</text>
+    <rect x="584" y="1132" width="240" height="74" rx="10" fill="#ffffff" stroke="#d7a1a5"/>
+    <text x="704" y="1165" text-anchor="middle" class="metric red">2,528 / 2,812</text>
+    <text x="704" y="1191" text-anchor="middle" class="small">freshness due or unknown</text>
+    <rect x="838" y="1132" width="274" height="74" rx="10" fill="#ffffff" stroke="#d7a1a5"/>
+    <text x="975" y="1165" text-anchor="middle" class="metric red">30 + 1</text>
+    <text x="975" y="1191" text-anchor="middle" class="small">map debt + system debt</text>
+    <text x="76" y="1238" class="small">Vault Markdown：maps 32 · sources 1,373 · system 225 · wiki 2,805</text>
+    <text x="76" y="1264" class="small">Unresolved template tokens：maps 0 · sources 0 · <tspan class="red">system 3</tspan> · wiki 0　|　inventory / freshness scans: side effects 0</text>
+
+    <rect x="1154" y="1084" width="666" height="211" rx="13" fill="#f2f8f5" stroke="#79aa8b"/>
+    <text x="1176" y="1113" class="cardTitle green">VERIFICATION RECEIPT</text>
+    <text x="1176" y="1142" class="bodyBold">✓ Skill lint</text><text x="1778" y="1142" text-anchor="end" class="bodyBold green">21 PASS</text>
+    <text x="1176" y="1170" class="bodyBold">✓ Tools suite</text><text x="1778" y="1170" text-anchor="end" class="bodyBold green">97 OK · 3 skipped</text>
+    <text x="1176" y="1198" class="bodyBold">✓ Canonical worker suite</text><text x="1778" y="1198" text-anchor="end" class="bodyBold green">65 OK</text>
+    <text x="1176" y="1226" class="bodyBold">✓ Graph experiments</text><text x="1778" y="1226" text-anchor="end" class="bodyBold green">22 OK</text>
+    <text x="1176" y="1254" class="bodyBold">✓ System deployment parity</text><text x="1778" y="1254" text-anchor="end" class="bodyBold green">40 / 40</text>
+    <text x="1176" y="1280" class="tiny">Bundle SHA-256: 31d5b40e…a0d1 · Command-center verifier PASS</text>
+
+    <rect x="1840" y="1084" width="506" height="211" rx="13" fill="#fffaf0" stroke="#d7ad61"/>
+    <text x="1862" y="1113" class="cardTitle amber">NEXT EVIDENCE GATE</text>
+    <text x="1862" y="1144" class="bodyBold">1. 分批修复 legacy corpus 债务</text>
+    <text x="1862" y="1173" class="bodyBold">2. 明确 orgs / queues：物化或声明按需</text>
+    <text x="1862" y="1202" class="bodyBold">3. 运行 1 个受治理的 W5 deliverable canary</text>
+    <text x="1862" y="1231" class="small">要求：committed knowledge→review→output receipt</text>
+    <rect x="1862" y="1250" width="460" height="27" rx="8" fill="#fbe9c9"/>
+    <text x="2092" y="1269" text-anchor="middle" class="small amber" font-weight="800">以终态回执证明闭环，而非以图像声明闭环</text>
+  </g>
+
+  <text x="1200" y="1340" text-anchor="middle" class="tiny">Third Brain V8.1 · Evidence-based as-is architecture · deterministic SVG source · generated 2026-08-20</text>
+</svg>

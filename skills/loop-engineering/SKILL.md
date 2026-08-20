@@ -2,8 +2,8 @@
 name: loop-engineering
 description: Use when a repeatable task must become a bounded Trigger -> Execute -> Verify -> State loop, scheduled automation, goal agent, or metric-driven research cycle.
 metadata:
-  version: "7.2.1"
-  updated: "2026-08-09"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "loop"
   assumes: "The task has inspectable state, a finite budget, and at least one verifier independent of the builder's opinion."
   conflicts_with: "Unbounded retries, self-certification, silent external mutation, or loops whose state cannot be recovered."

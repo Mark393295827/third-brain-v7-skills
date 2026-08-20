@@ -1,55 +1,40 @@
-# 3-Minute Quickstart: Ingest One Source
+# 3-Minute Quickstart: V8.1 Stage → Author → Submit → Approved Commit
 
-Use this when you want the fastest visible win from Third Brain V7 Skills.
+This quickstart uses the canonical transactional flow. A browser command-centre action can inspect or verify; it does not bypass governance or perform a live Vault commit.
 
-## Before
-
-You have a useful article, PDF, transcript, or rough note, but it is not connected to your long-term knowledge base.
-
-## Input
+## 1. Stage an immutable source
 
 ```text
-Source: one article, PDF excerpt, meeting note, transcript, or copied paragraph.
-Goal: preserve source provenance and create reusable wiki pages.
+Use the V8.1 worker flow to stage this source.
+Create an immutable source note under sources/YYYY-MM/, preserve metadata,
+calculate SHA-256, and add block anchors. Do not rewrite an existing source.
 ```
 
-## Prompt
+## 2. Author a candidate
 
 ```text
-Use wiki-ingest on this source.
-
-Goal: turn it into reusable wiki knowledge, not a loose summary.
-
-Create:
-1. one immutable source note in `SOURCES_DIR` (default: `sources/`)
-2. 3-7 key insights with source references
-3. at least one concept page in `CONCEPTS_DIR` (default: `wiki/concepts/`)
-4. relevant entity pages in `ENTITIES_DIR` (default: `wiki/entities/`)
-5. links from the new pages to existing related pages when possible
-6. a short log entry in `LOG_FILE` (default: `system/log.md`)
-
-After writing files, run a quick verification:
-- list created or updated files
-- check each wiki page has at least two wikilinks
-- state any claims that are single-source only
+Author a gold-standard concept candidate from the staged source.
+Include evidence bounds, Mermaid relationships, and source block references.
+Keep the result staged; do not write the live Vault.
 ```
 
-## Expected Output
+## 3. Submit for governance
 
-- A source note that preserves the original source metadata.
-- One or more concept/entity notes that can be reused later.
-- A short ingestion log.
-- A verification note showing what changed.
+```text
+Submit the staged source, concept candidate, and graph/navigation plan to the
+V8.1 governance worker. Run schema, link, block-reference, and preimage checks.
+Return a typed receipt and list any debt or unknowns.
+```
 
-## After
+## 4. Commit only after explicit approval
 
-The loose source becomes a linked knowledge unit with traceable claims, reusable concepts, and a clear next retrieval path.
+```text
+Review the governance receipt. If the preimages and checks are acceptable,
+explicitly approve the serial commit. Commit through python -m tools.worker_flow.cli,
+then run post-checks and read the committed files back. Do not treat HTTP 2xx,
+an animation, or a model message as success; require verifier evidence.
+```
 
-## Verification Receipt
+## Verification receipt
 
-The run is successful when the agent can point to the created files and every new concept page has:
-
-- frontmatter
-- at least two `[[wikilinks]]`
-- source references
-- a timeline entry
+A successful run identifies the immutable source hash and anchors, candidate and graph plan, governance receipt, approval identity, commit preimages, post-check output, and any remaining unknowns. Without those artifacts the run is `VERIFY_FAILED` or `NEEDS_INPUT`, not complete.

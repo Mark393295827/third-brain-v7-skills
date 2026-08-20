@@ -2,8 +2,8 @@
 name: deep-research
 description: Use when a decision-relevant question needs multi-source search, claim-level citations, contradiction handling, uncertainty, or a durable wiki handoff.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "high-risk"
   assumes: "The question benefits from multiple sources and authorized source access is available."
   conflicts_with: "Link collection without synthesis, uncited material claims, privacy leakage, or autonomous experiments without objective evaluation."

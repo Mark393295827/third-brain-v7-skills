@@ -11,6 +11,7 @@ from typing import Optional
 
 ROOT = Path(__file__).resolve().parents[1]
 INSTALLER = ROOT / "install.ps1"
+INSTALL_HELPER = ROOT / "tools" / "install_skills.py"
 
 
 class PowerShellInstallScriptTest(unittest.TestCase):
@@ -24,6 +25,9 @@ class PowerShellInstallScriptTest(unittest.TestCase):
         (self.home / ".claude").mkdir()
 
         shutil.copy2(INSTALLER, self.fixture_root / "install.ps1")
+        fixture_tools = self.fixture_root / "tools"
+        fixture_tools.mkdir()
+        shutil.copy2(INSTALL_HELPER, fixture_tools / "install_skills.py")
         skill = self.fixture_root / "skills" / "sample-skill"
         (skill / "scripts" / "__pycache__").mkdir(parents=True)
         (skill / "SKILL.md").write_text(
@@ -82,6 +86,7 @@ class PowerShellInstallScriptTest(unittest.TestCase):
         self.assertFalse(any(skill.rglob("__pycache__")))
         self.assertEqual(list(skill.rglob("*.pyc")), [])
         self.assertEqual(list(skill.rglob("*.pyo")), [])
+        self.assertTrue((target / ".third-brain-v8.1-manifest.json").is_file())
 
     def test_codex_install_filters_python_cache_artifacts(self) -> None:
         result = self.run_installer("codex")
@@ -103,7 +108,7 @@ class PowerShellInstallScriptTest(unittest.TestCase):
     def test_auto_install_handles_unset_claude_code(self) -> None:
         result = self.run_installer("auto")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assert_filtered_skill(self.home / ".claude" / "skills")
+        self.assert_filtered_skill(self.home / ".agents" / "skills")
 
     def test_all_preserves_targets_and_filters_python_cache_artifacts(self) -> None:
         result = self.run_installer("all")

@@ -2,8 +2,8 @@
 name: harness-engineering
 description: Use when an agent workflow needs production-like runtime controls for context, tools, permissions, observability, scheduling, evaluation, recovery, or maintenance.
 metadata:
-  version: "7.2.1"
-  updated: "2026-08-09"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "high-risk"
   assumes: "The workflow uses tools or delegated actions whose environment, permissions, and event trail can be controlled."
   conflicts_with: "Prompt-only safety, broad credentials, hidden tool effects, or autonomous routines without finite budgets and rollback."

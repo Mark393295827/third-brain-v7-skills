@@ -2,8 +2,8 @@
 name: graph-engineering
 description: Use when a workflow has explicit data dependencies, independently executable branches, typed joins, or node-local recovery needs that justify a bounded static dependency graph.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "high-risk"
   assumes: "Nodes, payloads, writers, verifiers, budgets, and permission boundaries can be declared before execution."
   conflicts_with: "Dynamic or cyclic expansion, overlapping writers, whole-graph retries, hidden joins, or external effects without approval and compensation."
@@ -41,7 +41,7 @@ Run the admission gate before drawing a graph:
    load. Require measurable payback or stronger independent evaluation.
 3. Keep one-shot or Loop execution when work is mainly sequential, small, or
    cheaper to review serially.
-4. Limit V7.1 to a static DAG: sequence, pipeline, diamond, maker-checker, or
+4. Limit V8.1 to a static DAG: sequence, pipeline, diamond, maker-checker, or
    bounded subgraph. Put repetition inside a `loop` node; reject graph cycles
    and dynamic expansion.
 
@@ -101,7 +101,7 @@ reviewer for consequential graph behavior.
 `max_attempts` comes from each node and never exceeds the graph cap. Retry only
 after changing diagnosis, input, owner, tool, or strategy. Stop on a repeated
 signature, incompatible edge, permission denial, invalid checkpoint, exhausted
-review budget, or `NO_PROGRESS`. Whole-graph retry is forbidden in strict V7.1.
+review budget, or `NO_PROGRESS`. Whole-graph retry is forbidden in strict V8.1.
 
 </retry_policy>
 

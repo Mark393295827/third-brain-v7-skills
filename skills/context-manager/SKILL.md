@@ -2,8 +2,8 @@
 name: context-manager
 description: Use when a long-running agent task needs context budgeting, checkpointing, compaction, retrieval, or capability-based model routing.
 metadata:
-  version: "7.2.1"
-  updated: "2026-08-09"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "stateful"
   assumes: "Runtime context limits, cost policy, and durable storage are available or can be bounded explicitly."
   conflicts_with: "Hard-coded vendor pricing, silent context loss, or retaining low-value history at the expense of execution state."

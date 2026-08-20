@@ -1,0 +1,21 @@
+{
+  "mission_id": "agentic-os-demo-alignment-20260820",
+  "status": "INTEGRATION_VERIFIED",
+  "formula": "ETC = 0.1 * cached_input + 1.0 * uncached_input + 3.0 * output",
+  "target_tclr": 2.5,
+  "estimated_total_etc": 85000,
+  "circuit_breaker_ratio": 1.5,
+  "tasks": [
+    {"task_id": "T01", "route": "gpt-5.6-sol", "owner": "demo-sol-planner", "budget_etc": 15000, "used_etc": null, "state": "COMPLETE"},
+    {"task_id": "T02", "route": "low-cost", "owner": "runtime-builder", "budget_etc": 20000, "used_etc": null, "state": "COMPLETE"},
+    {"task_id": "T03", "route": "low-cost", "owner": "vault-builder", "budget_etc": 18000, "used_etc": null, "state": "COMPLETE"},
+    {"task_id": "T04", "route": "low-cost", "owner": "interface-builder", "budget_etc": 18000, "used_etc": null, "state": "COMPLETE"},
+    {"task_id": "T05", "route": "integration-owner", "owner": "/root", "budget_etc": 14000, "used_etc": null, "state": "COMPLETE"}
+  ],
+  "controls": {
+    "max_attempts_per_task": 2,
+    "single_integration_owner": true,
+    "overlapping_write_ownership_allowed": false,
+    "live_vault_requires_staged_approved_commit": true
+  }
+}

@@ -41,6 +41,9 @@ jobs:
       - name: Run unit tests
         run: python -m unittest discover -s tools -p "test_*.py" -v
 
+      - name: Run canonical worker-flow tests
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+
       - name: Run Graph architecture experiment tests
         run: python -m unittest discover -s experiments/graph-engineering/tests -p "test_*.py" -v
 
@@ -71,3 +74,47 @@ jobs:
           python skills/harness-engineering/scripts/validate_runtime_envelope.py
           skills/harness-engineering/references/runtime-envelope-example.json
           --strict
+
+  installer-bash:
+    name: Bash installer canary
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Install into an isolated home
+        env:
+          THIRD_BRAIN_HOME: ${{ runner.temp }}/third-brain-installer
+        run: bash install.sh codex
+      - name: Verify the managed manifest
+        env:
+          THIRD_BRAIN_HOME: ${{ runner.temp }}/third-brain-installer
+        run: >-
+          python tools/install_skills.py
+          --source skills
+          --destination "$THIRD_BRAIN_HOME/.agents/skills"
+          --check
+
+  installer-powershell:
+    name: PowerShell installer canary
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Install into an isolated home
+        shell: pwsh
+        run: |
+          $env:THIRD_BRAIN_HOME = Join-Path $env:RUNNER_TEMP "third-brain-installer"
+          .\install.ps1 codex
+      - name: Verify the managed manifest
+        shell: pwsh
+        run: |
+          $env:THIRD_BRAIN_HOME = Join-Path $env:RUNNER_TEMP "third-brain-installer"
+          python tools/install_skills.py --source skills --destination (Join-Path $env:THIRD_BRAIN_HOME ".agents\skills") --check

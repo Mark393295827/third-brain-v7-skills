@@ -1,239 +1,26 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Third Brain V5 Skills — Tools</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Third Brain V8.1 · Agentic OS Command Centre</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
-  :root {
-    --bg: #080c14; --surface: #0f1623; --surface2: #161f30; --surface3: #1c2840;
-    --border: #1e3a5f; --cyan: #00d4ff; --green: #00ff94; --amber: #ffb800;
-    --red: #ff4757; --purple: #a855f7; --text: #e2e8f0; --text-dim: #94a3b8; --text-muted: #4a5568;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); font-family: 'Noto Sans SC', sans-serif; color: var(--text); min-height: 100vh; }
-  .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-
-  /* Language Toggle */
-  .lang-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 16px; }
-  .lang-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 5px 14px; cursor: pointer; font-family: 'JetBrains Mono'; font-size: 10px; color: var(--text-muted); transition: all 0.2s; }
-  .lang-btn.active { border-color: var(--cyan); color: var(--cyan); background: rgba(0,212,255,0.08); }
-  .lang-btn:hover { border-color: var(--cyan); }
-
-  /* Header */
-  .header { text-align: center; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid rgba(0,212,255,0.15); }
-  .header h1 { font-size: 24px; font-weight: 700; letter-spacing: 2px; background: linear-gradient(135deg, var(--cyan), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .header .en { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono'; letter-spacing: 4px; margin-top: 4px; }
-  .header .zh { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; margin-top: 2px; }
-
-  .hero-panel { background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(168,85,247,0.08)); border: 1px solid rgba(0,212,255,0.24); border-radius: 8px; padding: 18px; margin-bottom: 18px; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px; align-items: center; }
-  .hero-panel h2 { font-size: 18px; font-weight: 700; margin-bottom: 8px; letter-spacing: 0; }
-  .hero-panel p { color: var(--text-dim); font-size: 11px; line-height: 1.6; }
-  .quick-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .quick-actions a { text-decoration: none; color: var(--text); background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 9px 10px; font-size: 10px; font-family: 'JetBrains Mono'; transition: all 0.2s; }
-  .quick-actions a:hover { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,0.06); }
-  .search-box { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 10px 12px; margin: 0 0 12px; font-size: 11px; font-family: 'JetBrains Mono'; outline: none; }
-  .search-box:focus { border-color: var(--cyan); box-shadow: 0 0 0 2px rgba(0,212,255,0.08); }
-
-  /* Karpathy Score */
-  .karpathy-banner {
-    background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(168,85,247,0.06));
-    border: 1px solid rgba(0,212,255,0.25); border-radius: 8px; padding: 14px 20px;
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
-  }
-  .karpathy-banner .label { font-family: 'JetBrains Mono'; font-size: 9px; color: var(--text-muted); letter-spacing: 2px; }
-  .karpathy-banner .score { font-size: 28px; font-weight: 700; font-family: 'JetBrains Mono'; background: linear-gradient(135deg, var(--cyan), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .karpathy-banner .sub { font-size: 9px; color: var(--text-dim); font-family: 'JetBrains Mono'; }
-  .karpathy-banner .evolution { font-size: 9px; color: var(--text-muted); font-family: 'JetBrains Mono'; }
-  .karpathy-banner .evolution span { color: var(--green); }
-
-  /* Section Title */
-  .section-title { font-size: 12px; font-weight: 700; font-family: 'JetBrains Mono'; letter-spacing: 2px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-
-  /* Skill Grid */
-  .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-bottom: 24px; }
-  .skill-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 12px; transition: all 0.2s; cursor: pointer; }
-  .skill-card:hover { border-color: var(--cyan); background: rgba(0,212,255,0.03); }
-  .skill-card .name { font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono'; color: var(--cyan); margin-bottom: 4px; }
-  .skill-card .desc-en { font-size: 9px; color: var(--text-dim); line-height: 1.4; }
-  .skill-card .desc-zh { font-size: 9px; color: var(--text-dim); line-height: 1.4; }
-
-  /* Tool Cards */
-  .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; margin-bottom: 24px; }
-  .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: all 0.2s; }
-  .tool-card:hover { border-color: var(--cyan); transform: translateY(-1px); }
-  .tool-card .preview { height: 100px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 28px; border-bottom: 1px solid var(--border); }
-  .tool-card .body { padding: 12px; }
-  .tool-card .body .name { font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono'; margin-bottom: 4px; }
-  .tool-card .body .desc { font-size: 9px; color: var(--text-dim); line-height: 1.4; margin-bottom: 8px; }
-  .tool-card .body .actions { display: flex; gap: 6px; }
-  .tool-card .body .btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 5px 12px; font-size: 9px; font-family: 'JetBrains Mono'; color: var(--text-dim); cursor: pointer; text-decoration: none; transition: all 0.2s; }
-  .tool-card .body .btn:hover { border-color: var(--cyan); color: var(--cyan); }
-  .tool-card .body .btn.primary { border-color: var(--cyan); color: var(--cyan); background: rgba(0,212,255,0.06); }
-
-  /* Pipeline Quick View */
-  .pipeline { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-bottom: 24px; padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
-  .pipe-node { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 5px 10px; font-size: 9px; text-align: center; min-width: 60px; font-family: 'JetBrains Mono'; }
-  .pipe-node .p-name { font-weight: 600; font-size: 8px; color: var(--text-dim); }
-  .pipe-node .p-tag { font-size: 7px; margin-top: 2px; }
-  .pipe-arrow { color: var(--text-muted); font-size: 12px; }
-
-  .lang-zh { display: none; }
-  .lang-en { display: block; }
-  body.zh .lang-zh { display: block; }
-  body.zh .lang-en { display: none; }
-
-  .footer { text-align: center; padding-top: 16px; border-top: 1px solid var(--border); font-size: 9px; color: var(--text-muted); font-family: 'JetBrains Mono'; letter-spacing: 2px; }
-  @media (max-width: 760px) { .hero-panel { grid-template-columns: 1fr; } .quick-actions { grid-template-columns: 1fr; } }
-</style>
-</head>
-<body>
-<div class="container">
-
-<!-- Lang Toggle -->
-<div class="lang-bar">
-  <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
-  <button class="lang-btn" onclick="setLang('zh')" id="btn-zh">中文</button>
-</div>
-
-<!-- Header -->
-<div class="header">
-  <h1>Third Brain V5 Skills</h1>
-  <div class="en">KNOWLEDGE COMPOUNDING · BEHAVIOR DESIGN · CREATIVITY ENGINE</div>
-  <div class="zh">知识复利 · 行为设计 · 创意引擎</div>
-</div>
-
-<div class="hero-panel">
-  <div>
-    <h2 class="lang-en">Visual Navigation for the Third Brain</h2>
-    <h2 class="lang-zh">第三大脑可视化导航</h2>
-    <p class="lang-en">Jump from a workflow need to the right skill, example, or cost tool. Start with wiki-ingest for the fastest visible result.</p>
-    <p class="lang-zh">从工作流需求快速跳转到对应技能、案例或成本工具。最快上手路径是 wiki-ingest。</p>
-  </div>
-  <div class="quick-actions">
-    <a href="../examples/3-minute-quickstart.md">3-minute quickstart</a>
-    <a href="../examples/one-click-test-prompt.md">test prompt</a>
-    <a href="../docs/compatibility.md">IDE adapters</a>
-    <a href="pipeline-cost-calculator.html">cost calculator</a>
-  </div>
-</div>
-
-<!-- Karpathy Banner -->
-<div class="karpathy-banner">
-  <div>
-    <div class="label">KARPATHY LLM OS</div>
-    <div class="score">85 / 100</div>
-    <div class="sub">18 skills · 4 commands · 3 tools</div>
-  </div>
-  <div class="evolution">
-    <span class="lang-en">Evolved from V1: <span>42</span> → V3: <span>74</span> → <span style="color:var(--cyan)">V5: 85</span></span>
-    <span class="lang-zh">演化：<span>42</span> → <span>74</span> → <span style="color:var(--cyan)">85</span></span>
-  </div>
-</div>
-
-<!-- Pipeline -->
-<div class="pipeline" style="justify-content:center;">
-  <div class="pipe-node"><div class="p-name">🌐 Ingest</div><div class="p-tag" style="color:var(--green)">Python</div></div>
-  <div class="pipe-arrow">→</div>
-  <div class="pipe-node"><div class="p-name">🛡 PII Scrub</div><div class="p-tag" style="color:var(--green)">Presidio</div></div>
-  <div class="pipe-arrow">→</div>
-  <div class="pipe-node"><div class="p-name">▽ Funnel</div><div class="p-tag" style="color:var(--green)">cosine</div></div>
-  <div class="pipe-arrow">→</div>
-  <div class="pipe-node" style="border-color:rgba(168,85,247,0.3)"><div class="p-name">🧠 LLM</div><div class="p-tag" style="color:var(--purple)">Haiku</div></div>
-  <div class="pipe-arrow">→</div>
-  <div class="pipe-node"><div class="p-name">⊕ Vector</div><div class="p-tag" style="color:var(--green)">ChromaDB</div></div>
-  <div class="pipe-arrow">→</div>
-  <div class="pipe-node" style="border-color:rgba(168,85,247,0.3)"><div class="p-name">📊 Output</div><div class="p-tag" style="color:var(--purple)">Sonnet</div></div>
-</div>
-
-<!-- Skills -->
-<div class="section-title" style="color:var(--cyan);">
-  <span>⚙</span>
-  <span class="lang-en">Skills (18)</span>
-  <span class="lang-zh">技能（18 个）</span>
-</div>
-<input class="search-box" id="skill-search" placeholder="Search skills: ingest, verify, daily, startup..." oninput="filterSkills(this.value)">
-<div class="skill-grid" id="skill-grid"></div>
-
-<!-- Tools -->
-<div class="section-title" style="color:var(--amber);">
-  <span>🔧</span>
-  <span class="lang-en">Visual Tools</span>
-  <span class="lang-zh">可视化工具</span>
-</div>
-<div class="tool-grid" id="tool-grid"></div>
-
-<div class="footer">
-  <span class="lang-en">Open source · MIT License · Built for Claude Code / Codex / Gemini CLI</span>
-  <span class="lang-zh">开源 · MIT 协议 · 兼容 Claude Code / Codex / Gemini CLI</span>
-</div>
-
-</div>
-
-<script>
-const SKILLS = [
-  {name:'wiki-ingest', desc_en:'STOW pipeline: ingest sources → auto-create entities, concepts, update navigation & overview. For articles, PDFs, videos, notes.', desc_zh:'STOW 管道：摄入来源 → 自动创建实体、概念页、更新导航和概览。适用于文章、PDF、视频、笔记。'},
-  {name:'daily-okr', desc_en:'Daily knowledge compound closed loop — 7 Key Results: Input→Cognition→Wiki→Behavior→Creativity→Output→Feedback, with scoring.', desc_zh:'每日知识复利闭环——7 项关键成果：输入→认知→Wiki→行为→创意→输出→反馈，含评分。'},
-  {name:'cognitive-compile', desc_en:'7-step deep learning: Question→Facts→Concepts→Patterns→Conflicts→Judgment→Action. Transform raw info into actionable judgment.', desc_zh:'7 步深度学习：问题→事实→概念→模式→冲突→判断→行动。将原始信息转化为可执行的判断。'},
-  {name:'context-manager', desc_en:'Token budgeting, 3-layer prompt assembly, 6 truncation strategies, cost estimation. Manage the scarcest resource — the context window.', desc_zh:'Token 预算、3 层 Prompt 组装、6 种截断策略、成本估算。管理最稀缺的资源——上下文窗口。'},
-  {name:'behavior-design', desc_en:'Goal decomposition → minimum habits → triggers → SOPs → review → identity. Turn goals into repeatable behavior systems.', desc_zh:'目标分解→最小习惯→触发器→SOP→复盘→身份。将目标转化为可重复的行为系统。'},
-  {name:'creativity-engine', desc_en:'Combinatorial ideation, cross-domain analogy, minimum experiments. Generate novel ideas by combining knowledge across domains.', desc_zh:'组合式创意、跨域类比、最小实验。通过跨领域知识组合产生新颖创意。'},
-  {name:'session-learn', desc_en:'Extract 7 knowledge signals from sessions: concepts, entities, corrections, patterns, ideas, decisions, gaps. Closure Protocol included.', desc_zh:'从会话中提取 7 种知识信号：概念、实体、纠正、模式、想法、决策、缺口。含闭环协议。'},
-  {name:'verify-before-claim', desc_en:'Iron rule: NO completion claims without fresh verification evidence. Run verification commands and show output before any success claim.', desc_zh:'铁律：没有新的验证证据，不得声称完成。在做出任何成功声明前运行验证命令。'},
-  {name:'wiki-lint', desc_en:'8-dimension health check: frontmatter, links, orphans, stale content, contradictions, drift, stats, index. For periodic maintenance.', desc_zh:'8 维健康检查：frontmatter、链接、孤儿页面、过时内容、矛盾、漂移、统计、索引。用于定期维护。'},
-  {name:'knowledge-ops', desc_en:'4-layer knowledge management: Active→Memory→Wiki→External (Vector DB). With ChromaDB integration for semantic search.', desc_zh:'4 层知识管理：活跃→记忆→Wiki→外部（向量 DB）。集成 ChromaDB 实现语义搜索。'},
-  {name:'deep-research', desc_en:'Research harness: preflight → source/claim ledgers → activity trace → cited report → STOW handoff. Includes privacy and evidence gates.', desc_zh:'研究型 harness：预检→来源/主张台账→活动轨迹→引用报告→STOW 交接。包含隐私与证据门控。'},
-  {name:'project-flow-ops', desc_en:'Execution flow: triage → plan → track → review. For backlog control, task planning, and cross-project coordination.', desc_zh:'执行流：分类→计划→追踪→复盘。用于待办控制、任务规划和跨项目协调。'},
-  {name:'agentic-engineering', desc_en:'Refactor workflows into agentic macro actions with autonomy defaults, delegated-action boundaries, checkpoints, write-back, and verification gates.', desc_zh:'将工作流重构为智能体宏动作，包含自治默认值、委托边界、检查点、写回和验证门。'},
-  {name:'harness-engineering', desc_en:'Agent runtime infrastructure: 3-tier permissions, GAN-inspired Generator/Evaluator pattern, multi-agent orchestration, Deny-and-Continue.', desc_zh:'Agent 运行时基础设施：三层权限、GAN 启发式 Generator/Evaluator 模式、多 Agent 编排、Deny-and-Continue。'},
-  {name:'agent-teams-command', desc_en:'Strategic multi-agent orchestration: split work by role, define ownership, coordinate progress, and verify integrated output.', desc_zh:'战略性多 Agent 编排：按角色拆分工作、定义所有权、协调进展，并验证集成结果。'},
-  {name:'startup-evaluation', desc_en:'MIT 24-step disciplined entrepreneurship framework for assessing ideas, markets, beachheads, value propositions, and validation risks.', desc_zh:'MIT 24 步创业评估框架，用于评估想法、市场、滩头阵地、价值主张和验证风险。'},
-  {name:'anthropic-os', desc_en:'Self-evolving work method engine: diagnose loops, choose big bets, improve feedback, and define the next system experiment.', desc_zh:'自进化工作方法引擎：诊断循环、选择大赌注、改善反馈，并定义下一轮系统实验。'},
-  {name:'ai-six-sigma-property-os', desc_en:'AI + Ontology + DMAIC Black Belt operating model for property work orders, dispatch, quotes, evidence, CTQ metrics, and quality dashboards.', desc_zh:'AI + Ontology + DMAIC 黑带运营模型，用于物业工单、派单、报价、证据、CTQ 指标和质量看板。'},
-];
-
-const TOOLS = [
-  {name:'pipeline-cost-calculator.html', icon:'💰', desc_en:'Bilingual token cost calculator — adjust sliders, see real-time cost across funnel/context/research/embedding stages. Daily/weekly/monthly/yearly. EN/ZH toggle.', desc_zh:'双语 Token 成本计算器——滑动调节参数，实时查看漏斗/上下文/研究/嵌入各阶段成本。日/周/月/年。中英文切换。'},
-  {name:'architecture-v4.html', icon:'🏗', desc_en:'Full 4-layer system architecture: Ingestion → Compiling → Action → Governance. With Karpathy LLM OS compliance score and all V4.0 NEW components highlighted.', desc_zh:'完整 4 层系统架构：摄取→编译→行动→治理。含 Karpathy LLM OS 合规评分，所有 V4.0 新增组件高亮标注。'},
-  {name:'v5.1-simplified.html', icon:'⚡', desc_en:'Python-first pipeline proposal: replace LLM funnel with embedding similarity, reducing monthly cost from ~$27 to ~$8 (-70%). With decision matrix and code samples.', desc_zh:'Python 优先管道方案：用嵌入相似度替代 LLM 漏斗，月费从 ~$27 降至 ~$8（-70%）。含替换判断矩阵和代码示例。'},
-];
-
-function setLang(lang) {
-  document.body.classList.toggle('zh', lang === 'zh');
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(`btn-${lang}`).classList.add('active');
-}
-
-function init() {
-  const sg = document.getElementById('skill-grid');
-  SKILLS.forEach(s => {
-    const card = document.createElement('div');
-    card.className = 'skill-card';
-    card.dataset.name = s.name;
-    card.dataset.search = `${s.name} ${s.desc_en} ${s.desc_zh}`.toLowerCase();
-    card.onclick = () => window.open(`../skills/${s.name}/SKILL.md`, '_blank');
-    card.innerHTML = `<div class="name">${s.name}</div><div class="desc-en">${s.desc_en}</div><div class="desc-zh">${s.desc_zh}</div>`;
-    sg.appendChild(card);
-  });
-
-  const tg = document.getElementById('tool-grid');
-  TOOLS.forEach(t => {
-    const card = document.createElement('div');
-    card.className = 'tool-card';
-    card.innerHTML = `<div class="preview">${t.icon}</div><div class="body"><div class="name" style="color:var(--amber)">${t.name}</div><div class="desc-en">${t.desc_en}</div><div class="desc-zh">${t.desc_zh}</div><div class="actions"><a href="${t.name}" class="btn primary">Open</a></div></div>`;
-    tg.appendChild(card);
-  });
-}
-
-function filterSkills(query) {
-  const q = query.trim().toLowerCase();
-  document.querySelectorAll('.skill-card').forEach(card => {
-    card.style.display = !q || card.dataset.search.includes(q) ? '' : 'none';
-  });
-}
-
-init();
-</script>
-</body>
-</html>
+:root{color-scheme:dark;--bg:#080c14;--panel:#111a2a;--panel2:#172238;--line:#29405f;--text:#e5edf7;--muted:#91a1b5;--cyan:#23c9e8;--green:#42e39a;--amber:#ffc857;--red:#ff6878}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:1200px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;gap:16px;align-items:start;border-bottom:1px solid var(--line);padding-bottom:18px}.eyebrow{color:var(--cyan);font:12px ui-monospace,monospace;letter-spacing:2px}.muted{color:var(--muted)}h1{margin:6px 0;font-size:28px}h2{font-size:17px;margin:24px 0 10px}.pill,button{border:1px solid var(--line);border-radius:6px;background:var(--panel2);color:var(--text);padding:7px 11px;cursor:pointer}.pill{display:inline-block;font:12px ui-monospace,monospace}.status-ready{color:var(--green)}.status-partial{color:var(--amber)}.status-error,.disabled{color:var(--red)}.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}.metric{font-size:25px;font-weight:700;color:var(--cyan);margin-top:3px}.label{font-size:12px;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px}.action{display:flex;justify-content:space-between;gap:12px;align-items:center}.action h3{margin:0 0 5px;font-size:14px}.action p{margin:0;font-size:12px;color:var(--muted)}button:disabled{opacity:.45;cursor:not-allowed}.meta{font:11px ui-monospace,monospace;color:var(--muted);word-break:break-word}.evidence{font:12px ui-monospace,monospace;white-space:pre-wrap;max-height:180px;overflow:auto}.receipt{margin-top:8px;border-top:1px solid var(--line);padding-top:8px}.warn{border-color:var(--amber)}
+</style></head>
+<body><main>
+<header class="top"><div><div class="eyebrow">THIRD BRAIN V8.1 · CODEX HOST/KERNEL</div><h1>Command Centre <span class="muted">/ 命令中心</span></h1><div id="host-note" class="muted">Loading Codex host snapshot… / 正在加载 Codex 主机快照…</div></div><div><button id="lang" type="button">中文</button><div id="status" class="pill">CONNECTING</div></div></header>
+<section><h2>Live evidence / 实时证据</h2><div id="metrics" class="metrics"></div><div id="evidence" class="card evidence" style="margin-top:10px">No host evidence yet. / 尚未取得主机证据。</div></section>
+<section><h2>Allowlisted actions / 白名单动作</h2><div id="actions" class="grid"></div></section>
+<section><h2>Receipts / 回执</h2><div id="receipts" class="grid"><div class="card muted">No action submitted. / 尚未提交动作。</div></div></section>
+<footer class="muted" style="margin-top:28px;font-size:12px">Only a terminal receipt with verifier PASS is success. HTTP 2xx, timeout, or animation is never success. / 只有带验证器 PASS 的终态回执才算成功。</footer>
+</main><script>
+const state={snapshot:null,zh:false,receipts:[]};const $=id=>document.getElementById(id);const text=(en,zh)=>state.zh?(zh||en):(en||zh||'');
+function metric(value,configured=true){if(!configured||value===null||value===undefined||value==='')return '—';if(typeof value==='object')return Object.values(value).reduce((a,v)=>a+(Number.isFinite(Number(v))?Number(v):0),0);return String(value)}
+function nested(o,...keys){let v=o;for(const k of keys){if(!v||typeof v!=='object')return undefined;v=v[k]}return v}
+function render(){const s=state.snapshot;if(!s){$('status').textContent='HOST DISCONNECTED';$('status').className='pill status-error';$('host-note').textContent=text('Host disconnected. Start tools/agentic_os_server.py with an explicit --state-root; no counts are available.','主机未连接。请用显式 --state-root 启动 tools/agentic_os_server.py；当前没有可用计数。');$('metrics').innerHTML=['Skills','Vault files','Debt items','Latest run'].map(k=>`<div class="card"><div class="label">${k}</div><div class="metric">—</div></div>`).join('');$('actions').innerHTML='<div class="card warn">Host disconnected. Actions are disabled. / 主机未连接，动作已禁用。</div>';return}
+const status=s.status||'ERROR';$('status').textContent=status;$('status').className='pill '+(status==='READY'?'status-ready':status==='PARTIAL'?'status-partial':'status-error');$('host-note').textContent=text(`Snapshot ${s.generated_at||'timestamp unavailable'} · side effects: ${s.side_effect_count??'—'}`,`快照 ${s.generated_at||'无时间戳'} · 副作用：${s.side_effect_count??'—'}`);const v=s.vault||{};const configured=v.configured===true;const counts=v.counts||{};const debt=v.debt||{};const inventoryDebt=debt.inventory||{};const mapDebt=debt.maps||{};const systemDebt=debt.system||{};const freshness=v.freshness||{};const run=v.latest_run;const repo=s.repository||{};const cards=[['Skills',repo.skill_count??repo.skills_count??nested(repo,'verification','skill_count')],['Vault files',configured?counts:undefined],['Provenance debt',configured?inventoryDebt.provenance_debt_count:undefined],['Invalid hashes',configured?inventoryDebt.invalid_hash_count:undefined],['Map + system debt',configured?(Number(mapDebt.debt_count||0)+Number(systemDebt.debt_count||0)):undefined],['Freshness due',configured?freshness.due_or_unknown:undefined],['Latest run',run?(run.run_id||run.id||run.status):undefined]];$('metrics').innerHTML=cards.map(([k,val])=>`<div class="card"><div class="label">${text(k,({Skills:'技能','Vault files':'Vault 文件','Provenance debt':'来源证据债务','Invalid hashes':'无效哈希','Map + system debt':'地图与系统债务','Freshness due':'待复核新鲜度','Latest run':'最近运行'})[k])}</div><div class="metric">${metric(val,k==='Skills'||configured||k==='Latest run'&&!!run)}</div></div>`).join('');const ev=[`generated_at: ${s.generated_at||'—'}`,`registry_sha256: ${repo.skill_registry_sha256||'—'}`,`contract_version: ${repo.contract_version||'—'}`,...(s.evidence||[]).map(x=>typeof x==='string'?x:JSON.stringify(x))];$('evidence').textContent=ev.join('\n');const actions=s.actions||[];$('actions').innerHTML=actions.length?actions.map(a=>{const enabled=a.state==='LIVE'&&!a.approval_required;const label=a.label||{};return `<div class="card action"><div><h3>${label.en||a.id} <span class="pill ${enabled?'status-ready':'disabled'}">${a.state||'UNAVAILABLE'}${a.approval_required?' · APPROVAL REQUIRED':''}</span></h3><p>${text((a.description||{}).en,(a.description||{}).zh)}</p><div class="meta">${a.id} · ${a.effect||'—'} · receipt required</div></div><button ${enabled?'':'disabled'} data-action="${a.id}">${text('Run','执行')}</button></div>`}).join(''):'<div class="card warn">No registry actions in the snapshot. / 快照没有注册动作。</div>';document.querySelectorAll('[data-action]').forEach(b=>b.onclick=()=>runAction(b.dataset.action));$('lang').textContent=state.zh?'EN':'中文'}
+async function load(){try{const r=await fetch('/api/snapshot',{cache:'no-store'});if(!r.ok)throw Error(`snapshot HTTP ${r.status}`);const s=await r.json();if(!s||!['READY','PARTIAL','ERROR'].includes(s.status))throw Error('invalid snapshot status');state.snapshot=s;render()}catch(e){state.snapshot=null;render()}}
+function showReceipt(r){state.receipts.unshift(r);$('receipts').innerHTML=state.receipts.map(x=>{const v=x.verifier||{};const ok=x.state==='SUCCEEDED'&&v.result==='PASS';return `<div class="card receipt"><div><span class="pill ${ok?'status-ready':x.state==='BLOCKED'?'disabled':'status-partial'}">${x.state||'UNKNOWN'}</span> ${x.action_id||'—'}</div><div class="meta">execution: ${x.execution_id||'—'}<br>started: ${x.started_at||'—'}<br>completed: ${x.completed_at||'—'}<br>verifier: ${v.result||'NOT_RUN'}</div><div class="evidence">${x.stderr_tail||x.stdout_tail||'No output.'}</div></div>`}).join('')}
+async function runAction(id){const provisional={action_id:id,state:'QUEUED',started_at:new Date().toISOString(),verifier:{result:'NOT_RUN'}};showReceipt(provisional);try{const r=await fetch('/api/actions/'+encodeURIComponent(id),{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});const receipt=await r.json();if(!r.ok||!receipt.execution_id){showReceipt({...provisional,state:'FAILED',stderr_tail:receipt.error||`HTTP ${r.status}`,completed_at:new Date().toISOString()});return}showReceipt(receipt);if(receipt.state==='QUEUED'||receipt.state==='RUNNING')poll(receipt.execution_id)}catch(e){showReceipt({...provisional,state:'FAILED',stderr_tail:String(e),completed_at:new Date().toISOString()})}}
+async function poll(id){for(let i=0;i<30;i++){await new Promise(r=>setTimeout(r,250));try{const r=await fetch('/api/receipts/'+encodeURIComponent(id),{cache:'no-store'});if(!r.ok)continue;const x=await r.json();if(['SUCCEEDED','FAILED','BLOCKED'].includes(x.state)){showReceipt(x);return}}catch(e){return}}}
+$('lang').onclick=()=>{state.zh=!state.zh;render()};render();load();
+</script></body></html>

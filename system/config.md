@@ -1,14 +1,30 @@
 ---
-title: "Third Brain V7.2 / V5.0 Path & Taxonomy Configuration"
+title: "Third Brain V8.1 Path, Schema & Taxonomy Configuration"
 type: system-config
-updated: "2026-07-31"
-version: "7.2.0"
+updated: "2026-08-18"
+version: "8.1.0"
 status: active
 ---
 
-# Third Brain V7.2 / V5.0 Path & Taxonomy Configuration
+# Third Brain V8.1 Path, Schema & Taxonomy Configuration
 
-This document defines the authoritative path and taxonomy contracts for skills reading from or writing to the Obsidian vault (`C:\Users\高杰\Documents\Obsidian Vault`).
+This document is the human-readable summary of the machine authority in `contracts/vault-contract.json` (or its deployed `system/contracts/v8.1/vault-contract.json` copy). The runtime requires an explicit Vault root; no personal absolute path is part of the contract.
+
+For compact operator navigation, start at [`system/vault-navigation.md`](vault-navigation.md).
+Workflow eligibility is documented in [`system/workflow-registry.md`](workflow-registry.md),
+and generated run/debt evidence is indexed by [`system/run-history-index.md`](run-history-index.md).
+These pages are control-plane descriptions; they never substitute for a fresh run receipt.
+
+## Codex OS Host Contract
+
+- **Primary host:** Codex desktop/CLI with workspace `AGENTS.md`.
+- **Skill programs:** manifest-verified installation at `~/.agents/skills/`.
+- **Canonical write kernel:** `python -m tools.worker_flow.cli` with the V8.1
+  staging, Governance, approval, CAS, post-check, and receipt gates.
+- **Compatibility only:** Claude, Gemini, Cursor, and Windsurf adapters may
+  consume the same skills, but they do not define project state or policy.
+- **Evidence:** only generated snapshots and terminal receipts prove host
+  capability, execution, Vault health, or completion.
 
 ---
 
@@ -17,18 +33,19 @@ This document defines the authoritative path and taxonomy contracts for skills r
 | Variable | Base Path | Taxonomy Subdirectories | Purpose |
 |---|---|---|---|
 | `VAULT_ROOT` | `.` | — | Root directory for the active Obsidian vault. |
-| `SOURCES_DIR` | `sources/` | `YYYY-MM/`, `pre-2026/`, `books/` | Immutable source notes, clippings, and books (>100KB). |
+| `SOURCES_DIR` | `sources/` | `YYYY-MM/` (`2026-08/`, `2026-07/`...), `pre-2026/`, `books/` | Immutable source notes, clippings, and books (>100KB). |
 | `WIKI_DIR` | `wiki/` | — | Living synthesis pages and structured knowledge. |
-| `CONCEPTS_DIR` | `wiki/concepts/` | 13 Domain Subdirectories (see Section 2) | Concept, framework, method, and theory notes. |
+| `CONCEPTS_DIR` | `wiki/concepts/` | 13 Domain Subdirectories (see Section 2) | Concept, framework, method, and theory notes (V8.1 Gold Standard). |
 | `ENTITIES_DIR` | `wiki/entities/` | 5 Category Subdirectories (see Section 3) | People, company, fund, product, and organization notes. |
 | `OUTPUTS_DIR` | `wiki/outputs/` | `gmail-digests/`, `evaluations/`, `compilations/` | Reusable briefs, evaluations, playbooks, and analyses. |
 | `DECISIONS_DIR` | `wiki/decisions/` | — | Architecture and strategy decision records. |
 | `SOPS_DIR` | `wiki/sops/` | — | Standard operating procedures. |
 | `MAPS_DIR` | `maps/` | `domain-mocs/`, `system-indexes/`, `project-maps/`, `canvases/` | Maps of Content, system dashboards, and visual graphs. |
-| `SYSTEM_DIR` | `system/` | `logs/`, `templates/`, `scripts/`, `assets/`, `references/` | Governance, path config, log archives, and scripts. |
+| `SYSTEM_DIR` | `system/` | `logs/`, `templates/`, `scripts/`, `assets/`, `references/`, `contracts/`, `runs/`, `queues/` | Governance, navigation, path config, log archives, templates, scripts, durable run state, and debt queues. |
+| `RUNS_DIR` | `system/runs/` | `YYYY-MM/<run_id>/` | Atomic worker flow run state checkpoints and execution receipts. |
 | `LOG_FILE` | `system/log.md` | — | Append-only active log (current quarter entries only). |
 | `LOG_ARCHIVE` | `system/logs/log-archive-historical.md` | — | Archived historical log entries (Batches 1–130). |
-| `LINT_REPORT_FILE`| `system/lint-report.md` | — | Latest wiki health and link lint report. |
+| `LINT_REPORT_FILE`| `system/lint-report.md` | — | Latest wiki health, schema validation, and link lint report. |
 
 ---
 
@@ -76,6 +93,7 @@ All source clipping notes and transcripts must be placed into chronological or s
 
 ```
 sources/
+├── 2026-08/    # August 2026 sources & clippings
 ├── 2026-07/    # July 2026 sources & clippings
 ├── 2026-06/    # June 2026 sources & clippings
 ├── 2026-05/    # May 2026 sources & clippings
@@ -101,5 +119,6 @@ wiki/outputs/
 
 1. **Path Resolution:** Skills writing new concept or entity notes MUST resolve the exact subfolder using the taxonomy rules above.
 2. **Immutable Sources:** Never modify files in `sources/` after creation unless explicitly requested to fix a transcript error.
-3. **Log Rotation:** Keep `system/log.md` under 100 KB. Archive entries older than 30 days to `system/logs/log-archive-historical.md`.
-4. **Wikilink Resolution:** Wikilinks in Obsidian automatically resolve across subdirectories (e.g., `[[Dario Amodei]]` links to `wiki/entities/people/Dario Amodei.md`). Absolute relative links in system indexes should use explicit paths.
+3. **Gold-Standard Contract:** All new or updated concept notes MUST adhere to `system/templates/template-concept-gold-standard.md` (V8.1.0 specification).
+4. **Log Rotation:** Keep `system/log.md` under 100 KB. Archive entries older than 30 days to `system/logs/log-archive-historical.md`.
+5. **Wikilink Resolution:** Wikilinks in Obsidian automatically resolve across subdirectories (e.g., `[[Dario Amodei]]` links to `wiki/entities/people/Dario Amodei.md`). Absolute relative links in system indexes should use explicit paths.

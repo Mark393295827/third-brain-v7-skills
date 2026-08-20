@@ -2,8 +2,8 @@
 name: session-learn
 description: Use when a completed work session should yield durable concepts, corrections, decisions, reusable patterns, and a traceable next action.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "stateful"
   assumes: "The session transcript, artifacts, or execution receipts are available."
   conflicts_with: "Claiming automatic capture without a configured hook, storing raw noise as knowledge, or changing immutable sources."

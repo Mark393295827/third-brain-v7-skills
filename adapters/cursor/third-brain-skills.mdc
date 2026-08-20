@@ -1,9 +1,9 @@
 ---
-description: Route tasks to Third Brain V7.1 skill contracts with profile-aware controls.
+description: Route tasks to Third Brain V8.1 skill contracts with profile-aware controls.
 alwaysApply: false
 ---
 
-# Third Brain V7.1 Skill Router
+# Third Brain V8.1 Skill Router
 
 When the user asks for knowledge ingestion, daily review, research, verification, behavior design, creativity, startup evaluation, or agent-team orchestration:
 
@@ -37,8 +37,9 @@ Common routing:
 - Agent permissions, tools, observability, or runtime safety -> `skills/harness-engineering/SKILL.md`
 - Team operating system, growth method, or self-evolving work method -> `skills/anthropic-os/SKILL.md`
 - Multi-agent execution -> `skills/agent-teams-command/SKILL.md`
+- Audit manual work, prior sessions, or interviews for reusable workflows -> `skills/workflow-audit/SKILL.md`
 
-Engineering boundary: Loop = temporal depth; Graph = dependency width; Agent Teams = process ownership, IPC, and integration; Harness = runtime scheduler, permissions, and observability. Use `graph-engineering` only when admission value exceeds orchestration and review cost. V7.1 supports bounded static DAGs, not dynamic or cyclic graphs.
+Engineering boundary: Loop = temporal depth; Graph = dependency width; Agent Teams = process ownership, IPC, and integration; Harness = runtime scheduler, permissions, and observability. Use `graph-engineering` only when admission value exceeds orchestration and review cost. V8.1 supports bounded static DAGs, not dynamic or cyclic graphs.
 
 Do not claim completion unless fresh evidence satisfies Success Metrics and Quality Gates.
 
