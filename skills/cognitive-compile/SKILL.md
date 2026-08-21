@@ -2,8 +2,8 @@
 name: cognitive-compile
 description: Use when source material must be transformed into a compact, evidence-aware model for learning, decisions, or an Obsidian concept note.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "one-shot"
   assumes: "The source material or a source-grounded summary is available."
   conflicts_with: "Inventing missing claims, erasing provenance, or presenting hypotheses as facts."

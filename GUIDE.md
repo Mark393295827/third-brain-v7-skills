@@ -1,6 +1,8 @@
-# Third Brain V7.1 Skills — Installation & Usage Guide
+# Third Brain V8.1 Skills — Installation & Usage Guide
 
-> **20 profile-aware skills** for a persistent knowledge and agent execution system. Compatible with Claude Code, Codex CLI, Gemini CLI, Cursor, Windsurf, and other rule/context-based AI IDEs.
+> **21 profile-aware skills** for a persistent Codex knowledge and agent execution system. Claude Code, Gemini CLI, Cursor, and Windsurf are optional compatibility adapters.
+
+Codex is the primary host/kernel for V8.1. The other harnesses are compatibility adapters and must be selected explicitly when Codex is not the host.
 
 ---
 
@@ -19,9 +21,13 @@
 
 ## 1. Installation
 
+### Codex Agentic OS command centre
+
+After installing the Codex skills, run `python tools/agentic_os_server.py --state-root .agentic-os-state` and open `http://127.0.0.1:8765/`. The command centre reads `/api/snapshot` from the T02 runtime and displays real evidence only. It disables host-dependent actions and treats only a terminal receipt whose verifier is `PASS` as success. See [docs/agentic-os-command-center.md](docs/agentic-os-command-center.md) for packaging, readiness, and the separately approved Codex Vault `AGENTS.md` sync.
+
 ### Prerequisites
 
-- One supported AI coding tool: **Claude Code**, **Codex CLI**, **Gemini CLI**, **Cursor**, **Windsurf**, or another tool that can read project rules/context files
+- **Codex CLI** as the primary host/kernel, or an explicitly selected compatibility adapter
 - **Git** (`git --version`)
 - **Python 3.8+** (for linting, loop validation, token-cost utility, and optional vector adapters)
 - **Bash**, or **PowerShell 5.1+ on Windows**, for the installer
@@ -33,6 +39,7 @@
 # Clone the repository
 git clone https://github.com/Mark393295827/third-brain-v5-skills.git
 cd third-brain-v5-skills
+git switch main
 bash install.sh
 ```
 
@@ -40,6 +47,7 @@ Windows PowerShell:
 
 ```powershell
 .\install.ps1
+.\install.ps1 codex
 ```
 
 Explicit targets:
@@ -57,21 +65,21 @@ Use the same targets with `.\install.ps1 <target>` on Windows.
 
 ### Install for Your Platform
 
-#### Claude Code (Recommended)
+#### Codex CLI (Primary host/kernel)
 
 ```bash
 # Personal skills (available across all projects)
-bash install.sh claude
+bash install.sh codex
 
 # Verify installation
-ls ~/.claude/skills/ | wc -l
-# Expected output: 20
+ls ~/.agents/skills/ | wc -l
+# Expected output: 21
 ```
 
-#### Codex CLI
+#### Claude Code (Compatibility adapter)
 
 ```bash
-bash install.sh codex
+bash install.sh claude
 ```
 
 #### Gemini CLI
@@ -98,7 +106,7 @@ bash install.sh windsurf
 
 For details, see [docs/compatibility.md](docs/compatibility.md).
 
-#### Commands (Optional)
+#### Claude command adapter (Optional compatibility path)
 
 ```bash
 # Copy command files for token tracking
@@ -111,7 +119,7 @@ cp commands/* ~/.claude/commands/
 
 ### 2.1 Graph Engineering (Optional)
 
-Use `graph-engineering` for dependency width only when explicit dependencies, independently executable branches, typed joins, or node-local recovery justify more orchestration and review cost than a serial workflow. V7.1 accepts bounded static DAGs; it rejects dynamic expansion and cyclic graphs.
+Use `graph-engineering` for dependency width only when explicit dependencies, independently executable branches, typed joins, or node-local recovery justify more orchestration and review cost than a serial workflow. V8.1 accepts bounded static DAGs; it rejects dynamic expansion and cyclic graphs.
 
 ### 2.2 Agent Teams (Optional)
 
@@ -121,12 +129,16 @@ Use `agent-teams-command` only after its admission gate shows that independent w
 
 ### 2.3 Wiki Path Configuration
 
-Skills read the default vault contract from `system/config.md`. If your Obsidian vault already has a different structure, copy that file into the vault and edit the path values before running write-heavy skills.
+The canonical runtime reads `contracts/vault-contract.json`; deployed Vaults receive the versioned copy at `system/contracts/v8.1/vault-contract.json`. `system/config.md` is a readable summary, not the machine authority. Resolve the explicit Vault root and inspect a staging plan before any write-heavy operation.
 
 Create the default layout when starting a new vault:
 
 ```bash
-mkdir -p {sources,wiki/{concepts,entities,atomic-notes,outputs,decisions,sops},maps,system/templates}
+mkdir -p sources/{"$(date +%Y-%m)",pre-2026,books}
+mkdir -p wiki/concepts/{ai-engineering,ai-economics,ai-science,behavioral-econ,business-strategy,entrepreneurship,general-concepts,geopolitics-energy,identity-culture,investing-macro,investing-quant,investing-vc,knowledge-systems}
+mkdir -p wiki/entities/{people,companies,funds-investors,products,orgs}
+mkdir -p wiki/outputs/{gmail-digests,evaluations,compilations} wiki/sops
+mkdir -p maps/{domain-mocs,system-indexes,project-maps,canvases} system/{templates,runs,queues}
 ```
 
 Minimum required variables:
@@ -162,19 +174,19 @@ Run this sequence to verify everything works:
 
 ```bash
 # Step 1: Verify skills are installed
-claude "What skills do I have?"
+codex "What skills do I have?"
 
 # Step 2: Ingest a piece of knowledge
-claude "I just read that Curiosity Rover found organic molecules on Mars. Ingest this into my wiki."
+codex "I just read that Curiosity Rover found organic molecules on Mars. Ingest this into my wiki."
 
 # Step 3: Run daily OKR
-claude "Run my daily OKR."
+codex "Run my daily OKR."
 
 # Step 4: Check wiki health
-claude "Lint my wiki."
+codex "Lint my wiki."
 
 # Step 5: Create an agent team (if enabled)
-claude "Create a team of 3 agents to research this topic."
+codex "Create a team of 3 agents to research this topic."
 ```
 
 ---
@@ -435,7 +447,7 @@ Discover team, sandbox, connector, and approval settings from the installed runt
 ```bash
 # Post-commit hook: auto-lint wiki
 cat > .git/hooks/post-commit << 'EOF'
-claude "Lint my wiki after this change."
+codex "Lint my wiki after this change."
 EOF
 chmod +x .git/hooks/post-commit
 ```
@@ -444,13 +456,13 @@ chmod +x .git/hooks/post-commit
 
 ```bash
 # Estimate before expensive tasks
-claude "Estimate token cost for a cognitive compile on this 50-page PDF."
+codex "Estimate token cost for a cognitive compile on this 50-page PDF."
 
 # Log after tasks
-claude "Log this task: cognitive-compile, runtime-model-id, 150K input, 35K output, using today's billing rates."
+codex "Log this task: cognitive-compile, runtime-model-id, 150K input, 35K output, using today's billing rates."
 
 # Weekly report
-claude "Generate my weekly token report."
+codex "Generate my weekly token report."
 ```
 
 ---
@@ -472,13 +484,13 @@ claude "Generate my weekly token report."
 
 ```bash
 # Check skills installed
-ls ~/.claude/skills/
+ls ~/.agents/skills/
 
-# Verify Claude Code version
-claude --version
+# Verify Codex version
+codex --version
 
-# Check settings
-cat ~/.claude/settings.json | grep agentTeams
+# Check the installed Codex navigation contract
+test -f AGENTS.md && test -d ~/.agents/skills
 
 # Check token log
 cat .token-log.csv | tail -5
@@ -537,4 +549,4 @@ cat .token-log.csv | tail -5
 
 ---
 
-> **Next**: Open Claude Code and say: "Run my daily OKR."
+> **Next**: Open Codex and say: "Run my daily OKR."

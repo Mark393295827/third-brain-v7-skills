@@ -1,7 +1,7 @@
 # Static Graph Contract
 
 Use this reference when writing or reviewing a `graph-engineering` JSON
-contract. V7.1 supports bounded static DAGs only. Put local repetition inside a
+contract. V8.1 supports bounded static DAGs only. Put local repetition inside a
 `loop` node; do not encode cycles or dynamic node expansion.
 
 ## Ownership Boundaries
@@ -40,7 +40,7 @@ Each edge declares `from`, `to`, `type`, `payload_schema`, `condition`, and
 
 Supported types are `data`, `control`, `verification`, `failure`, and
 `compensation`. Data and verification payloads must appear in the source
-node's `outputs` and target node's `inputs`. V7.1 rejects feedback edges and
+node's `outputs` and target node's `inputs`. V8.1 rejects feedback edges and
 all cycles. A non-empty `failure_route` is an implicit control arc from the
 edge source to the named recovery node, so it participates in reachability,
 entry/terminal, and cycle checks.
@@ -86,7 +86,7 @@ PENDING -> READY -> RUNNING -> VERIFYING -> SUCCEEDED
 
 `WAITING` may represent an unmet dependency or approval. Retry the failed node
 or smallest invalid subgraph after changing diagnosis or strategy. Rerun the
-whole graph only when the graph invariant itself is invalid; strict V7.1
+whole graph only when the graph invariant itself is invalid; strict V8.1
 contracts therefore set `whole_graph_rerun` to `false`.
 
 ## Admission

@@ -1,0 +1,13 @@
+{
+  "mission_id": "scratch-governance-20260820",
+  "recorded_at": "2026-08-20T18:28:08+08:00",
+  "algorithm": "sha256 of ordinal-sorted relative-posix-path TAB lowercase-file-sha256 LF records",
+  "trees": [
+    {"tree": "Clippings", "files": 1023, "bytes": 43715321, "fingerprint": "88d54dd7a1a0335c63873e84af6345261c6b4167e8ecf588cc13eb59931c6d80"},
+    {"tree": "sources", "files": 1358, "bytes": 23770182, "fingerprint": "ffc2dcacf1420468863a21054bc2b2c259778e5b14461eb136f910fbf1b00514"},
+    {"tree": "wiki", "files": 2766, "bytes": 16146042, "fingerprint": "a0825ae6dd1d6fbedb23a82fa639bac71f92d86976a610ba2c4139b7f2b37a55"},
+    {"tree": "maps", "files": 39, "bytes": 805222, "fingerprint": "25e9552cbf4fdb5e577caf6660ac559a0483f33b0f3dce7811b631c136f6f468"},
+    {"tree": "system", "files": 187, "bytes": 9656343, "fingerprint": "4583b701e55056e4387ce8d49e331c93cdb4c95ac3d1357183948e7aa7805847"},
+    {"tree": ".obsidian", "files": 34, "bytes": 2805475, "fingerprint": "29621b98c02332ebf9dc0ffba294f1f4ebb4fa5ca707ac49f4da71696efcc2be"}
+  ]
+}

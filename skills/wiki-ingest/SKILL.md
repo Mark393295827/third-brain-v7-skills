@@ -2,8 +2,8 @@
 name: wiki-ingest
 description: Use when a PDF, URL, transcript, clipping, or raw note must become source-grounded, linked, governed knowledge in an Obsidian vault.
 metadata:
-  version: "7.2.1"
-  updated: "2026-08-09"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "high-risk"
   assumes: "The source is accessible and the vault root plus write boundaries can be resolved."
   conflicts_with: "Invented provenance, modified immutable sources, unsupported concept promotion, or success claims without post-ingest checks."
@@ -44,6 +44,8 @@ If the source cannot be read, the vault is ambiguous, or provenance cannot be di
 </unknowns_gate>
 
 <execute>
+
+`wiki-ingest` owns one evidence-to-candidate transaction: immutable source capture, concept candidate, graph update plan, governance handoff, and clipping transition after verified commit. Cross-corpus deduplication, retrieval/index maintenance, and knowledge-debt queues belong to `knowledge-ops`; health scoring and generalized repair recommendations belong to `wiki-lint`.
 
 1. **Source:** create or identify one immutable source note; preserve raw content and archive locators. Extract 3-7 key insights with stable block references. For concurrent ingest, stage the candidate, recheck the source identity immediately before commit, and promote only one canonical path.
 2. **Transform:** separate direct claims, interpretations, contradictions, unknowns, and fast-changing facts. Mark single-source and self-reported claims.

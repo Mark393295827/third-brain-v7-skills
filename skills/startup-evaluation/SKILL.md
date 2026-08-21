@@ -2,8 +2,8 @@
 name: startup-evaluation
 description: Use when a startup needs an evidence-weighted health check, investor lens, runway diagnosis, top constraint, or cheapest next validation test.
 metadata:
-  version: "7.2.1"
-  updated: "2026-08-09"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "one-shot"
   assumes: "The company stage, business type, and at least partial customer or operating evidence can be obtained."
   conflicts_with: "Treating pitch quality, market size, or founder conviction as proof of demand or investment merit."

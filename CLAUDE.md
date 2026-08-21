@@ -1,12 +1,12 @@
-# Third Brain V7.2 Skills — Claude Code
+# Third Brain V8.1 Skills — Claude Code
 
 For detailed installation, usage, and workflow scenarios, see **[GUIDE.md](GUIDE.md)**.
 
-You have access to the 20 Agent Skills defined in `~/.claude/skills/` or `~/.agents/skills/`.
+This file is a Claude Code compatibility adapter. Codex OS and `AGENTS.md` are the primary project host contract. The repository exposes 21 Agent Skills under `skills/`; compatible installations may mirror them to `~/.claude/skills/` or `~/.agents/skills/`.
 
-## V7.2 Multi-Domain Taxonomy Specification
+## V8.1 Multi-Domain Taxonomy Specification
 
-V7.2 defines a multi-domain taxonomy for the active Obsidian vault (`C:\Users\高杰\Documents\Obsidian Vault`):
+`contracts/vault-contract.json` defines the machine-enforced multi-domain taxonomy. Always resolve an explicit Vault root; no personal path is part of this contract.
 
 1. **`wiki/concepts/` (13 Domain Subdirectories):**
    `ai-engineering`, `ai-economics`, `ai-science`, `behavioral-econ`, `business-strategy`, `entrepreneurship`, `general-concepts`, `geopolitics-energy`, `identity-culture`, `investing-macro`, `investing-quant`, `investing-vc`, `knowledge-systems`.

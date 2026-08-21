@@ -4,7 +4,7 @@ Load this reference when writing notes or adapting the pipeline to a vault schem
 
 ## Path Resolution
 
-Read `system/config.md` when available. Otherwise use:
+Read the machine contract first: repository execution uses `contracts/vault-contract.json`, while a deployed Vault uses `system/contracts/v8.1/vault-contract.json`. Verify `contract_id`, `contract_version`, and the resolved Vault root before any write. Use `system/config.md` only as a human-readable compatibility summary. If no machine contract is available, stop before mutation; the following paths are read-only discovery defaults:
 
 ```text
 SOURCES_DIR=sources/
@@ -15,7 +15,7 @@ SYSTEM_DIR=system/
 LOG_FILE=system/log.md
 ```
 
-Never infer that a similarly named directory is the target vault without checking its root.
+Never infer that a similarly named directory is the target Vault without checking its root. Discovery defaults do not grant write authority.
 
 ## Source Note Minimum
 

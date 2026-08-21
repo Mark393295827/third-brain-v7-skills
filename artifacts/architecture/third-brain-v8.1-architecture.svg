@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1350" viewBox="0 0 2400 1350" role="img" aria-labelledby="title desc">
+  <title id="title">AI驱动的第三大脑 V8.1 项目架构</title>
+  <desc id="desc">人脑战略导航、技能与上下文编排、五阶段 Worker 流水线、Obsidian 知识操作系统、事务运行时、零信任治理、输出与认知复利闭环。</desc>
+  <metadata>
+    Version 8.1.0. Machine authority: contracts/vault-contract.json and contracts/system-bundle.json.
+    Canonical runtime: python -m tools.worker_flow.cli. W5 is an optional reviewed support lane.
+  </metadata>
+  <defs>
+    <linearGradient id="pageBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbfdff"/>
+      <stop offset="1" stop-color="#f1f6fa"/>
+    </linearGradient>
+    <linearGradient id="titleGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0c4f89"/>
+      <stop offset="0.55" stop-color="#244783"/>
+      <stop offset="1" stop-color="#683f91"/>
+    </linearGradient>
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#15324d" flood-opacity="0.13"/>
+    </filter>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#15324d" flood-opacity="0.10"/>
+    </filter>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1767a6"/>
+    </marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6750a4"/>
+    </marker>
+    <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#187d80"/>
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#c97816"/>
+    </marker>
+    <style>
+      text { font-family: "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", Arial, sans-serif; fill: #17324d; }
+      .title { font-size: 43px; font-weight: 800; letter-spacing: 1px; }
+      .subtitle { font-size: 23px; font-weight: 600; fill: #31536f; }
+      .strap { font-size: 18px; fill: #48677f; }
+      .section { font-size: 20px; font-weight: 800; fill: #ffffff; }
+      .cardTitle { font-size: 20px; font-weight: 800; }
+      .body { font-size: 16px; }
+      .bodyBold { font-size: 16px; font-weight: 700; }
+      .small { font-size: 14px; fill: #526b80; }
+      .tiny { font-size: 12px; fill: #657b8d; }
+      .white { fill: #ffffff; }
+      .navy { fill: #0f4f88; }
+      .blue { fill: #1767a6; }
+      .teal { fill: #187d80; }
+      .purple { fill: #6750a4; }
+      .green { fill: #2f7b4d; }
+      .amber { fill: #c97816; }
+      .red { fill: #b54444; }
+      .panel { fill: #ffffff; stroke: #9ab1c3; stroke-width: 1.5; }
+      .inset { fill: #ffffff; stroke-width: 1.2; }
+      .dashed { stroke-dasharray: 7 6; }
+    </style>
+  </defs>
+
+  <rect width="2400" height="1350" fill="url(#pageBg)"/>
+  <rect x="0" y="0" width="2400" height="12" fill="url(#titleGlow)"/>
+
+  <!-- Header -->
+  <text x="1200" y="60" text-anchor="middle" class="title">AI驱动的第三大脑 V8.1：人脑 × LLM Wiki × 5-Stage Worker × 事务治理</text>
+  <text x="1200" y="96" text-anchor="middle" class="subtitle">Third Brain Knowledge Operating System — Current Project Architecture</text>
+  <text x="1200" y="126" text-anchor="middle" class="strap">不可变事实 → 认知编译 → 图谱编织 → 契约验证 → 显式提交 → 交付与反馈</text>
+
+  <!-- Paradigm evolution -->
+  <g id="paradigm-evolution">
+    <rect x="28" y="145" width="2344" height="218" rx="16" class="panel"/>
+    <rect x="28" y="145" width="2344" height="38" rx="14" fill="#0f4f88"/>
+    <rect x="28" y="169" width="2344" height="14" fill="#0f4f88"/>
+    <text x="48" y="171" class="section">一、范式跃迁 / Paradigm Evolution</text>
+
+    <g filter="url(#softShadow)">
+      <rect x="54" y="199" width="500" height="142" rx="14" fill="#eef5fb" stroke="#8fb1ca"/>
+      <circle cx="96" cy="240" r="25" fill="#1767a6"/>
+      <text x="96" y="248" text-anchor="middle" class="white" font-size="24" font-weight="800">A</text>
+      <text x="133" y="229" class="cardTitle blue">V1–V3：知识存储</text>
+      <text x="133" y="254" class="small">笔记 / 文件 / 数据库</text>
+      <text x="78" y="286" class="body">• 关注保存、搜索与分类</text>
+      <text x="78" y="313" class="body">• 静态、碎片化、难转化为行动</text>
+    </g>
+
+    <line x1="562" y1="270" x2="608" y2="270" stroke="#1767a6" stroke-width="6" marker-end="url(#arrowBlue)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="620" y="199" width="500" height="142" rx="14" fill="#f2f0fb" stroke="#a99bd2"/>
+      <circle cx="662" cy="240" r="25" fill="#6750a4"/>
+      <text x="662" y="248" text-anchor="middle" class="white" font-size="24" font-weight="800">B</text>
+      <text x="699" y="229" class="cardTitle purple">V4–V5：LLM Wiki</text>
+      <text x="699" y="254" class="small">Raw + Wiki + Schema + Index</text>
+      <text x="644" y="286" class="body">• 知识编译、链接与持续维护</text>
+      <text x="644" y="313" class="body">• 从“知道”走向“做到”</text>
+    </g>
+
+    <line x1="1128" y1="270" x2="1174" y2="270" stroke="#6750a4" stroke-width="6" marker-end="url(#arrowPurple)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="1186" y="199" width="500" height="142" rx="14" fill="#edf8f5" stroke="#80b9ad"/>
+      <circle cx="1228" cy="240" r="25" fill="#187d80"/>
+      <text x="1228" y="248" text-anchor="middle" class="white" font-size="24" font-weight="800">C</text>
+      <text x="1265" y="229" class="cardTitle teal">V6–V7：结构化认知</text>
+      <text x="1265" y="254" class="small">概念卡片 + OODA + Closure</text>
+      <text x="1210" y="286" class="body">• 证据边界、机制与可证伪性</text>
+      <text x="1210" y="313" class="body">• 抗脆弱决策与闭环写回</text>
+    </g>
+
+    <line x1="1694" y1="270" x2="1740" y2="270" stroke="#c97816" stroke-width="6" marker-end="url(#arrowAmber)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="1752" y="199" width="594" height="142" rx="14" fill="#fff7e8" stroke="#ddb56d"/>
+      <circle cx="1794" cy="240" r="25" fill="#c97816"/>
+      <text x="1794" y="248" text-anchor="middle" class="white" font-size="24" font-weight="800">D</text>
+      <text x="1831" y="229" class="cardTitle amber">V8.1：事务型 Agent Knowledge OS</text>
+      <text x="1831" y="254" class="small">5 Workers + Contracts + Receipts</text>
+      <text x="1776" y="286" class="body">• 分阶段、失败关闭、显式审批、串行提交</text>
+      <text x="1776" y="313" class="body">• 可追溯、可验证、可回滚、可复利</text>
+    </g>
+  </g>
+
+  <!-- Main architecture -->
+  <g id="main-architecture">
+    <rect x="28" y="380" width="2344" height="620" rx="16" class="panel"/>
+    <rect x="28" y="380" width="2344" height="40" rx="14" fill="#0f4f88"/>
+    <rect x="28" y="406" width="2344" height="14" fill="#0f4f88"/>
+    <text x="48" y="407" class="section">二、V8.1 系统主架构 / Input → Orchestration → Worker Assembly → Canonical Vault → Output</text>
+
+    <!-- 1 Input -->
+    <g filter="url(#softShadow)">
+      <rect x="50" y="438" width="240" height="438" rx="14" fill="#eef5fb" stroke="#6d9dc0" stroke-width="1.5"/>
+      <rect x="50" y="438" width="240" height="45" rx="14" fill="#dcecf7"/>
+      <rect x="50" y="469" width="240" height="14" fill="#dcecf7"/>
+      <circle cx="76" cy="460" r="16" fill="#1767a6"/>
+      <text x="76" y="466" text-anchor="middle" class="white" font-size="17" font-weight="800">1</text>
+      <text x="99" y="467" class="cardTitle blue">输入与事实</text>
+      <text x="70" y="511" class="small">INPUT / FACTS</text>
+      <rect x="68" y="528" width="204" height="58" rx="9" class="inset" stroke="#89abc4"/>
+      <text x="84" y="552" class="bodyBold">外部世界</text>
+      <text x="84" y="576" class="small">网页 / PDF / 音视频 / 代码</text>
+      <rect x="68" y="598" width="204" height="58" rx="9" class="inset" stroke="#89abc4"/>
+      <text x="84" y="622" class="bodyBold">用户输入</text>
+      <text x="84" y="646" class="small">问题 / 目标 / 体验 / 决策</text>
+      <rect x="68" y="668" width="204" height="58" rx="9" class="inset" stroke="#89abc4"/>
+      <text x="84" y="692" class="bodyBold">环境与遥测</text>
+      <text x="84" y="716" class="small">反馈 / 指标 / 告警 / 变化</text>
+      <rect x="68" y="738" width="204" height="58" rx="9" class="inset" stroke="#89abc4"/>
+      <text x="84" y="762" class="bodyBold">本地入口</text>
+      <text x="84" y="786" class="small">Clippings / 显式文件路径</text>
+      <rect x="68" y="814" width="204" height="42" rx="9" fill="#1767a6"/>
+      <text x="170" y="840" text-anchor="middle" class="white" font-size="14" font-weight="700">输入 ≠ 已验证事实</text>
+    </g>
+
+    <!-- 2 Human strategy -->
+    <g filter="url(#softShadow)">
+      <rect x="310" y="438" width="230" height="438" rx="14" fill="#edf8f5" stroke="#6ba79d" stroke-width="1.5"/>
+      <rect x="310" y="438" width="230" height="45" rx="14" fill="#d8eee8"/>
+      <rect x="310" y="469" width="230" height="14" fill="#d8eee8"/>
+      <circle cx="336" cy="460" r="16" fill="#187d80"/>
+      <text x="336" y="466" text-anchor="middle" class="white" font-size="17" font-weight="800">2</text>
+      <text x="359" y="467" class="cardTitle teal">人脑战略导航</text>
+      <text x="425" y="518" text-anchor="middle" class="teal" font-size="27" font-weight="800">HITL</text>
+      <circle cx="425" cy="514" r="44" fill="none" stroke="#187d80" stroke-width="2"/>
+      <rect x="328" y="575" width="194" height="48" rx="9" class="inset" stroke="#7eb3a9"/>
+      <text x="425" y="605" text-anchor="middle" class="bodyBold">North Star / 优先级</text>
+      <rect x="328" y="636" width="194" height="48" rx="9" class="inset" stroke="#7eb3a9"/>
+      <text x="425" y="666" text-anchor="middle" class="bodyBold">审美、伦理与边界</text>
+      <rect x="328" y="697" width="194" height="48" rx="9" class="inset" stroke="#7eb3a9"/>
+      <text x="425" y="727" text-anchor="middle" class="bodyBold">审批与最终裁决</text>
+      <rect x="328" y="758" width="194" height="48" rx="9" class="inset" stroke="#7eb3a9"/>
+      <text x="425" y="788" text-anchor="middle" class="bodyBold">异常处理与停止</text>
+      <text x="425" y="837" text-anchor="middle" class="small">人脑是舵手，不是语法苦力</text>
+    </g>
+
+    <!-- 3 Orchestration -->
+    <g filter="url(#softShadow)">
+      <rect x="560" y="438" width="280" height="438" rx="14" fill="#f2f0fb" stroke="#9a89c8" stroke-width="1.5"/>
+      <rect x="560" y="438" width="280" height="45" rx="14" fill="#e7e1f6"/>
+      <rect x="560" y="469" width="280" height="14" fill="#e7e1f6"/>
+      <circle cx="586" cy="460" r="16" fill="#6750a4"/>
+      <text x="586" y="466" text-anchor="middle" class="white" font-size="17" font-weight="800">3</text>
+      <text x="609" y="467" class="cardTitle purple">Skills / Context 编排</text>
+      <text x="700" y="511" text-anchor="middle" class="small">LLM OS PROGRAM LAYER</text>
+      <rect x="580" y="531" width="112" height="74" rx="10" fill="#ffffff" stroke="#a99bd2"/>
+      <text x="636" y="560" text-anchor="middle" class="purple" font-size="19" font-weight="800">21</text>
+      <text x="636" y="586" text-anchor="middle" class="small">Agent Skills</text>
+      <rect x="706" y="531" width="112" height="74" rx="10" fill="#ffffff" stroke="#a99bd2"/>
+      <text x="762" y="560" text-anchor="middle" class="purple" font-size="19" font-weight="800">MCP</text>
+      <text x="762" y="586" text-anchor="middle" class="small">Tools / Apps</text>
+      <rect x="580" y="620" width="112" height="74" rx="10" fill="#ffffff" stroke="#a99bd2"/>
+      <text x="636" y="649" text-anchor="middle" class="purple" font-size="19" font-weight="800">RAM</text>
+      <text x="636" y="675" text-anchor="middle" class="small">Context Budget</text>
+      <rect x="706" y="620" width="112" height="74" rx="10" fill="#ffffff" stroke="#a99bd2"/>
+      <text x="762" y="649" text-anchor="middle" class="purple" font-size="19" font-weight="800">DAG</text>
+      <text x="762" y="675" text-anchor="middle" class="small">Agent Teams</text>
+      <rect x="580" y="710" width="238" height="47" rx="9" class="inset" stroke="#a99bd2"/>
+      <text x="699" y="739" text-anchor="middle" class="bodyBold">权限边界 + 工具路由</text>
+      <rect x="580" y="768" width="238" height="47" rx="9" class="inset" stroke="#a99bd2"/>
+      <text x="699" y="797" text-anchor="middle" class="bodyBold">预算 / 检查点 / 停止规则</text>
+      <text x="700" y="841" text-anchor="middle" class="small">Skills 是程序，Harness 是内核</text>
+    </g>
+
+    <!-- 4 Five-stage worker pipeline -->
+    <g filter="url(#softShadow)">
+      <rect x="860" y="438" width="500" height="438" rx="14" fill="#f7fbfd" stroke="#497da5" stroke-width="2"/>
+      <rect x="860" y="438" width="500" height="45" rx="14" fill="#0f4f88"/>
+      <rect x="860" y="469" width="500" height="14" fill="#0f4f88"/>
+      <circle cx="886" cy="460" r="16" fill="#ffffff"/>
+      <text x="886" y="466" text-anchor="middle" class="navy" font-size="17" font-weight="800">4</text>
+      <text x="909" y="467" class="cardTitle white">5-Stage Worker Assembly Pipeline</text>
+
+      <rect x="882" y="500" width="456" height="61" rx="10" fill="#eef5fb" stroke="#6d9dc0"/>
+      <circle cx="913" cy="530" r="20" fill="#1767a6"/>
+      <text x="913" y="537" text-anchor="middle" class="white" font-size="17" font-weight="800">W1</text>
+      <text x="948" y="522" class="bodyBold blue">INGEST — 不可变来源</text>
+      <text x="948" y="546" class="small">完整字节 · SHA-256 · provenance · 3–7 anchors</text>
+
+      <rect x="882" y="571" width="456" height="61" rx="10" fill="#f2f0fb" stroke="#a99bd2"/>
+      <circle cx="913" cy="601" r="20" fill="#6750a4"/>
+      <text x="913" y="608" text-anchor="middle" class="white" font-size="17" font-weight="800">W2</text>
+      <text x="948" y="593" class="bodyBold purple">COGNITIVE — 黄金标准概念</text>
+      <text x="948" y="617" class="small">论点 · 机制 · 证据边界 · 反证 · 精确定位</text>
+
+      <rect x="882" y="642" width="456" height="61" rx="10" fill="#edf8f5" stroke="#7eb3a9"/>
+      <circle cx="913" cy="672" r="20" fill="#187d80"/>
+      <text x="913" y="679" text-anchor="middle" class="white" font-size="17" font-weight="800">W3</text>
+      <text x="948" y="664" class="bodyBold teal">GRAPHWEAVER — MOC / Map Delta</text>
+      <text x="948" y="688" class="small">分类 · 链接 · 锚点 · 共享目标 preimage</text>
+
+      <rect x="882" y="713" width="456" height="61" rx="10" fill="#fff0ef" stroke="#d38989"/>
+      <circle cx="913" cy="743" r="20" fill="#b54444"/>
+      <text x="913" y="750" text-anchor="middle" class="white" font-size="17" font-weight="800">W4</text>
+      <text x="948" y="735" class="bodyBold red">GOVERNANCE — Submit / Verify / Commit</text>
+      <text x="948" y="759" class="small">Schema · links · anchors · freshness · touched set</text>
+
+      <rect x="882" y="784" width="456" height="61" rx="10" fill="#fff7e8" stroke="#ddb56d"/>
+      <circle cx="913" cy="814" r="20" fill="#c97816"/>
+      <text x="913" y="821" text-anchor="middle" class="white" font-size="17" font-weight="800">W5</text>
+      <text x="948" y="806" class="bodyBold amber">DELIVERABLE — 可选支持通道</text>
+      <text x="948" y="830" class="small">基于已提交知识的独立、人工复核交付任务</text>
+      <text x="1110" y="862" text-anchor="middle" class="tiny">W1–W4 为必需事务；W5 不代表自动交付渲染器</text>
+    </g>
+
+    <!-- 5 Canonical vault -->
+    <g filter="url(#softShadow)">
+      <rect x="1380" y="438" width="300" height="438" rx="14" fill="#edf8f5" stroke="#5f9e84" stroke-width="1.5"/>
+      <rect x="1380" y="438" width="300" height="45" rx="14" fill="#dbeee4"/>
+      <rect x="1380" y="469" width="300" height="14" fill="#dbeee4"/>
+      <circle cx="1406" cy="460" r="16" fill="#2f7b4d"/>
+      <text x="1406" y="466" text-anchor="middle" class="white" font-size="17" font-weight="800">5</text>
+      <text x="1429" y="467" class="cardTitle green">Obsidian 知识操作系统</text>
+      <text x="1530" y="511" text-anchor="middle" class="small">CANONICAL MARKDOWN DISK</text>
+
+      <rect x="1400" y="529" width="122" height="72" rx="10" fill="#ffffff" stroke="#75a990"/>
+      <text x="1461" y="557" text-anchor="middle" class="green" font-size="18" font-weight="800">SOURCES</text>
+      <text x="1461" y="582" text-anchor="middle" class="small">不可变收据</text>
+      <rect x="1538" y="529" width="122" height="72" rx="10" fill="#ffffff" stroke="#75a990"/>
+      <text x="1599" y="557" text-anchor="middle" class="green" font-size="18" font-weight="800">CONCEPTS</text>
+      <text x="1599" y="582" text-anchor="middle" class="small">13 Domains</text>
+
+      <rect x="1400" y="615" width="122" height="72" rx="10" fill="#ffffff" stroke="#75a990"/>
+      <text x="1461" y="643" text-anchor="middle" class="green" font-size="18" font-weight="800">ENTITIES</text>
+      <text x="1461" y="668" text-anchor="middle" class="small">5 Categories</text>
+      <rect x="1538" y="615" width="122" height="72" rx="10" fill="#ffffff" stroke="#75a990"/>
+      <text x="1599" y="643" text-anchor="middle" class="green" font-size="18" font-weight="800">MAPS</text>
+      <text x="1599" y="668" text-anchor="middle" class="small">4 Tiers / MOC</text>
+
+      <rect x="1400" y="701" width="122" height="72" rx="10" fill="#ffffff" stroke="#75a990"/>
+      <text x="1461" y="729" text-anchor="middle" class="green" font-size="18" font-weight="800">OUTPUTS</text>
+      <text x="1461" y="754" text-anchor="middle" class="small">Reviewed</text>
+      <rect x="1538" y="701" width="122" height="72" rx="10" fill="#ffffff" stroke="#75a990"/>
+      <text x="1599" y="729" text-anchor="middle" class="green" font-size="18" font-weight="800">RUNS</text>
+      <text x="1599" y="754" text-anchor="middle" class="small">状态 / 收据 / 队列</text>
+
+      <rect x="1400" y="789" width="260" height="50" rx="9" fill="#2f7b4d"/>
+      <text x="1530" y="812" text-anchor="middle" class="white" font-size="14" font-weight="700">事实不可变 · 概念可进化</text>
+      <text x="1530" y="831" text-anchor="middle" class="white" font-size="12">Markdown 是机器权威存储</text>
+      <text x="1530" y="861" text-anchor="middle" class="tiny">Entity / Canvas 能力以运行时契约为准</text>
+    </g>
+
+    <!-- 6 Output -->
+    <g filter="url(#softShadow)">
+      <rect x="1700" y="438" width="350" height="438" rx="14" fill="#fff7e8" stroke="#d7a550" stroke-width="1.5"/>
+      <rect x="1700" y="438" width="350" height="45" rx="14" fill="#f8e6bf"/>
+      <rect x="1700" y="469" width="350" height="14" fill="#f8e6bf"/>
+      <circle cx="1726" cy="460" r="16" fill="#c97816"/>
+      <text x="1726" y="466" text-anchor="middle" class="white" font-size="17" font-weight="800">6</text>
+      <text x="1749" y="467" class="cardTitle amber">行动、交付与价值</text>
+      <text x="1875" y="511" text-anchor="middle" class="small">OUTPUT / ACTION / FEEDBACK</text>
+      <rect x="1722" y="529" width="306" height="56" rx="9" class="inset" stroke="#ddb56d"/>
+      <circle cx="1752" cy="557" r="16" fill="#c97816"/>
+      <text x="1752" y="563" text-anchor="middle" class="white" font-size="14" font-weight="800">D</text>
+      <text x="1780" y="563" class="bodyBold">决策备忘录 / 投资评估</text>
+      <rect x="1722" y="597" width="306" height="56" rx="9" class="inset" stroke="#ddb56d"/>
+      <circle cx="1752" cy="625" r="16" fill="#c97816"/>
+      <text x="1752" y="631" text-anchor="middle" class="white" font-size="14" font-weight="800">R</text>
+      <text x="1780" y="631" class="bodyBold">报告 / 编译 / 学习地图</text>
+      <rect x="1722" y="665" width="306" height="56" rx="9" class="inset" stroke="#ddb56d"/>
+      <circle cx="1752" cy="693" r="16" fill="#c97816"/>
+      <text x="1752" y="699" text-anchor="middle" class="white" font-size="14" font-weight="800">S</text>
+      <text x="1780" y="699" class="bodyBold">SOP / 行为设计 / Daily OKR</text>
+      <rect x="1722" y="733" width="306" height="56" rx="9" class="inset" stroke="#ddb56d"/>
+      <circle cx="1752" cy="761" r="16" fill="#c97816"/>
+      <text x="1752" y="767" text-anchor="middle" class="white" font-size="14" font-weight="800">B</text>
+      <text x="1780" y="767" class="bodyBold">研究 / 产品 / 代码候选</text>
+      <rect x="1722" y="801" width="306" height="42" rx="9" fill="#c97816"/>
+      <text x="1875" y="827" text-anchor="middle" class="white" font-size="14" font-weight="700">结果 → 反馈 → 新一轮输入</text>
+      <text x="1875" y="863" text-anchor="middle" class="tiny">外部发布与执行仍受显式权限约束</text>
+    </g>
+
+    <!-- Governance rail -->
+    <g filter="url(#softShadow)">
+      <rect x="2070" y="438" width="280" height="438" rx="14" fill="#fff0ef" stroke="#c96d6d" stroke-width="1.6"/>
+      <rect x="2070" y="438" width="280" height="45" rx="14" fill="#b54444"/>
+      <rect x="2070" y="469" width="280" height="14" fill="#b54444"/>
+      <text x="2210" y="466" text-anchor="middle" class="cardTitle white">治理与溯源 / Governance</text>
+      <rect x="2090" y="503" width="240" height="42" rx="8" fill="#ffffff" stroke="#d38989"/>
+      <text x="2210" y="529" text-anchor="middle" class="bodyBold red">Vault + System Bundle Contracts</text>
+      <rect x="2090" y="555" width="240" height="42" rx="8" fill="#ffffff" stroke="#d38989"/>
+      <text x="2210" y="581" text-anchor="middle" class="bodyBold">Schemas + Typed Templates</text>
+      <rect x="2090" y="607" width="240" height="42" rx="8" fill="#ffffff" stroke="#d38989"/>
+      <text x="2210" y="633" text-anchor="middle" class="bodyBold">SHA-256 + Source IDs</text>
+      <rect x="2090" y="659" width="240" height="42" rx="8" fill="#ffffff" stroke="#d38989"/>
+      <text x="2210" y="685" text-anchor="middle" class="bodyBold">Links + All Block Anchors</text>
+      <rect x="2090" y="711" width="240" height="42" rx="8" fill="#ffffff" stroke="#d38989"/>
+      <text x="2210" y="737" text-anchor="middle" class="bodyBold">Freshness + Touched-Set Tests</text>
+      <rect x="2090" y="763" width="240" height="42" rx="8" fill="#ffffff" stroke="#d38989"/>
+      <text x="2210" y="789" text-anchor="middle" class="bodyBold">Approval + Compare-and-Set</text>
+      <rect x="2090" y="815" width="240" height="42" rx="8" fill="#b54444"/>
+      <text x="2210" y="841" text-anchor="middle" class="white" font-size="14" font-weight="700">Append-only Receipts · Fail Closed</text>
+    </g>
+
+    <!-- Main flow arrows -->
+    <line x1="290" y1="650" x2="306" y2="650" stroke="#1767a6" stroke-width="5" marker-end="url(#arrowBlue)"/>
+    <line x1="540" y1="650" x2="556" y2="650" stroke="#187d80" stroke-width="5" marker-end="url(#arrowTeal)"/>
+    <line x1="840" y1="650" x2="856" y2="650" stroke="#6750a4" stroke-width="5" marker-end="url(#arrowPurple)"/>
+    <line x1="1360" y1="650" x2="1376" y2="650" stroke="#187d80" stroke-width="5" marker-end="url(#arrowTeal)"/>
+    <line x1="1680" y1="650" x2="1696" y2="650" stroke="#c97816" stroke-width="5" marker-end="url(#arrowAmber)"/>
+    <path d="M 2210 876 L 2210 902 L 1110 902" fill="none" stroke="#b54444" stroke-width="2" class="dashed"/>
+    <path d="M 2210 483 L 2210 428 L 1110 428" fill="none" stroke="#b54444" stroke-width="2" class="dashed"/>
+
+    <!-- Transactional runtime band -->
+    <rect x="310" y="902" width="1740" height="48" rx="15" fill="#0f4f88"/>
+    <text x="330" y="932" class="white" font-size="16" font-weight="800">事务运行时 / Runtime Kernel</text>
+    <text x="585" y="932" class="white" font-size="14">python -m tools.worker_flow.cli</text>
+    <text x="875" y="932" class="white" font-size="14" font-weight="700">CLAIMED → STAGED → AUTHORED → VERIFIED → COMMITTED → ARCHIVED</text>
+    <text x="1665" y="932" class="white" font-size="13">显式 Vault / Repo · Run ID · CAS · Approval · Rollback</text>
+
+    <!-- Learning loop -->
+    <path d="M 1875 884 L 1875 967 L 170 967 L 170 884" fill="none" stroke="#1767a6" stroke-width="7" stroke-linejoin="round" marker-end="url(#arrowBlue)"/>
+    <rect x="690" y="951" width="880" height="34" rx="17" fill="#ffffff" stroke="#6d9dc0" stroke-width="1.5"/>
+    <text x="1130" y="974" text-anchor="middle" class="bodyBold blue">深化迭代：交付结果 → 行动反馈 → 证据更新 → Wiki 更新 → 下一轮输入</text>
+  </g>
+
+  <!-- Bottom flywheel, principles, goal -->
+  <g id="flywheel-and-principles">
+    <rect x="28" y="1015" width="2344" height="306" rx="16" class="panel"/>
+
+    <!-- Flywheel -->
+    <rect x="28" y="1015" width="1510" height="40" rx="14" fill="#0f4f88"/>
+    <rect x="28" y="1041" width="1510" height="14" fill="#0f4f88"/>
+    <text x="48" y="1042" class="section">三、V8.1 认知复利飞轮 / Verified Compounding Flywheel</text>
+
+    <g filter="url(#softShadow)">
+      <rect x="48" y="1075" width="220" height="132" rx="13" fill="#eef5fb" stroke="#7da3be"/>
+      <circle cx="76" cy="1103" r="18" fill="#1767a6"/>
+      <text x="76" y="1109" text-anchor="middle" class="white" font-size="15" font-weight="800">1</text>
+      <text x="101" y="1110" class="bodyBold blue">输入与范围</text>
+      <text x="158" y="1142" text-anchor="middle" class="small">显式来源与目标</text>
+      <text x="158" y="1167" text-anchor="middle" class="small">权限 / 预算 / 停止规则</text>
+    </g>
+    <line x1="270" y1="1140" x2="294" y2="1140" stroke="#1767a6" stroke-width="4" marker-end="url(#arrowBlue)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="302" y="1075" width="220" height="132" rx="13" fill="#eef5fb" stroke="#7da3be"/>
+      <circle cx="330" cy="1103" r="18" fill="#1767a6"/>
+      <text x="330" y="1109" text-anchor="middle" class="white" font-size="15" font-weight="800">2</text>
+      <text x="355" y="1110" class="bodyBold blue">证据固化</text>
+      <text x="412" y="1142" text-anchor="middle" class="small">W1 · immutable sources</text>
+      <text x="412" y="1167" text-anchor="middle" class="small">SHA-256 / anchors / receipt</text>
+    </g>
+    <line x1="524" y1="1140" x2="548" y2="1140" stroke="#6750a4" stroke-width="4" marker-end="url(#arrowPurple)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="556" y="1075" width="220" height="132" rx="13" fill="#f2f0fb" stroke="#a99bd2"/>
+      <circle cx="584" cy="1103" r="18" fill="#6750a4"/>
+      <text x="584" y="1109" text-anchor="middle" class="white" font-size="15" font-weight="800">3</text>
+      <text x="609" y="1110" class="bodyBold purple">认知编译</text>
+      <text x="666" y="1142" text-anchor="middle" class="small">W2 · thesis / mechanism</text>
+      <text x="666" y="1167" text-anchor="middle" class="small">evidence boundary / falsifier</text>
+    </g>
+    <line x1="778" y1="1140" x2="802" y2="1140" stroke="#187d80" stroke-width="4" marker-end="url(#arrowTeal)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="810" y="1075" width="220" height="132" rx="13" fill="#edf8f5" stroke="#7eb3a9"/>
+      <circle cx="838" cy="1103" r="18" fill="#187d80"/>
+      <text x="838" y="1109" text-anchor="middle" class="white" font-size="15" font-weight="800">4</text>
+      <text x="863" y="1110" class="bodyBold teal">图谱编织</text>
+      <text x="920" y="1142" text-anchor="middle" class="small">W3 · taxonomy / MOC</text>
+      <text x="920" y="1167" text-anchor="middle" class="small">links / anchors / maps</text>
+    </g>
+    <line x1="1032" y1="1140" x2="1056" y2="1140" stroke="#b54444" stroke-width="4" marker-end="url(#arrowAmber)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="1064" y="1075" width="220" height="132" rx="13" fill="#fff0ef" stroke="#d38989"/>
+      <circle cx="1092" cy="1103" r="18" fill="#b54444"/>
+      <text x="1092" y="1109" text-anchor="middle" class="white" font-size="15" font-weight="800">5</text>
+      <text x="1117" y="1110" class="bodyBold red">验证提交</text>
+      <text x="1174" y="1142" text-anchor="middle" class="small">W4 · submit / approve</text>
+      <text x="1174" y="1167" text-anchor="middle" class="small">CAS commit / post-check</text>
+    </g>
+    <line x1="1286" y1="1140" x2="1310" y2="1140" stroke="#c97816" stroke-width="4" marker-end="url(#arrowAmber)"/>
+
+    <g filter="url(#softShadow)">
+      <rect x="1318" y="1075" width="200" height="132" rx="13" fill="#fff7e8" stroke="#ddb56d"/>
+      <circle cx="1346" cy="1103" r="18" fill="#c97816"/>
+      <text x="1346" y="1109" text-anchor="middle" class="white" font-size="15" font-weight="800">6</text>
+      <text x="1371" y="1110" class="bodyBold amber">交付反馈</text>
+      <text x="1418" y="1142" text-anchor="middle" class="small">W5 support / action</text>
+      <text x="1418" y="1167" text-anchor="middle" class="small">closure / next input</text>
+    </g>
+
+    <path d="M 1418 1210 L 1418 1250 L 158 1250 L 158 1210" fill="none" stroke="#1767a6" stroke-width="5" marker-end="url(#arrowBlue)"/>
+    <rect x="340" y="1233" width="890" height="34" rx="17" fill="#ffffff" stroke="#6d9dc0"/>
+    <text x="785" y="1256" text-anchor="middle" class="bodyBold blue">每次行动必须 Format → Link → Log；活动本身不是成功，fresh receipt 才是</text>
+    <text x="785" y="1297" text-anchor="middle" class="bodyBold">真正的范式转变：从管理知识，走向事务化编译认知、验证行动、积累复利。</text>
+
+    <!-- Principles -->
+    <rect x="1558" y="1015" width="490" height="40" rx="14" fill="#0f4f88"/>
+    <rect x="1558" y="1041" width="490" height="14" fill="#0f4f88"/>
+    <text x="1803" y="1042" text-anchor="middle" class="section">系统核心原则</text>
+    <rect x="1558" y="1055" width="490" height="250" fill="#ffffff" stroke="#9ab1c3"/>
+    <circle cx="1590" cy="1090" r="15" fill="#1767a6"/>
+    <text x="1590" y="1096" text-anchor="middle" class="white" font-size="13" font-weight="800">1</text>
+    <text x="1618" y="1096" class="bodyBold">Markdown 是权威存储，不是向量库</text>
+    <circle cx="1590" cy="1132" r="15" fill="#187d80"/>
+    <text x="1590" y="1138" text-anchor="middle" class="white" font-size="13" font-weight="800">2</text>
+    <text x="1618" y="1138" class="bodyBold">Source body 不可变，概念可迭代</text>
+    <circle cx="1590" cy="1174" r="15" fill="#6750a4"/>
+    <text x="1590" y="1180" text-anchor="middle" class="white" font-size="13" font-weight="800">3</text>
+    <text x="1618" y="1180" class="bodyBold">无契约不写入，无模板不编译</text>
+    <circle cx="1590" cy="1216" r="15" fill="#b54444"/>
+    <text x="1590" y="1222" text-anchor="middle" class="white" font-size="13" font-weight="800">4</text>
+    <text x="1618" y="1222" class="bodyBold">Stage → Verify → Approve → Commit</text>
+    <circle cx="1590" cy="1258" r="15" fill="#c97816"/>
+    <text x="1590" y="1264" text-anchor="middle" class="white" font-size="13" font-weight="800">5</text>
+    <text x="1618" y="1264" class="bodyBold">无新鲜验证收据，不声称完成</text>
+    <text x="1803" y="1290" text-anchor="middle" class="tiny">人类审批 · 单一集成所有者 · 可回滚 · 失败关闭</text>
+
+    <!-- Goal -->
+    <rect x="2068" y="1015" width="304" height="290" rx="16" fill="#ffffff" stroke="#6d9dc0" stroke-width="1.7" filter="url(#softShadow)"/>
+    <circle cx="2220" cy="1073" r="35" fill="#eef5fb" stroke="#1767a6" stroke-width="4"/>
+    <circle cx="2220" cy="1073" r="22" fill="none" stroke="#1767a6" stroke-width="4"/>
+    <circle cx="2220" cy="1073" r="9" fill="#1767a6"/>
+    <line x1="2243" y1="1050" x2="2266" y2="1027" stroke="#1767a6" stroke-width="5" marker-end="url(#arrowBlue)"/>
+    <text x="2220" y="1144" text-anchor="middle" class="navy" font-size="30" font-weight="800">目标 / GOAL</text>
+    <text x="2220" y="1186" text-anchor="middle" class="bodyBold blue">让知识不止被保存，</text>
+    <text x="2220" y="1215" text-anchor="middle" class="bodyBold blue">而是被理解、可追溯、</text>
+    <text x="2220" y="1244" text-anchor="middle" class="bodyBold blue">可验证、可行动、可复利。</text>
+    <rect x="2094" y="1265" width="252" height="27" rx="13" fill="#eef5fb" stroke="#8fb1ca"/>
+    <text x="2220" y="1284" text-anchor="middle" class="tiny">Evidence → Cognition → Action → Value</text>
+  </g>
+
+  <text x="2360" y="1338" text-anchor="end" class="tiny">Third Brain V8.1 · 2026-08-20 · machine authority: vault-contract + system-bundle</text>
+</svg>

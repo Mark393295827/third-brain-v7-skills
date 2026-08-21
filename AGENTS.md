@@ -1,13 +1,13 @@
-# Third Brain V8.0 Skills — Codex / Antigravity CLI
+# Third Brain V8.1 Skills — Codex / Antigravity CLI
 
 This repository contains Agent Skills for Codex CLI & Antigravity CLI environments. Place skills in `~/.agents/skills/` or `~/.gemini/skills/`.
 
-V8.0 updates the Obsidian Vault to full OCD Gold-Standard standards, adding an explicit **5-Stage Worker Assembly Pipeline** (`workflows/worker-flows.md` and `tools/worker_flow_engine.py`):
+V8.1 defines an explicit **5-Stage Worker Assembly Pipeline** in `workflows/worker-flows.md`, enforced by the canonical transactional runtime `python -m tools.worker_flow.cli`. `tools/worker_flow_engine.py` is a read-only deprecated compatibility facade.
 1. **Worker 1 (Ingest)**: Immutable source creation (`sources/YYYY-MM/`) + SHA-256 + block anchors `^...`.
 2. **Worker 2 (Cognitive)**: Gold-Standard concept cards with Mermaid, paradigm matrices, and evidence bounds.
 3. **Worker 3 (GraphWeaver)**: MOC navigation, Home.md / Central Index updates, and Canvas mapping.
 4. **Worker 4 (Governance)**: YAML validation, link & block ref verification, KPI updates, and test suites.
-5. **Worker 5 (Deliverable)**: Actionable outputs (`wiki/outputs/`), strategic memos, and daily OKR loop completion.
+5. **Worker 5 (Deliverable support, optional)**: Schema/template support for reviewed outputs in `wiki/outputs/`; no automatic authoring capability is implied.
 
 ## Skills Summary (20 Skills)
 
@@ -50,7 +50,9 @@ V8.0 updates the Obsidian Vault to full OCD Gold-Standard standards, adding an e
 
 ---
 
-## V7.2 Vault Taxonomy Contract (`system/config.md`)
+## V8.1 Vault Taxonomy Contract
+
+`contracts/vault-contract.json` is the machine authority. `system/config.md` is its human-readable summary.
 
 - **`wiki/concepts/` (13 Domains):** `ai-engineering`, `ai-economics`, `ai-science`, `behavioral-econ`, `business-strategy`, `entrepreneurship`, `general-concepts`, `geopolitics-energy`, `identity-culture`, `investing-macro`, `investing-quant`, `investing-vc`, `knowledge-systems`.
 - **`wiki/entities/` (5 Categories):** `people`, `companies`, `funds-investors`, `products`, `orgs`.

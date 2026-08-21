@@ -2,8 +2,8 @@
 name: daily-okr
 description: Use when planning or closing a daily knowledge-compounding cycle across input, cognition, wiki, behavior, creativity, output, and feedback.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "stateful"
   assumes: "A daily note or equivalent state record is writable and the user can choose one priority."
   conflicts_with: "Invented completion, seven unrelated priorities, or activity counts without evidence."

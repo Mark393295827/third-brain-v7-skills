@@ -1,68 +1,53 @@
 #!/usr/bin/env python3
-"""
-Auto-Heal Vault Utility — Part of Third Brain V7.2 / V5.0 Automation Governance
-Performs automated structural cleanup, legacy entity migration, link verification, and system KPI refresh.
-"""
+"""Read-only migration planner replacing the retired blind entity mover."""
 
-import os
-import shutil
-import subprocess
-import sys
+from __future__ import annotations
+
+import argparse
+import json
 from pathlib import Path
+from typing import Any
 
-DEFAULT_VAULT = r"C:\Users\高杰\Documents\Obsidian Vault"
-VAULT_DIR = Path(os.environ.get("OBSIDIAN_VAULT_PATH", DEFAULT_VAULT))
+from tools.legacy_compat import deprecation_envelope, explicit_directory
+from tools.worker_flow.frontmatter import parse_markdown
+from tools.worker_flow.utils import sha256_file
 
-def migrate_legacy_entities():
-    """Migrates standalone root entities/*.md files to proper subfolders under wiki/entities/."""
-    legacy_dir = VAULT_DIR / "entities"
-    target_dir = VAULT_DIR / "wiki" / "entities" / "products"
-    target_dir.mkdir(parents=True, exist_ok=True)
-    
-    if not legacy_dir.exists():
-        return 0
-    
-    moved_count = 0
-    for f in legacy_dir.glob("*.md"):
-        if f.is_file():
-            dest = target_dir / f.name
-            shutil.move(str(f), str(dest))
-            print(f"Migrated legacy entity: {f.name} -> wiki/entities/products/{f.name}")
-            moved_count += 1
-            
-    # Remove empty root entities folder
-    try:
-        if not list(legacy_dir.iterdir()):
-            legacy_dir.rmdir()
-    except Exception:
-        pass
-        
-    return moved_count
 
-def run_kpi_script():
-    """Executes update-system-kpi.ps1 via PowerShell."""
-    script_path = VAULT_DIR / "system" / "scripts" / "update-system-kpi.ps1"
-    if not script_path.exists():
-        print(f"KPI script missing: {script_path}", file=sys.stderr)
-        return False
-        
-    cmd = ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(script_path), "-VaultPath", str(VAULT_DIR)]
-    res = subprocess.run(cmd, capture_output=True, text=True)
-    if res.returncode == 0:
-        print("✅ System KPI script updated successfully.")
-        return True
-    else:
-        print(f"❌ KPI script error: {res.stderr}", file=sys.stderr)
-        return False
+VALID_CATEGORIES = {"people", "companies", "funds-investors", "products", "orgs"}
 
-def main():
-    print("=== Auto-Healing Obsidian Vault ===")
-    moved = migrate_legacy_entities()
-    print(f"Legacy Entity Migration: {moved} files migrated.")
-    
-    kpi_success = run_kpi_script()
-    print(f"KPI Refresh: {'SUCCESS' if kpi_success else 'FAILED'}")
-    print("=== Vault Healing Complete ===")
+
+def plan_entity_migrations(vault_dir: Path) -> dict[str, Any]:
+    vault = explicit_directory(vault_dir, "vault")
+    root = vault / "wiki" / "entities"
+    proposals: list[dict[str, Any]] = []
+    if root.is_dir():
+        for note in sorted(root.glob("*.md")):
+            document = parse_markdown(note.read_text(encoding="utf-8", errors="replace"))
+            category = document.frontmatter.get("entity_category")
+            target = f"wiki/entities/{category}/{note.name}" if category in VALID_CATEGORIES else None
+            proposals.append(
+                {
+                    "source": note.relative_to(vault).as_posix(),
+                    "source_sha256": sha256_file(note),
+                    "proposed_target": target,
+                    "decision": "move" if target else "requires_review",
+                }
+            )
+    return deprecation_envelope(
+        "tools/auto_heal_vault.py",
+        vault,
+        action="entity-migration-plan",
+        facts={"proposals": proposals},
+    )
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--vault", required=True, type=Path)
+    args = parser.parse_args(argv)
+    print(json.dumps(plan_entity_migrations(args.vault), ensure_ascii=False, indent=2))
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

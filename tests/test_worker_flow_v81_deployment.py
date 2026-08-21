@@ -392,6 +392,11 @@ flowchart TD
 
     def test_system_bundle_deploy_is_deterministic_transactional_and_idempotent(self) -> None:
         expected = self._expected_system_bundle()
+        preexisting_targets = {
+            target_relative
+            for target_relative in expected
+            if (self.vault / target_relative).exists()
+        }
         inventory_before = self.runtime.inventory(limit=10)
         prepared = self.runtime.prepare_system_bundle(approve_staging=True)
         self.assertEqual(prepared["status"], "STAGED")
@@ -403,7 +408,8 @@ flowchart TD
             staged = store.run_dir / "staging" / target_relative
             self.assertTrue(staged.is_file(), target_relative)
             self.assertEqual(staged.read_bytes(), repository_source.read_bytes(), target_relative)
-            self.assertFalse((self.vault / target_relative).exists(), target_relative)
+            if target_relative not in preexisting_targets:
+                self.assertFalse((self.vault / target_relative).exists(), target_relative)
 
         submitted = self.runtime.submit(prepared["run_id"])
         self.assertEqual(submitted["status"], "VERIFIED", submitted)
@@ -439,8 +445,13 @@ flowchart TD
             target: sha256_file(self.vault / target) for target in expected
         }
         run_count = len(list((self.vault / "system/runs").rglob("manifest.json")))
-        repeated = self.runtime.prepare_system_bundle(approve_staging=True)
+        # Re-open the runtime after config.md changed. The Vault fingerprint is
+        # intentionally config-derived, so desired-state equality must be the
+        # idempotency proof rather than the pre-deployment receipt fingerprint.
+        reopened_runtime = WorkerFlowRuntime(self.vault, repo_root=self.repo)
+        repeated = reopened_runtime.prepare_system_bundle(approve_staging=True)
         self.assertEqual(repeated["status"], "NO_OP")
+        self.assertEqual(repeated["side_effect_count"], 0)
         self.assertEqual(
             len(list((self.vault / "system/runs").rglob("manifest.json"))), run_count
         )
@@ -455,6 +466,11 @@ flowchart TD
         conflict_target = conflict_vault / conflict_target_relative
         conflict_target.parent.mkdir(parents=True, exist_ok=True)
         conflict_target.write_text("legacy operator-owned template\n", encoding="utf-8")
+        conflict_preimages = {
+            target_relative: sha256_file(conflict_vault / target_relative)
+            for target_relative in expected
+            if (conflict_vault / target_relative).is_file()
+        }
         conflict_prepared = conflict_runtime.prepare_system_bundle(approve_staging=True)
         self.assertEqual(conflict_prepared["status"], "STAGED")
         self.assertEqual(
@@ -470,10 +486,18 @@ flowchart TD
         )
         for target_relative in expected:
             if target_relative != conflict_target_relative:
-                self.assertFalse(
-                    (conflict_vault / target_relative).exists(),
-                    f"partial canonical write escaped preflight: {target_relative}",
-                )
+                target = conflict_vault / target_relative
+                if target_relative in conflict_preimages:
+                    self.assertEqual(
+                        sha256_file(target),
+                        conflict_preimages[target_relative],
+                        f"pre-existing target changed before failed preflight: {target_relative}",
+                    )
+                else:
+                    self.assertFalse(
+                        target.exists(),
+                        f"partial canonical write escaped preflight: {target_relative}",
+                    )
 
     def test_system_manifest_tampering_cannot_escape_system_boundary(self) -> None:
         prepared = self.runtime.prepare_system_bundle(approve_staging=True)

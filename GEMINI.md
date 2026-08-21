@@ -1,13 +1,13 @@
-# Third Brain V8.0 Skills — Gemini / Antigravity CLI
+# Third Brain V8.1 Skills — Gemini / Antigravity CLI
 
 This repository contains Agent Skills for Gemini CLI & Antigravity CLI environments. Place skills in `~/.gemini/skills/` or `~/.agents/skills/`.
 
-V8.0 updates the Obsidian Vault to full OCD Gold-Standard standards, adding an explicit **5-Stage Worker Assembly Pipeline** (`workflows/worker-flows.md` and `tools/worker_flow_engine.py`):
+V8.1 defines a transactional **5-Stage Worker Assembly Pipeline** (`workflows/worker-flows.md`) enforced by `python -m tools.worker_flow.cli`. The legacy `tools/worker_flow_engine.py` entry point is read-only and deprecated.
 1. **Worker 1 (Ingest)**: Immutable source creation (`sources/YYYY-MM/`) + SHA-256 + block anchors `^...`.
 2. **Worker 2 (Cognitive)**: Gold-Standard concept cards with Mermaid, paradigm matrices, and evidence bounds.
 3. **Worker 3 (GraphWeaver)**: MOC navigation, Home.md / Central Index updates, and Canvas mapping.
 4. **Worker 4 (Governance)**: YAML validation, link & block ref verification, KPI updates, and test suites.
-5. **Worker 5 (Deliverable)**: Actionable outputs (`wiki/outputs/`), strategic memos, and daily OKR loop completion.
+5. **Worker 5 (Deliverable support, optional)**: Schema/template support for reviewed outputs in `wiki/outputs/`; no automatic authoring capability is implied.
 
 ## 20 Core Agent Skills
 

@@ -2,8 +2,8 @@
 name: behavior-design
 description: Use when a goal must be converted into a repeatable behavior, cue, SOP, review cadence, and identity-aligned reinforcement.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "stateful"
   assumes: "The actor, desired outcome, and operating context can be observed or probed."
   conflicts_with: "Coercive behavior design, vague motivation advice, or unmeasured habit claims."

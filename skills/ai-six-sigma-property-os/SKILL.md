@@ -2,8 +2,8 @@
 name: ai-six-sigma-property-os
 description: Use when property-service operations need an AI plus ontology plus DMAIC design for work orders, dispatch, quotes, evidence, CTQ metrics, and control dashboards.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "high-risk"
   assumes: "A real or planned service workflow has identifiable customers, work orders, workers, quotes, evidence, and accountable operators."
   conflicts_with: "Automating undefined processes, hiding safety or pricing decisions, or expanding into a full ERP before the core quality loop works."

@@ -27,6 +27,16 @@ This guide operates the transactional runtime defined by the V8.1 blueprint. The
 - A clipping is archived only after post-commit verification.
 - Existing source bodies are immutable. A changed URL capture becomes a new snapshot linked to prior snapshots.
 
+## Navigation and state surfaces
+
+Start an operator session at the deployed `system/vault-navigation.md`. Use
+`system/workflow-registry.md` to inspect action eligibility and
+`system/agentic-os-command-center.md` for snapshot/action-receipt semantics.
+Use `system/run-history-index.md` to distinguish generated run/debt evidence
+from templates and descriptive notes. A template, dashboard, scheduled
+trigger, or rendered command-center page never proves execution or Vault
+health; require the matching generated receipt under `system/runs/`.
+
 ## Queue loop
 
 ```powershell
@@ -172,6 +182,6 @@ Resume from `state.json`; do not replay completed writes. Recovery never trusts 
 ```powershell
 python -m unittest -v tests.test_worker_flow_v81 tests.test_worker_flow_v81_deployment tests.test_worker_flow_transaction_safety
 python -m compileall -q tools/worker_flow
-python "C:\Users\高杰\.agents\skills\loop-engineering\scripts\validate_loop_contract.py" contracts/automation-loop-contract.md --strict
-python "C:\Users\高杰\.agents\skills\harness-engineering\scripts\validate_runtime_envelope.py" contracts/runtime/obsidian-pipeline-envelope.json --strict
+python skills/loop-engineering/scripts/validate_loop_contract.py contracts/automation-loop-contract.md --strict
+python skills/harness-engineering/scripts/validate_runtime_envelope.py contracts/runtime/obsidian-pipeline-envelope.json --strict
 ```

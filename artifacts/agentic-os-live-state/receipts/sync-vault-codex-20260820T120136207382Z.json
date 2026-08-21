@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "status": "COMMITTED",
+  "generated_at": "2026-08-20T12:01:35Z",
+  "vault_root": "D:\\C-Drive-Relocated\\Personal\\Documents\\Obsidian Vault",
+  "install_home": "C:\\Users\\高杰",
+  "write_allowlist": [
+    "AGENTS.md",
+    "C:\\Users\\高杰\\.agents\\skills"
+  ],
+  "forbidden": [
+    ".claude",
+    "settings.local.json",
+    "plugins"
+  ],
+  "preimage": {
+    "agents_sha256": null,
+    "skills_manifest": "C:\\Users\\高杰\\.agents\\skills\\.third-brain-v8.1-manifest.json"
+  },
+  "planned": {
+    "agents_sha256": "6e448a1be8f921e09f061a9408b27a0bb46831353cb9e10c498176e4668a8178",
+    "skills_source": "D:\\C-Drive-Relocated\\Personal\\Desktop\\LLM-wiki(建构）\\LLM-wiki1.0\\3Mark-原创\\third-brain-v5-skills\\skills"
+  },
+  "side_effect_count": 1,
+  "backup": "D:\\C-Drive-Relocated\\Personal\\Desktop\\LLM-wiki(建构）\\LLM-wiki1.0\\3Mark-原创\\third-brain-v5-skills\\artifacts\\agentic-os-live-state\\backups\\20260820T120135Z",
+  "skills": {
+    "status": "INSTALLED",
+    "source": "D:\\C-Drive-Relocated\\Personal\\Desktop\\LLM-wiki(建构）\\LLM-wiki1.0\\3Mark-原创\\third-brain-v5-skills\\skills",
+    "destination": "C:\\Users\\高杰\\.agents\\skills",
+    "file_count": 40,
+    "copied": 0,
+    "removed_stale_managed_files": 0,
+    "manifest": "C:\\Users\\高杰\\.agents\\skills\\.third-brain-v8.1-manifest.json",
+    "verified": true
+  },
+  "receipt": "D:\\C-Drive-Relocated\\Personal\\Desktop\\LLM-wiki(建构）\\LLM-wiki1.0\\3Mark-原创\\third-brain-v5-skills\\artifacts\\agentic-os-live-state\\receipts\\sync-vault-codex-20260820T120136207382Z.json"
+}

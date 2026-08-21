@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://third-brain.local/contracts/agentic-os/action-receipt.schema.json",
+  "title": "Agentic OS action receipt",
+  "type": "object",
+  "required": ["schema_version", "action_id", "execution_id", "state", "started_at", "completed_at", "resolved_argv", "exit_code", "stdout_tail", "stderr_tail", "verifier", "evidence", "side_effect_count"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "action_id": {"type": "string"},
+    "execution_id": {"type": "string"},
+    "state": {"enum": ["QUEUED", "RUNNING", "SUCCEEDED", "FAILED", "BLOCKED"]},
+    "started_at": {"type": "string", "format": "date-time"},
+    "completed_at": {"type": ["string", "null"], "format": "date-time"},
+    "resolved_argv": {"type": "array", "items": {"type": "string"}},
+    "exit_code": {"type": ["integer", "null"]},
+    "stdout_tail": {"type": "string"},
+    "stderr_tail": {"type": "string"},
+    "verifier": {
+      "type": "object",
+      "required": ["argv", "exit_code", "result"],
+      "properties": {
+        "argv": {"type": "array", "items": {"type": "string"}},
+        "exit_code": {"type": ["integer", "null"]},
+        "result": {"enum": ["NOT_RUN", "PASS", "FAIL"]}
+      }
+    },
+    "evidence": {"type": "array"},
+    "side_effect_count": {"const": 0}
+  }
+}

@@ -15,6 +15,6 @@ Run the `wiki-lint` skill as a twelve-check health audit:
 9. clipping archive and source lifecycle;
 10. permission, immutable-source, and human-approval boundaries;
 11. daily-loop receipts and flywheel write-back;
-12. V7 promotion-gate readiness for proposed rules.
+12. V8.1 promotion-gate readiness for proposed rules.
 
 Before scanning, resolve paths from `system/config.md` when present. The run is successful only when the skill's `## Success Metrics` and `## Quality Gates` are satisfied, including writing the report to `LINT_REPORT_FILE` and avoiding source-file modifications.

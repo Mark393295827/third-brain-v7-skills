@@ -2,8 +2,8 @@
 name: wiki-lint
 description: Use when an Obsidian wiki needs a reproducible health audit for structure, provenance, links, understanding, lifecycle, and promotion readiness.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "stateful"
   assumes: "The vault is readable and configured paths can be discovered or supplied."
   conflicts_with: "Mutating immutable source notes, silently deleting content, or reporting health without scan evidence."
@@ -52,7 +52,7 @@ Run twelve checks and preserve file-level evidence:
 9. clipping archive and source lifecycle;
 10. permission, immutable-source, and human-approval boundaries;
 11. daily-loop receipts and flywheel write-back;
-12. V7 promotion-gate readiness for proposed rules.
+12. V8.1 promotion-gate readiness for proposed rules.
 
 Classify `P0` integrity loss, `P1` broken provenance/navigation, `P2` debt, and `P3` improvement. Prefer deterministic checks; label semantic judgments separately.
 

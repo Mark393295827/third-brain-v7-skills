@@ -8,7 +8,12 @@ from pathlib import Path
 from typing import Any
 
 from .contracts import ContractBundle
-from .deployment import stage_system_bundle, system_bundle_identity, verify_staged_system_bundle
+from .deployment import (
+    plan_system_bundle,
+    stage_system_bundle,
+    system_bundle_identity,
+    verify_staged_system_bundle,
+)
 from .freshness import evaluate_freshness, scan_freshness
 from .frontmatter import first_heading, parse_markdown
 from .governance import ANCHOR_RE, WIKILINK_RE, Finding, GovernanceReport, validate_concept, validate_source
@@ -18,6 +23,7 @@ from .inventory import build_inventory, inventory_debt_regressions, inventory_de
 from .locking import integration_owned
 from .schema import validate_schema
 from .state import RunStore
+from .template_render import render_host_template
 from .transaction import PreimageConflict, TransactionManager, WriteOperation
 from .utils import (
     atomic_write_json,
@@ -620,9 +626,10 @@ class WorkerFlowRuntime:
             "freshness_tier": freshness_tier,
             "valid_as_of": valid_as_of,
             "last_verified": today.isoformat(),
-            "next_review": next_review or "null",
+            "next_review": next_review,
             "source_id": source.source_id,
             "run_id": store.run_id,
+            "concept_slug": Path(concept_relative).stem,
             "source_note": source_note,
             "thesis_anchor": source.anchors[0],
             "evidence_anchor": source.anchors[1],
@@ -633,8 +640,11 @@ class WorkerFlowRuntime:
             "metric_anchor_2": source.anchors[1],
             "moc_path": moc_note,
         }
-        for key, value in known.items():
-            content = content.replace("{{" + key + "}}", value)
+        content = render_host_template(
+            content,
+            known,
+            self.contracts.placeholder_registry["templates"]["concept"],
+        )
         content = content.replace("freshness_status: current", f"freshness_status: {freshness_status}")
         draft = resolve_within(store.run_dir / "staging", concept_relative)
         atomic_write_text(draft, content)
@@ -1002,16 +1012,40 @@ class WorkerFlowRuntime:
         if not approve_staging:
             raise PermissionError("system deployment staging requires explicit host approval")
         self.contracts.verify_templates()
-        baseline_inventory = build_inventory(
-            self.vault_root,
-            contract_version=self.contracts.version,
-            vault_fingerprint=self.vault_fingerprint,
-            limit=0,
-        )
-        baseline_debt = inventory_debt_signature(baseline_inventory)
         bundle_hash, bundle_id = system_bundle_identity(self.contracts.repo_root, self.contracts.version)
         key = sha256_bytes(f"system-deploy|{bundle_id}|{bundle_hash}|{self.contracts.version}".encode("utf-8"))
         prior_receipt = self._idempotency_path(key)
+
+        # Desired-state equality is the direct idempotency proof for a system
+        # bundle. In particular, a legitimate config.md deployment can change
+        # the config-derived Vault fingerprint after commit; a new runtime must
+        # still recognize that every contracted target already matches without
+        # creating another run or distrusting its own earlier receipt.
+        planned_entries, planned_hash, planned_id, _ = plan_system_bundle(
+            self.contracts.repo_root,
+            self.vault_root,
+            self.contracts.version,
+        )
+        if planned_hash != bundle_hash or planned_id != bundle_id:
+            raise WorkflowError("system bundle identity changed during live comparison")
+        if all(
+            entry.expected_preimage_sha256 == entry.source_sha256
+            for entry in planned_entries
+        ):
+            result: dict[str, Any] = {
+                "status": "NO_OP",
+                "reason": "every contracted V8.1 system target already matches the repository bundle",
+                "bundle_id": bundle_id,
+                "bundle_hash": bundle_hash,
+                "file_count": len(planned_entries),
+                "side_effect_count": 0,
+            }
+            if prior_receipt.is_file():
+                result["idempotency_receipt"] = prior_receipt.relative_to(
+                    self.vault_root
+                ).as_posix()
+            return result
+
         if prior_receipt.is_file():
             valid, reason, drift = self._receipt_validity(
                 prior_receipt, key, expected_mode="system-bundle", expected_input_sha256=bundle_hash
@@ -1030,6 +1064,13 @@ class WorkerFlowRuntime:
                 "side_effect_count": 0,
             }
 
+        baseline_inventory = build_inventory(
+            self.vault_root,
+            contract_version=self.contracts.version,
+            vault_fingerprint=self.vault_fingerprint,
+            limit=0,
+        )
+        baseline_debt = inventory_debt_signature(baseline_inventory)
         store = RunStore.create(self.vault_root)
         store.transition("CLAIMED", "stage_system_bundle", vault_fingerprint=self.vault_fingerprint)
         entries, staged_bundle_hash, staged_bundle_id = stage_system_bundle(

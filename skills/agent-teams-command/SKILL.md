@@ -1,134 +1,108 @@
 ---
 name: agent-teams-command
-description: Use when work has genuinely independent streams or distinct builder, evaluator, domain, and integration roles that require bounded multi-agent command.
+description: Use when work has genuinely independent streams or distinct builder, evaluator, domain, and integration roles that require bounded multi-agent command scaled from 5 to 100+ agents.
 metadata:
-  version: "7.2.1"
-  updated: "2026-08-09"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "high-risk"
-  assumes: "The runtime supports isolated workers or equivalent processes, durable shared state, and explicit integration ownership."
-  conflicts_with: "Parallelism for its own sake, overlapping write ownership, chat-only coordination, or workers crossing permission boundaries."
+  assumes: "The runtime supports isolated workers, durable shared task lists, token budgeting, and explicit integration ownership."
+  conflicts_with: "Parallelism without pre-flight task lists, unbudgeted token burning, overlapping write ownership, or chat-only coordination."
 ---
 
-# Agent Teams Command
+# Agent Teams Command — 安德智能体集群指挥系统 (V8.1)
 
 <skill_contract>
-  <input>A mission with independently ownable workstreams, interfaces, permissions, budgets, and an integration owner.</input>
-  <output>An isolated worker program, typed IPC ledger, serial integration, cleanup, and evidence receipts.</output>
-  <done>Integrated artifacts pass mission checks and ownership, review, rollback, and cleanup gates.</done>
-  <non_goals>Graph-schema design, parallelism without net value, overlapping writers, or worker self-certification.</non_goals>
+  <input>A mission with independently ownable workstreams, time SLA requirements, pre-flight task list, token budget, interfaces, permissions, and an integration owner.</input>
+  <output>An isolated worker fleet (5 to 100+ agents), typed IPC ledger, pre-allocated token ledger, serial integration, cleanup, and evidence receipts.</output>
+  <done>Pre-flight task list is 100% reconciled, integrated artifacts pass mission checks, token consumption is within TCLR boundaries, and cleanup gates pass.</done>
+  <non_goals>Parallelism without a task list, unbounded token burn, overlapping writers, or worker self-certification.</non_goals>
 
-Strategic intent and final integration remain serial; owned execution may run
-in parallel. `graph-engineering` may define dependency topology, but this skill
-owns worker processes, exclusive territories, typed IPC, integration, and
-cleanup. A Graph node is not automatically a teammate. Use the Ender lens for
-commander understanding, Palantir for operational objects/actions, and von
-Neumann for executable, inspectable process architecture. Detailed patterns:
-`references/ender-palantir-command-patterns.md`; examples:
-`references/classic-campaigns.md`.
+Strategic intent and final integration remain serial; owned execution runs in dynamically scaled parallel squadrons (5, 10, 50, 100+ agents). Use the Ender lens for commander intent and squad autonomy, Palantir for operational objects/actions, and von Neumann for executable process architecture. Detailed patterns: `references/ender-palantir-command-patterns.md`; examples: `references/classic-campaigns.md`.
 
 ## Usage Template
 
-Provide: mission, non-goals, workstreams, dependencies, files/systems, acceptance criteria, permissions, review bandwidth, runtime capabilities, budget, and integration owner.
+Provide: mission, time SLA, task list candidate, workstreams, scaling tier (5/10/50/100+), dependencies, acceptance criteria, token budget (ETC limit), permissions, runtime capabilities, and integration owner.
 
 ## Workflow
 
 <intake>
 
-Admit a team only when at least two workstreams can proceed with low coordination, or distinct roles materially improve evaluation/safety. Calculate orchestration tax: setup, context duplication, IPC, merge conflict, review, and cleanup. If one process can finish within the same review budget, keep one process.
-
-If dependencies and joins are the only complexity, use `graph-engineering`
-without recruiting a team. Add workers only for nodes that need isolated
-context, distinct ownership, or independent judgment.
+1. **Mission Intake & Scale Triage**: Analyze mission complexity and select the smallest supported tier: Tier 1 (Squad: 5 agents), Tier 2 (Squadron: 10 agents), Tier 3 (Battle Group: 50 agents), or Tier 4 (Fleet: 100+ agents). If the runtime exposes fewer slots, cap the active fleet to that observed limit.
+2. **Pre-flight Task List & Token Gate**: Generate structured task list with explicit owner, territory, expected output, verification command, and token budget (ETC).
+3. **Territory Mapping**: Partition work into non-overlapping directories or git worktrees. Every worker gets strictly exclusive write boundaries.
 
 </intake>
 
 <unknowns_gate>
 
-Resolve commander intent, object/state vocabulary, ownership, dependency direction, verifier, join gate, and permission boundary before recruiting. Return `NEEDS_INPUT` when an irreversible business decision or authority cannot be discovered locally. Workers may probe implementation unknowns only inside their territory.
+If dependencies, write ownership, or verification commands are ambiguous, return `NEEDS_INPUT` or `INSUFFICIENT_EVIDENCE`. Do not launch parallel workers before pre-flight task list and token ledger are fully reconciled.
 
 </unknowns_gate>
 
 <execute>
 
-1. Write a command program: objective, non-goals, finite actions, commander, checkpoint cadence, interrupt policy, state/artifact paths, IPC schema, allowed/denied tools, verifier, stop, recovery, and promotion boundary. Publish one versioned shared intent surface for decisions and non-code constraints; the commander owns changes to it.
-2. Atomically decompose work by interface/territory. Each task has one owner, inputs, output artifact, dependencies, definition of done, verifier, budget, and blast radius.
-3. Select the smallest topology: maker-checker, manager-workers, or specialist pipeline. If a validated Graph exists, map only `agent` or `agent-team` nodes to workers; deterministic, Loop, subgraph, and human-gate nodes keep their own contracts. Route workers by required capabilities and runtime policy, never fixed model names.
-4. Isolate mutable work with separate worktrees/branches or disjoint files. Shared schemas/contracts are commander-owned until published.
-5. Use typed IPC: `{task_id, state, context_manifest, artifact, artifact_hash, evidence, decision, unknowns, dependency, termination_reason, next_action}`. Messages change state; status chatter does not.
-6. Give each worker the least context and tools required for its territory.
-   Return bounded summaries, artifact locators, decisions, and verifier receipts;
-   do not merge private branch transcripts into the command context.
-7. Require workers to run `state + evidence -> next action -> verifier -> next state | stop | escalate` and checkpoint after each material action. Host runtime, not worker prose, interprets termination and dispatches tools.
-8. Monitor attention and review budgets, repeated failures, idle dependencies, ownership violations, and architecture drift. Rebalance or serialize when coordination cost rises.
-9. Integrate one verified workstream at a time in dependency order. The integration owner runs broader regression/eval checks and records accepted/rejected artifacts.
-10. Run an independent reviewer/red team for consequential behavior. Give the
-    reviewer acceptance criteria and raw artifacts without the builder's
-    intended conclusion. Human approval precedes production, publication,
-    spending, destructive/shared-state actions, credentials, and policy
-    changes; prepare rollback first.
-11. Close workers, remove temporary worktrees/state, reconcile tasks, preserve receipts, and extract only promotion-gated reusable patterns.
+1. **Launch Workers**: Dispatch workers in parallel across isolated worktrees. Each receives a typed `context_manifest` containing only its objective, dependencies, territory, inputs, output schema, budget, and verifier.
+2. **Typed IPC & Command Board**: Workers report state transitions (`pending` -> `active` -> `review` -> `accepted` -> `closed`) to shared command board.
+3. **Independent Verification**: Evaluator and reviewer agents verify worker outputs against objective criteria. No worker self-certification.
+4. **Serial Integration & Join Gate**: Integrator aggregates verified artifacts and receipts in dependency order. Do not merge private branch transcripts into the integration context. Run regression tests.
+5. **Durable Write-back & Cleanup**: Persist execution receipts, update system logs, and clean up temporary worktree branches.
 
-Hooks are optional executable infrastructure, not prose. Configure one only when its referenced program exists, has tests, and emits a verified receipt; never copy illustrative hook commands as if installed.
+For high-risk operations or cross-repo modifications, require independent review and human approval. Prepare a rollback plan before applying writes.
 
 </execute>
 
 <evaluate>
 
-Evaluate mission outcome, per-workstream evidence, Graph edge/join compatibility
-when used, ownership compliance, integration diff, regression suite,
-reviewability, residual risk, and cleanup. Quiet green checks are insufficient
-if the commander cannot explain architecture delta and rollback.
+Audit total token consumption against the mission-declared TCLR: verified tasks resolved per 10,000 effective tokens consumed. Higher is better; do not invent a universal threshold. Verify all workstreams reached `accepted` or `closed` state, no file ownership conflicts occurred, and the declared regression suite passed.
 
 </evaluate>
 
 <retry_policy>
 
-`max_attempts: 2` per failed task/integration signature. Retry the failed unit only after changing diagnosis, owner, scope, or strategy. Stop/rebalance on repeated signature, ownership conflict, rising orchestration tax, exhausted review budget, or `NO_PROGRESS`.
+`max_attempts: 2`. Stop on repeated failure signature or `NO_PROGRESS`. If a worker stalls or fails, reassign territory or downgrade to serial execution rather than launching unbudgeted retries.
 
 </retry_policy>
 
 <state_contract>
 
-Persist `{run_id, status, attempt, budget, evidence, unknowns, last_error, next_action}` plus mission/contract version, shared-intent hash, command board, task graph, ownership map, worker/worktree registry, per-worker context/tool manifests, IPC events, termination reasons, attention budget, approvals, integration ledger, rollback points, and cleanup receipt.
+Persist `{mission_id, run_id, status, attempt, budget, token_ledger, task_list, worker_fleet, context_manifest, command_board, evidence, unknowns, next_action}` in durable storage.
 
 </state_contract>
 
 ## Failure Protocol
 
-- `NEEDS_INPUT`: intent, ownership, verifier, join, or authority is unresolved; do not launch.
-- `BLOCKED_DEPENDENCY`: checkpoint the worker and advance only independent tasks.
-- `BLOCKED_PERMISSION`: stop the affected stream and request approval.
-- `VERIFY_FAILED`: reject the artifact at its integration gate; preserve evidence.
-- `NO_PROGRESS`: the same signature repeats after changed strategy. `max_attempts: 2`.
-- `BUDGET_STOP`: interrupt workers, checkpoint, and emit a partial integration/cleanup plan.
+- `NEEDS_INPUT`: Ambiguous mission scope or overlapping territory; prompt for clarification before launch.
+- `INSUFFICIENT_EVIDENCE`: Missing verification command or unverified worker output; reject merge.
+- `BLOCKED_PERMISSION`: Worker lacks required tool or file write permission; escalate to commander.
+- `BLOCKED_DEPENDENCY`: Upstream task failed; suspend dependent workers until resolved.
+- `VERIFY_FAILED`: Artifact fails independent evaluation; reject and trigger bounded repair.
+- `NO_PROGRESS`: Worker produces duplicate errors after 2 attempts; stop worker and flag for review.
+- `BUDGET_STOP`: Token consumption exceeds allocated ETC budget; trigger automatic halt. `max_attempts: 2`.
 
 ## Output Contract
 
-Return `status`, `result` (mission and integrated artifacts), `evidence` (task/integration/cleanup receipts), `unknowns`, and `next_action` including approval or rollback.
+Return `status`, `result` (worker fleet summary, task resolution ledger, and verified artifacts), `evidence` (source receipts, lint receipts, and integration logs), `unknowns`, and `next_action` including approval or rollback when relevant.
 
 ## Edge Cases
 
-- Two workers need the same schema file: commander publishes the contract first; serialize schema edits and let workers consume it read-only.
-- A Graph has six nodes but only two require agent judgment: recruit two
-  workers, not six; deterministic nodes remain scheduler-owned.
-- A critic receives the builder's full rationale and simply agrees: rerun with
-  the acceptance criteria, artifact, and evidence only; independence requires
-  context separation, not a different role label.
-- All workers report success but integration fails: mission status is `VERIFY_FAILED`; reject incompatible artifacts rather than averaging reports.
+- **File Collision**: Two workers attempt to modify the same file -> Integrator serializes execution and assigns one canonical owner.
+- **Worker Runaway**: Worker exceeds token budget without progress -> Heartbeat monitor triggers instant `BUDGET_STOP` kill.
+- **Context Drift**: Worker hallucinates outside its assigned territory -> Reviewer rejects output and logs territory violation.
 
 ## Success Metrics
 
-- Parallel work reduces elapsed time or improves independent evaluation beyond its coordination cost.
-- Ownership is exclusive, IPC is typed, and integration is serial and evidence-gated.
-- Final state is reproducible, reviewable, recoverable, and clean.
+- 100% of pre-flight tasks resolved with verifiable evidence.
+- Zero file write collisions across concurrent workers.
+- Total token expenditure remains within allocated ETC budget.
+- Wall-clock time reduced significantly compared to single-agent baseline.
 
 ## Quality Gates
 
-- [ ] Team admission and orchestration-tax calculation justify multi-agent use.
-- [ ] Every task has one owner, artifact, verifier, budget, and stop condition.
-- [ ] Shared intent is versioned; worker context/tool slices and summary IPC are minimal and auditable.
-- [ ] Independent review, approval, and rollback match risk.
-- [ ] Integration and cleanup receipts match actual repository/runtime state.
-- [ ] Capability routing contains no durable model binding.
+- [ ] Pre-flight task list and token ledger reconciled before execution.
+- [ ] Exclusive write territories assigned to all active workers.
+- [ ] Independent reviewer verified all deliverables (no self-certification).
+- [ ] Integrator executed serial merge with passing regression suite.
+- [ ] High-risk operations received independent review, human approval, and rollback readiness.
+- [ ] Worktrees cleaned up and durable receipts written to system log.
 
 </skill_contract>

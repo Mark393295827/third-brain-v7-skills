@@ -1,12 +1,21 @@
 # Changelog
 
-All notable changes to Third Brain V7 Skills are documented here.
+All notable changes to Third Brain V8.1 Skills are documented here.
+
+Current V8.1 baseline: 21 Agent Skills.
 
 This project follows a small-release rhythm: ship one focused release every 1-2 weeks when there are meaningful fixes, docs improvements, or skill updates.
 
-## Unreleased
+## [8.1.0] - 2026-08-18
 
-Current V7.1 baseline: 20 Agent Skills.
+### Added & Standardized
+- **V8.1.0 Gold-Standard Concept Specification (`concept-gold-standard`)**:
+  - Full schema alignment across `system/templates/template-concept-gold-standard.md` and `template-concept-gold-standard-v8.1.md` in both skills repo and Obsidian Vault.
+  - Complete 10-section contract structure: Frontmatter (`contract_version: "8.1.0"`, `knowledge_stage`, `evidence_level`, `freshness_tier`, `source_ids`, `run_id`), Core Thesis callout (`> [!NOTE]`) with block anchor `^{{concept_slug}}-core-thesis`, Temporal Scope (`> [!INFO]`), Evidence Scope (Direct Evidence, Interpretation, Evidence Boundary, Falsifiers), Core Mechanisms with 3-stage colored Mermaid TD flowchart (`#f0f5ff`, `#f6ffed`, `#fffbe6`), Multi-dimensional Paradigm Matrix, Key Data with source citations, Actionable SOP, 5-category Graph Connections (Domain MOC, People, Companies, Concepts, Immutable Sources), and Evolution Timeline.
+- **System-Wide Schema & Governance Upgrade**:
+  - Upgraded `system/schema.md` in Obsidian Vault and skills repo to V8.1.0 contract specifications.
+  - Ensured source cards follow immutable provenance, block-anchored key claims, evidence boundary, and key insights structure.
+  - Synchronized all template contracts across primary C: Desktop and D: relocated drive repositories.
 
 ## [7.2.0] - 2026-07-31
 

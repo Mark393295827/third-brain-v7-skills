@@ -31,8 +31,8 @@ class PromotedSkillContractTests(unittest.TestCase):
     def test_affected_skills_have_iteration_version_and_date(self):
         for name in AFFECTED_SKILLS:
             text = skill_text(name)
-            self.assertRegex(text, r'version:\s*"7\.2\.1"', name)
-            self.assertRegex(text, r'updated:\s*"2026-08-09"', name)
+            self.assertRegex(text, r'version:\s*"8\.1\.0"', name)
+            self.assertRegex(text, r'updated:\s*"2026-08-18"', name)
 
     def test_runtime_control_chain_is_explicit(self):
         harness = normalized(skill_text("harness-engineering"))
@@ -51,7 +51,7 @@ class PromotedSkillContractTests(unittest.TestCase):
         teams = normalized(skill_text("agent-teams-command"))
         context = normalized(skill_text("context-manager"))
         self.assertIn("context_manifest", teams)
-        self.assertIn("do not merge private branch transcripts", teams)
+        self.assertIn("do not merge private branch transcripts", teams.lower())
         self.assertIn("private context manifest", context)
         self.assertIn("not the builder's desired conclusion", context)
 

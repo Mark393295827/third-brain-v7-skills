@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Third Brain skills against the V7 execution contract."""
+"""Validate Third Brain skills against the V8.1 execution contract."""
 
 from __future__ import annotations
 

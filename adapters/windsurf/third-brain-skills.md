@@ -1,9 +1,9 @@
 ---
 trigger: model_decision
-description: Route tasks to Third Brain V7.1 workspace skills with profile-aware controls.
+description: Route tasks to Third Brain V8.1 workspace skills with profile-aware controls.
 ---
 
-# Third Brain V7.1 Skill Router
+# Third Brain V8.1 Skill Router
 
 Use this rule when the user asks Cascade for knowledge ingestion, daily review, research, verification, behavior design, creativity, startup evaluation, or agent-team orchestration.
 
@@ -29,8 +29,9 @@ Routing:
 - Agent permissions, tools, observability, or runtime safety -> `@harness-engineering`
 - Team operating system, growth method, or self-evolving work method -> `@anthropic-os`
 - Multi-agent execution -> `@agent-teams-command`
+- Audit manual work, prior sessions, or interviews for reusable workflows -> `@workflow-audit`
 
-Engineering boundary: Loop = temporal depth; Graph = dependency width; Agent Teams = process ownership, IPC, and integration; Harness = runtime scheduler, permissions, and observability. Use `@graph-engineering` only when admission value exceeds orchestration and review cost. V7.1 supports bounded static DAGs, not dynamic or cyclic graphs.
+Engineering boundary: Loop = temporal depth; Graph = dependency width; Agent Teams = process ownership, IPC, and integration; Harness = runtime scheduler, permissions, and observability. Use `@graph-engineering` only when admission value exceeds orchestration and review cost. V8.1 supports bounded static DAGs, not dynamic or cyclic graphs.
 
 For each selected skill:
 

@@ -1,14 +1,14 @@
 ---
-title: "Third Brain V7.2 / V5.0 Tag Taxonomy Reference"
+title: "Third Brain V8.1 Tag Taxonomy Reference"
 type: system-tag-taxonomy
-updated: "2026-07-31"
-version: "7.2.0"
+updated: "2026-08-18"
+version: "8.1.0"
 status: active
 ---
 
-# Third Brain V7.2 / V5.0 Tag Taxonomy Reference
+# Third Brain V8.1 Tag Taxonomy Reference
 
-This reference defines the official, hierarchical tag taxonomy used across all notes in the Obsidian Vault.
+This reference summarizes the official hierarchical tags for a contract-bound Vault. `contracts/vault-contract.json` remains the machine authority.
 
 ---
 
@@ -34,9 +34,9 @@ Used on concept notes and domain MOCs to identify primary knowledge domains:
 
 ## 2. Note Type Tags (`#type/...`)
 
-- `#type/concept` — Concept, framework, method, or theory notes
-- `#type/entity` — Entity notes (people, companies, funds, products, orgs)
-- `#type/source` — Immutable source clipping notes
+- `#type/concept` — Concept, framework, method, or theory notes (V8.1 Gold Standard)
+- `#type/entity` — Entity notes (people, companies, funds-investors, products, orgs)
+- `#type/source` — Immutable source clipping notes and transcripts
 - `#type/sop` — Standard Operating Procedure notes
 - `#type/map` — Maps of Content and navigation indexes
 - `#type/output` — Reusable briefs, evaluations, and cognitive compiles
@@ -53,9 +53,19 @@ Used on concept notes and domain MOCs to identify primary knowledge domains:
 
 ---
 
-## 4. Evidence & Status Tags
+## 4. Maturity & Status Tags
 
-- `#evidence/primary` — Derived directly from primary literature or verified code
-- `#evidence/single-source` — Unverified single-source evidence (requires caution)
-- `#status/active` — Active, production-ready knowledge note
-- `#status/seed` — Draft or initial seed note needing expansion
+- `#maturity/gold` — V8.1 Gold Standard fully compliant concept card
+- `#maturity/silver` — Structured concept note with core thesis and citations
+- `#maturity/seed` — Initial seed concept or draft stub
+- `#status/evergreen` — Continually verified and active knowledge note
+- `#status/stored` — Verified and stored in knowledge base
+- `#status/ingested` — Raw source captured and indexed
+- `#status/stub` — Minimal entity or concept placeholder awaiting expansion
+
+---
+
+## 5. Topic Tags (`#topic/...`)
+
+Granular topic classifiers used to cluster cross-domain concepts:
+- `#topic/autonomous-agents`, `#topic/dark-factory`, `#topic/world-models`, `#topic/physical-ai`, `#topic/agentic-commerce`, `#topic/stablecoins`, `#topic/cybersecurity`, `#topic/zero-day`, `#topic/m-and-a-playbook`, `#topic/screenless-voice-ui`

@@ -2,8 +2,8 @@
 name: verify-before-claim
 description: Use when an agent is about to claim completion, correctness, safety, publication, deployment, or any consequential external fact.
 metadata:
-  version: "7.2.1"
-  updated: "2026-08-09"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "high-risk"
   assumes: "At least one objective verification method or authoritative source can be identified."
   conflicts_with: "Inferring success from effort, stale evidence, partial checks, or self-authored assertions."

@@ -1,6 +1,6 @@
 # Base Skill Template
 
-Use this V7 template when creating or refactoring a skill. Keep the hot path below 350 `SKILL.md` lines; move detailed domain material and long examples into `references/`.
+Use this V8.1 template when creating or refactoring a skill. Keep the hot path below 350 `SKILL.md` lines; move detailed domain material and long examples into `references/`.
 
 ## Execution Profiles
 
@@ -20,7 +20,7 @@ Do not hard-code model brands, prices, or context-window sizes. Select runtime c
 name: skill-name
 description: Perform the core transformation and name its output. Use when the user asks for the specific task, artifact, or workflow this skill owns.
 metadata:
-  version: "7.1.0"
+  version: "8.1.0"
   updated: "YYYY-MM-DD"
   profile: "one-shot"
   assumes: "State the minimum condition required to execute safely."

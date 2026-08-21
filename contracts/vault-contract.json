@@ -44,7 +44,13 @@
       "system-indexes",
       "project-maps",
       "canvases"
-    ]
+    ],
+    "map_tier_paths": {
+      "domain-moc": "maps/domain-mocs",
+      "system-index": "maps/system-indexes",
+      "project-map": "maps/project-maps",
+      "canvas": "maps/canvases"
+    }
   },
   "schemas": {
     "source": "contracts/notes/source.schema.json",
@@ -55,18 +61,28 @@
     "system": "contracts/notes/system.schema.json",
     "worker_receipt": "contracts/ipc/worker-receipt.schema.json"
   },
+  "placeholder_registry": "contracts/templates/placeholder-registry.json",
   "templates": {
     "source": {
       "id": "source-v8.1",
       "version": "8.1.0",
       "path": "system/templates/template-source-v8.1.md",
+      "aliases": ["system/templates/template-source-v8.md"],
       "sha256": "ba6bf15d0f7f84519064e93a9d572f1f09a50665cb0a8e7abd9b30d4b69a8901"
     },
     "concept": {
       "id": "concept-gold-standard",
       "version": "8.1.0",
       "path": "system/templates/template-concept-gold-standard-v8.1.md",
-      "sha256": "a5a9aa16cfc0dfc075c7b00ebe9bce0701bbd309f1641319f008b5e0a91214ad"
+      "aliases": ["system/templates/template-concept-gold-standard.md"],
+      "sha256": "061c5531a03b4917fffaa5c0c29c97431b7af062c7502561eec37c2b0423749c"
+    },
+    "output": {
+      "id": "output-deliverable-v8.1",
+      "version": "8.1.0",
+      "path": "system/templates/template-output-deliverable-v8.1.md",
+      "aliases": ["system/templates/template-output-deliverable.md"],
+      "sha256": "7bce5d0f944afc6eb305e1378968375a4143ed8e95652996ef4c78e694ef06c8"
     }
   },
   "freshness_policy": "contracts/freshness-policy.json",

@@ -1,12 +1,12 @@
-# Third Brain V7.2 / V5.0 Skills
+# Third Brain V8.1 Skills
 
 <p align="center">
-  <img src="assets/third-brain-v5-system-architecture.png" alt="Third Brain V7 knowledge OS architecture: LLM, Skills, Obsidian, behavior design, creativity engine, governance, and compounding loops" width="600">
+  <img src="assets/third-brain-v8.1-actual-system-architecture.png" alt="Third Brain V8.1 actual Codex OS architecture: Codex host, repository control plane, transactional worker runtime, live Obsidian Vault, verification evidence, and declared debt" width="900">
 </p>
 
-**Verification-first Agent Skills for Claude Code, Codex, Gemini, Cursor, and Windsurf.** Build a persistent knowledge operating system with Obsidian provenance, scheduled loops, bounded static dependency graphs, context management, and multi-agent orchestration.
+**Verification-first Agent Skills for Codex OS, with optional compatibility adapters for Claude Code, Gemini, Cursor, and Windsurf.** Build a persistent knowledge operating system with Obsidian provenance, scheduled loops, bounded static dependency graphs, context management, and multi-agent orchestration.
 
-Install 20 reusable agent skills for ingesting sources, compiling interlinked wikis, running daily knowledge loops, verifying claims before shipping, managing token costs, engineering bounded loops and static dependency graphs, and orchestrating multi-agent teams.
+Install 21 reusable agent skills for ingesting sources, auditing workflows, compiling interlinked wikis, running daily knowledge loops, verifying claims before shipping, managing token costs, engineering bounded loops and static dependency graphs, and orchestrating multi-agent teams.
 
 **Use this if:**
 - Your AI agent keeps forgetting context between sessions
@@ -17,7 +17,8 @@ Install 20 reusable agent skills for ingesting sources, compiling interlinked wi
 
 [![GitHub stars](https://img.shields.io/github/stars/Mark393295827/third-brain-v5-skills?style=social)](https://github.com/Mark393295827/third-brain-v5-skills/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-Compatible-8A2BE2)](https://claude.ai/code)
+[![Codex OS](https://img.shields.io/badge/Codex%20OS-Primary-10A37F)](AGENTS.md)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Compatibility%20Adapter-8A2BE2)](docs/compatibility.md)
 [![Cursor](https://img.shields.io/badge/Cursor-Rules%20Compatible-111827)](GUIDE.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
 
@@ -30,17 +31,17 @@ Install 20 reusable agent skills for ingesting sources, compiling interlinked wi
 ```bash
 git clone https://github.com/Mark393295827/third-brain-v5-skills.git
 cd third-brain-v5-skills
-bash install.sh claude  # or: codex, gemini, cursor, windsurf, all
+bash install.sh codex  # Codex is the primary host/kernel
 ```
 
-Windows PowerShell uses `.\install.ps1 claude` with the same target names.
+Windows PowerShell uses `.\install.ps1 codex`. Compatibility adapters require an explicit non-Codex target.
 
 ### 2. Try a Skill
 
-Paste this into Claude Code or your agent:
+Paste this into Codex:
 
 ```text
-Use wiki-ingest on this source. Create source notes, concept pages, entity pages, navigation updates, and a verification summary.
+Use wiki-ingest on this source. Stage an immutable source, author a governed concept candidate, plan navigation updates, and return a verification summary. Treat entity authoring as a separate reviewed capability.
 ```
 
 Then paste a URL, article, PDF text, or any source you want to capture.
@@ -51,9 +52,11 @@ See the **[3-Minute Quickstart](examples/3-minute-quickstart.md)** for a complet
 
 Full guide: **[GUIDE.md](GUIDE.md)**
 
-中文进阶手册：**[V7 最大潜力使用手册](docs/v7-max-potential-guide-zh.md)**
+Command centre and distribution: **[V8.1 Codex Agentic OS command centre](docs/agentic-os-command-center.md)**. Start it with `python tools/agentic_os_server.py --state-root .agentic-os-state`; the host is localhost-only by default and requires T02 runtime receipts. Claude/Gemini/Cursor/Windsurf remain compatibility adapters, not the primary runtime.
 
-🔥 **[OCD V8.0 多智能体 Worker 流水线手册](docs/worker-flows-guide-zh.md)** & **[Worker Flows 规范](workflows/worker-flows.md)**：5 阶段流水线（Ingest $\rightarrow$ Cognitive $\rightarrow$ GraphWeaver $\rightarrow$ Governance $\rightarrow$ Deliverable）驱动高确定性产出。
+中文历史进阶手册：**[V7 最大潜力使用手册（参考）](docs/v7-max-potential-guide-zh.md)**
+
+🔥 **[V8.1 多智能体 Worker 流水线手册](docs/worker-flows-guide-zh.md)** & **[Worker Flows 规范](workflows/worker-flows.md)**：事务式流水线（Stage → Author → Graph Plan → Govern → Commit/Postcheck → optional Deliverable），归档只发生在验证提交之后。
 
 ---
 
@@ -67,9 +70,9 @@ Full guide: **[GUIDE.md](GUIDE.md)**
 
 ---
 
-## V7 Operating Model
+## V8.1 Operating Model
 
-V7 keeps the wiki as durable disk and governance, then gives every skill a profile-aware execution contract:
+V8.1 keeps the wiki as durable disk and governance, gives every skill a profile-aware execution contract, and makes `python -m tools.worker_flow.cli` the only canonical transactional runtime:
 
 ```text
 Input -> Source -> Wiki compile -> Daily loop -> Agent/Wiki flywheel -> Skill/SOP upgrade -> Verification
@@ -85,9 +88,9 @@ The upgrade adds seven hard defaults:
 - **Teams need ownership**: multi-agent work requires write scopes, IPC, join gates, cleanup, and evidence.
 - **Rules promote through evidence**: wiki insights become schema or skill rules only after repeated support and a cheap check.
 
-See [V7 release notes](docs/release-notes-v7.md) and the [Agent Skills standard](docs/agent-skills-standard.md).
+See the [V8.1 Worker Flow](workflows/worker-flows.md), the [Agent Skills standard](docs/agent-skills-standard.md), and the historical [V7 release notes](docs/release-notes-v7.md).
 
-V7.1 adds `graph-engineering` as the 20th skill. It supports bounded static DAGs only; dynamic expansion and cyclic graphs remain out of scope.
+V8.1 keeps `graph-engineering` bounded to static DAGs; dynamic expansion and cyclic graphs remain out of scope.
 
 ---
 
@@ -137,7 +140,7 @@ V7.1 adds `graph-engineering` as the 20th skill. It supports bounded static DAGs
 
 ### 📥 Ingestion & Knowledge
 
-- `wiki-ingest` — Ingest sources with source-risk taxonomy, Karpathy understanding gate, concept/entity pages, wikilinks
+- `wiki-ingest` — Stage immutable sources, author governed concept candidates, plan graph updates, and hand off optional entity authoring for separate review
 - `knowledge-ops` — Multi-layer knowledge management: classify, deduplicate, preserve evidence hierarchy, vector + Markdown retrieval
 - `wiki-lint` — Health check: P0/P1 graph health, frontmatter, source refs, wikilink density, provenance debt
 
@@ -165,7 +168,7 @@ V7.1 adds `graph-engineering` as the 20th skill. It supports bounded static DAGs
 
 - `context-manager` — Runtime budgets, checkpoint replay, compaction, retrieval, capability routing
 
-Utility command: `commands/token-cost-tracker.md` estimates, logs, and reports token usage; it is not one of the 20 Agent Skills.
+Utility command: `commands/token-cost-tracker.md` estimates, logs, and reports token usage; it is not one of the 21 Agent Skills.
 
 ### 🏗️ Engineering
 
@@ -211,7 +214,7 @@ The system is a **closed loop**: ingest sources → process daily → extract le
 
 ## Architecture & Design
 
-**Third Brain V7 treats agents as LLM OS processes:**
+**Third Brain V8.1 treats agents as LLM OS processes:**
 - LLM = CPU
 - Context = RAM
 - Wiki/Obsidian = Disk
@@ -233,7 +236,7 @@ The system is a **closed loop**: ingest sources → process daily → extract le
 | **🏗️ Engineering** | Design bounded loops, static dependency graphs, harnesses, agent workflows, and multi-agent systems | loop-engineering, graph-engineering, agentic-engineering, harness-engineering, agent-teams-command |
 | **💼 Strategy & Operations** | Evaluate startups, design AI quality systems | startup-evaluation, anthropic-os, ai-six-sigma-property-os |
 
-Engineering boundaries are deliberate: Loop Engineering controls temporal depth; Graph Engineering controls dependency width; Agent Teams Command controls process ownership, IPC, and integration; Harness Engineering supplies the runtime scheduler, permissions, and observability. A graph node may contain a Loop or Agent Team, but V7.1 does not support dynamic or cyclic graphs.
+Engineering boundaries are deliberate: Loop Engineering controls temporal depth; Graph Engineering controls dependency width; Agent Teams Command controls process ownership, IPC, and integration; Harness Engineering supplies the runtime scheduler, permissions, and observability. A graph node may contain a Loop or Agent Team, but V8.1 does not support dynamic or cyclic graphs.
 
 ---
 
@@ -256,11 +259,11 @@ Start small. Add skills as you need them.
 
 ## Installation
 
-### For Claude Code
+### For Codex CLI (Primary host/kernel)
 
 ```bash
 # Personal skills (available across all projects)
-bash install.sh claude
+bash install.sh codex
 ```
 
 ### For Cursor
@@ -275,10 +278,10 @@ bash install.sh cursor
 bash install.sh windsurf
 ```
 
-### For Codex CLI / Gemini CLI
+### Compatibility adapters: Claude Code / Gemini CLI
 
 ```bash
-bash install.sh codex
+bash install.sh claude
 bash install.sh gemini
 ```
 
@@ -305,15 +308,15 @@ Skills default to STOW paths (configurable via `system/config.md`):
 ```
 sources/          ← Immutable source notes (articles, PDFs, transcripts)
 wiki/
-├── concepts/     ← Ideas, frameworks, methods
-├── entities/     ← People, companies, products
-├── atomic-notes/ ← Single-fact notes
-├── outputs/      ← Reusable reports, analyses
-├── decisions/    ← Architecture decisions
-└── sops/         ← Standard operating procedures
-system/           ← Config, log, schema, templates
-08_behaviors/     ← Behavior system (goals, habits, reviews)
-09_creativity/    ← Creativity system (ideas, experiments)
+├── concepts/     ← 13 contracted domains
+├── entities/     ← people, companies, funds-investors, products, orgs
+└── outputs/      ← gmail-digests, evaluations, compilations
+maps/
+├── domain-mocs/
+├── system-indexes/
+├── project-maps/
+└── canvases/
+system/           ← Deployed contracts, config, schema, templates, runs
 ```
 
 ---
@@ -322,10 +325,10 @@ system/           ← Config, log, schema, templates
 
 | Resource | Purpose |
 |----------|---------|
-| [tools/index.html](tools/index.html) | Visual skill navigator and dashboard |
-| [tools/token-calculator.html](tools/token-calculator.html) | Token cost calculator |
+| [tools/index.html](tools/index.html) | V8.1 visual skill navigator |
+| [tools/token-calculator.html](tools/token-calculator.html) | Historical V5 cost-model calculator; not a runtime authority |
 | [GUIDE.md](GUIDE.md) | Full installation & troubleshooting |
-| [V7 最大潜力使用手册](docs/v7-max-potential-guide-zh.md) | Profile、知识飞轮、Agent 工程、治理和 30 天采用路径 |
+| [V7 最大潜力使用手册（历史参考）](docs/v7-max-potential-guide-zh.md) | Earlier profile、知识飞轮、Agent 工程、治理和 30 天采用路径 |
 | [CLAUDE.md](CLAUDE.md) | Claude Code setup |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute skills |
 

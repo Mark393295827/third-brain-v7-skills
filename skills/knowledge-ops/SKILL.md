@@ -2,8 +2,8 @@
 name: knowledge-ops
 description: Use when an Obsidian knowledge system needs classification, deduplication, retrieval, synchronization, debt queues, or governed Agent/Wiki promotion.
 metadata:
-  version: "7.2.1"
-  updated: "2026-08-09"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "stateful"
   assumes: "A durable Markdown knowledge base exists and its configured paths can be discovered or supplied."
   conflicts_with: "Treating vector search as canonical storage, silently merging provenance, or promoting one-off wiki signals into rules."
@@ -38,6 +38,8 @@ If canonical ownership, vault identity, or merge authority is ambiguous, return 
 </unknowns_gate>
 
 <execute>
+
+`knowledge-ops` owns cross-corpus organization, identity reconciliation, retrieval/index state, promotion queues, and knowledge-debt governance. It does not replace `wiki-ingest` as the owner of a single source-to-candidate transaction, and it does not replace `wiki-lint` as the read-only health auditor.
 
 1. **Classify:** assign each item to execution state, quick memory, durable wiki, optional retrieval index, or governance state.
 2. **Search first:** exact path/title, wikilinks, canonical URL/source id, and lexical search before semantic retrieval.

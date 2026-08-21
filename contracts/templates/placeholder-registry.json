@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "contract_version": "8.1.0",
+  "templates": {
+    "source": {
+      "host_tokens": [
+        "captured_at", "evidence_blocks", "evidence_level", "input_class",
+        "observed_at", "prior_snapshots", "raw_content", "run_id", "sha256",
+        "source_author", "source_author_or_unknown", "source_date", "source_id",
+        "source_identity", "source_title", "source_type", "source_url",
+        "source_url_or_unknown", "trust_level", "valid_as_of"
+      ],
+      "semantic_tokens": [],
+      "post_host_render": "no-unresolved-tokens"
+    },
+    "concept": {
+      "host_tokens": [
+        "author", "chinese_title", "concept_slug", "created", "domain",
+        "evidence_anchor", "evidence_level", "freshness_tier", "last_verified",
+        "mechanism_anchor_1", "mechanism_anchor_2", "mechanism_anchor_3",
+        "metric_anchor_1", "metric_anchor_2", "moc_path", "next_review",
+        "run_id", "source_date", "source_id", "source_note", "thesis_anchor",
+        "title", "updated", "url", "valid_as_of"
+      ],
+      "semantic_tokens": [
+        "semantic.agent_role", "semantic.anti_pattern",
+        "semantic.context_layer", "semantic.core_thesis",
+        "semantic.dimension_1", "semantic.dimension_2",
+        "semantic.dimension_3", "semantic.dimension_4",
+        "semantic.dimension_5", "semantic.dimension_6",
+        "semantic.direct_evidence_1", "semantic.direct_evidence_2",
+        "semantic.direct_evidence_3", "semantic.evaluation_gate",
+        "semantic.evidence_boundary", "semantic.falsifier",
+        "semantic.governance_constraint", "semantic.input_contract",
+        "semantic.intermediate_1", "semantic.intermediate_2",
+        "semantic.intermediate_3", "semantic.intermediate_4",
+        "semantic.intermediate_5", "semantic.intermediate_6",
+        "semantic.intermediate_paradigm", "semantic.interpretation",
+        "semantic.legacy_1", "semantic.legacy_2", "semantic.legacy_3",
+        "semantic.legacy_4", "semantic.legacy_5", "semantic.legacy_6",
+        "semantic.legacy_paradigm", "semantic.mechanism_1_detail",
+        "semantic.mechanism_1_title", "semantic.mechanism_2_detail",
+        "semantic.mechanism_2_title", "semantic.mechanism_3_detail",
+        "semantic.mechanism_3_title", "semantic.mechanism_4_detail",
+        "semantic.mechanism_4_title", "semantic.metric_1_as_of",
+        "semantic.metric_1_label", "semantic.metric_1_value",
+        "semantic.metric_2_as_of", "semantic.metric_2_label",
+        "semantic.metric_2_value", "semantic.metric_3_as_of",
+        "semantic.metric_3_label", "semantic.metric_3_value",
+        "semantic.new_1", "semantic.new_2", "semantic.new_3",
+        "semantic.new_4", "semantic.new_5", "semantic.new_6",
+        "semantic.new_paradigm", "semantic.open_question_1",
+        "semantic.open_question_2", "semantic.output_contract",
+        "semantic.related_concept_1", "semantic.related_concept_1_desc",
+        "semantic.related_concept_2", "semantic.related_concept_2_desc",
+        "semantic.related_entity_1", "semantic.related_entity_1_desc",
+        "semantic.reusable_action", "semantic.sop_id",
+        "semantic.sop_scope", "semantic.sop_step_1_action",
+        "semantic.sop_step_1_title", "semantic.sop_step_2_action",
+        "semantic.sop_step_2_title", "semantic.sop_step_3_action",
+        "semantic.sop_step_3_title", "semantic.sop_step_4_action",
+        "semantic.sop_step_4_title", "semantic.sop_trigger",
+        "semantic.stage_1_name", "semantic.stage_1_node",
+        "semantic.stage_2_name", "semantic.stage_2_node",
+        "semantic.stage_3_name", "semantic.stage_3_node",
+        "semantic.stage_4_name", "semantic.stage_4_node",
+        "semantic.stop_condition", "semantic.telemetry_signal",
+        "semantic.timeline_2_date", "semantic.timeline_2_event",
+        "semantic.timeline_3_date", "semantic.timeline_3_event",
+        "semantic.tool_mapping", "semantic.understanding_delta"
+      ],
+      "post_host_render": "semantic-prefix-only",
+      "post_author_render": "no-unresolved-tokens"
+    },
+    "output": {
+      "host_tokens": [
+        "chinese_title", "concept_1", "concept_2", "created",
+        "deliverable_title", "domain", "freshness_status", "output_type",
+        "recipient_1", "run_id", "source_id", "source_note", "updated",
+        "valid_as_of"
+      ],
+      "semantic_tokens": [
+        "semantic.action_1", "semantic.action_2", "semantic.action_3",
+        "semantic.context_paragraph", "semantic.dimension_1",
+        "semantic.dimension_2", "semantic.dimension_3", "semantic.dri_1",
+        "semantic.dri_2", "semantic.dri_3", "semantic.evidence_1",
+        "semantic.evidence_2", "semantic.evidence_3",
+        "semantic.executive_summary_statement", "semantic.result_1",
+        "semantic.result_2", "semantic.result_3", "semantic.score_1",
+        "semantic.score_2", "semantic.score_3", "semantic.stage_1_input",
+        "semantic.stage_1_name", "semantic.stage_1_proc",
+        "semantic.stage_2_action", "semantic.stage_2_analysis",
+        "semantic.stage_2_name", "semantic.stage_3_name",
+        "semantic.stage_3_outcome", "semantic.weight_1", "semantic.weight_2",
+        "semantic.weight_3"
+      ],
+      "post_host_render": "semantic-prefix-only",
+      "post_author_render": "no-unresolved-tokens"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://third-brain.local/contracts/agentic-os/snapshot.schema.json",
+  "title": "Agentic OS read-only snapshot",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "status", "repository", "vault", "actions", "evidence", "side_effect_count"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["READY", "PARTIAL", "ERROR"]},
+    "repository": {"type": "object"},
+    "vault": {"type": "object"},
+    "actions": {"type": "array"},
+    "evidence": {"type": "array"},
+    "side_effect_count": {"const": 0}
+  }
+}

@@ -2,8 +2,8 @@
 name: anthropic-os
 description: Use when a personal or team operating system needs a bounded redesign using Four-C, closed-loop controls, 70/30 allocation, 3B creativity, experiments, and prediction-error learning.
 metadata:
-  version: "7.1.0"
-  updated: "2026-07-25"
+  version: "8.1.0"
+  updated: "2026-08-18"
   profile: "high-risk"
   assumes: "The operating system has a named owner, observable workflow, local metrics, and a review cadence."
   conflicts_with: "Copying extreme productivity claims, surveillance without governance, automatic policy evolution, or cadence before context and capability."

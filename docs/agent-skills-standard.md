@@ -1,6 +1,6 @@
 # Agent Skills Standard
 
-This repository uses portable Agent Skills folders with a V7 execution contract.
+This repository uses portable Agent Skills folders with a V8.1 execution contract.
 
 ## Package Contract
 
@@ -17,14 +17,14 @@ Do not add auxiliary READMEs, changelogs, installation guides, or process diarie
 
 ## Frontmatter
 
-Keep discovery fields at the top level and V7 governance fields under `metadata`:
+Keep discovery fields at the top level and V8.1 governance fields under `metadata`:
 
 ```yaml
 ---
 name: skill-name
 description: State the owned transformation and complete "Use when" trigger.
 metadata:
-  version: "7.1.0"
+  version: "8.1.0"
   updated: "YYYY-MM-DD"
   profile: "one-shot | stateful | loop | high-risk"
   assumes: "Required operating condition."
@@ -109,4 +109,4 @@ Run:
 python tools\lint-agent-skills.py
 ```
 
-The V7 linter validates frontmatter, the non-empty contract quartet, required sections, line budgets, resource existence, executable-reference honesty, standard failure coverage, and conditional state/retry controls.
+The V8.1 linter validates frontmatter, the non-empty contract quartet, required sections, line budgets, resource existence, executable-reference honesty, standard failure coverage, and conditional state/retry controls.
